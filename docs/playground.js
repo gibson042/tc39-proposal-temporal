@@ -94,7 +94,7 @@
 	var $isNaN$1 = require_isNaN();
 
 	/** @type {import('./sign')} */
-	var sign$1 = function sign(number) {
+	var sign$2 = function sign(number) {
 		if ($isNaN$1(number) || number === 0) {
 			return number;
 		}
@@ -467,7 +467,7 @@
 	var min = min$1;
 	var pow = pow$1;
 	var round = round$1;
-	var sign = sign$1;
+	var sign$1 = sign$2;
 
 	var $Function = Function;
 
@@ -595,7 +595,7 @@
 		'%Math.min%': min,
 		'%Math.pow%': pow,
 		'%Math.round%': round,
-		'%Math.sign%': sign,
+		'%Math.sign%': sign$1,
 		'%Reflect.getPrototypeOf%': $ReflectGPO
 	};
 
@@ -879,8 +879,6 @@
 
 	var Call$1 = /*@__PURE__*/getDefaultExportFromCjs(Call);
 
-	var _IntlDurationFormat$p;
-
 	// Constructor Properties of the Global Object
 	const {
 	  Array: Array$1,
@@ -971,23 +969,27 @@
 	const {
 	  supportedValuesOf: IntlSupportedValuesOf,
 	  DateTimeFormat: IntlDateTimeFormat,
-	  DurationFormat: IntlDurationFormat
+	  DurationFormat: IntlDurationFormat,
+	  NumberFormat: IntlNumberFormat
 	} = Intl$1;
 	const {
 	  get: IntlDateTimeFormatPrototypeGetFormat
-	} = ObjectGetOwnPropertyDescriptor((IntlDateTimeFormat === null || IntlDateTimeFormat === void 0 ? void 0 : IntlDateTimeFormat.prototype) || ObjectCreate(null), 'format') || ObjectCreate(null);
+	} = ObjectGetOwnPropertyDescriptor(IntlDateTimeFormat?.prototype || ObjectCreate(null), 'format') || ObjectCreate(null);
 	const {
 	  formatRange: IntlDateTimeFormatPrototypeFormatRange,
 	  formatRangeToParts: IntlDateTimeFormatPrototypeFormatRangeToParts,
 	  formatToParts: IntlDateTimeFormatPrototypeFormatToParts,
 	  resolvedOptions: IntlDateTimeFormatPrototypeResolvedOptions
-	} = (IntlDateTimeFormat === null || IntlDateTimeFormat === void 0 ? void 0 : IntlDateTimeFormat.prototype) || ObjectCreate(null);
-	const IntlDurationFormatPrototype = (_IntlDurationFormat$p = IntlDurationFormat === null || IntlDurationFormat === void 0 ? void 0 : IntlDurationFormat.prototype) !== null && _IntlDurationFormat$p !== void 0 ? _IntlDurationFormat$p : ObjectCreate(null);
+	} = IntlDateTimeFormat?.prototype || ObjectCreate(null);
+	const IntlDurationFormatPrototype = IntlDurationFormat?.prototype ?? ObjectCreate(null);
 	const {
 	  format: IntlDurationFormatPrototypeFormat,
 	  formatToParts: IntlDurationFormatPrototypeFormatToParts,
 	  resolvedOptions: IntlDurationFormatPrototypeResolvedOptions
 	} = IntlDurationFormatPrototype;
+	const {
+	  get: IntlNumberFormatPrototypeGetFormat
+	} = ObjectGetOwnPropertyDescriptor(IntlNumberFormat?.prototype || ObjectCreate(null), 'format') || ObjectCreate(null);
 	const {
 	  stringify: JSONStringify
 	} = JSON$1;
@@ -1001,10 +1003,12 @@
 	} = Map$1;
 	const {
 	  abs: MathAbs,
+	  ceil: MathCeil,
 	  floor: MathFloor,
 	  log10: MathLog10,
 	  max: MathMax,
 	  min: MathMin,
+	  round: MathRound,
 	  sign: MathSign,
 	  trunc: MathTrunc
 	} = Math$1;
@@ -1076,103 +1080,18 @@
 	} = console$1;
 	const now = performance$1 && performance$1.now ? performance$1.now.bind(performance$1) : Date$1.now;
 
-	function _defineProperty(e, r, t) {
-	  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-	    value: t,
-	    enumerable: !0,
-	    configurable: !0,
-	    writable: !0
-	  }) : e[r] = t, e;
+	function assert(condition, message) {
+	  if (!condition) throw new Error$1(`assertion failure: ${message}`);
 	}
-	function ownKeys$1(e, r) {
-	  var t = Object.keys(e);
-	  if (Object.getOwnPropertySymbols) {
-	    var o = Object.getOwnPropertySymbols(e);
-	    r && (o = o.filter(function (r) {
-	      return Object.getOwnPropertyDescriptor(e, r).enumerable;
-	    })), t.push.apply(t, o);
-	  }
-	  return t;
-	}
-	function _objectSpread2(e) {
-	  for (var r = 1; r < arguments.length; r++) {
-	    var t = null != arguments[r] ? arguments[r] : {};
-	    r % 2 ? ownKeys$1(Object(t), !0).forEach(function (r) {
-	      _defineProperty(e, r, t[r]);
-	    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1(Object(t)).forEach(function (r) {
-	      Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
-	    });
-	  }
-	  return e;
-	}
-	function _toPrimitive(t, r) {
-	  if ("object" != typeof t || !t) return t;
-	  var e = t[Symbol.toPrimitive];
-	  if (void 0 !== e) {
-	    var i = e.call(t, r || "default");
-	    if ("object" != typeof i) return i;
-	    throw new TypeError("@@toPrimitive must return a primitive value.");
-	  }
-	  return ("string" === r ? String : Number)(t);
-	}
-	function _toPropertyKey(t) {
-	  var i = _toPrimitive(t, "string");
-	  return "symbol" == typeof i ? i : i + "";
+	function assertNotReached(message) {
+	  const reason = message ? ` because ${message}` : '';
+	  throw new Error$1(`assertion failure: code should not be reached${reason}`);
 	}
 
 	/** @type {import('./isObject')} */
 	var isObject$4 = function isObject(x) {
 		return !!x && (typeof x === 'function' || typeof x === 'object');
 	};
-
-	var isObject$3 = isObject$4;
-
-	// https://262.ecma-international.org/5.1/#sec-8
-
-	var Type$2 = function Type(x) {
-		if (x === null) {
-			return 'Null';
-		}
-		if (typeof x === 'undefined') {
-			return 'Undefined';
-		}
-		if (isObject$3(x)) {
-			return 'Object';
-		}
-		if (typeof x === 'number') {
-			return 'Number';
-		}
-		if (typeof x === 'boolean') {
-			return 'Boolean';
-		}
-		if (typeof x === 'string') {
-			return 'String';
-		}
-	};
-
-	var ES5Type = Type$2;
-
-	// https://262.ecma-international.org/11.0/#sec-ecmascript-data-types-and-values
-
-	var Type = function Type(x) {
-		if (typeof x === 'symbol') {
-			return 'Symbol';
-		}
-		if (typeof x === 'bigint') {
-			return 'BigInt';
-		}
-		return ES5Type(x);
-	};
-
-	var Type$1 = /*@__PURE__*/getDefaultExportFromCjs(Type);
-
-	function assert(condition, message) {
-	  if (!condition) throw new Error$1("assertion failure: ".concat(message));
-	}
-	function assertNotReached(message) {
-	  const reason = message ? " because ".concat(message) : '';
-	  throw new Error$1("assertion failure: code should not be reached".concat(reason));
-	}
 
 	var toString$1 = {}.toString;
 
@@ -4545,7 +4464,7 @@
 	    }
 	  });
 	  for (var x = args[i]; i < len; x = args[++i]) {
-	    if (isNull(x) || !isObject$2(x)) {
+	    if (isNull(x) || !isObject$3(x)) {
 	      str += ' ' + x;
 	    } else {
 	      str += ' ' + inspect(x);
@@ -4969,19 +4888,19 @@
 	}
 
 	function isRegExp$1(re) {
-	  return isObject$2(re) && objectToString$1(re) === '[object RegExp]';
+	  return isObject$3(re) && objectToString$1(re) === '[object RegExp]';
 	}
 
-	function isObject$2(arg) {
+	function isObject$3(arg) {
 	  return typeof arg === 'object' && arg !== null;
 	}
 
 	function isDate$2(d) {
-	  return isObject$2(d) && objectToString$1(d) === '[object Date]';
+	  return isObject$3(d) && objectToString$1(d) === '[object Date]';
 	}
 
 	function isError$1(e) {
-	  return isObject$2(e) &&
+	  return isObject$3(e) &&
 	      (objectToString$1(e) === '[object Error]' || e instanceof Error);
 	}
 
@@ -5032,7 +4951,7 @@
 
 	function _extend(origin, add) {
 	  // Don't do anything if add isn't an object
-	  if (!add || !isObject$2(add)) return origin;
+	  if (!add || !isObject$3(add)) return origin;
 
 	  var keys = Object.keys(add);
 	  var i = keys.length;
@@ -5054,7 +4973,7 @@
 	  isFunction: isFunction,
 	  isError: isError$1,
 	  isDate: isDate$2,
-	  isObject: isObject$2,
+	  isObject: isObject$3,
 	  isRegExp: isRegExp$1,
 	  isUndefined: isUndefined,
 	  isSymbol: isSymbol$3,
@@ -5088,7 +5007,7 @@
 		isNull: isNull,
 		isNullOrUndefined: isNullOrUndefined,
 		isNumber: isNumber$1,
-		isObject: isObject$2,
+		isObject: isObject$3,
 		isPrimitive: isPrimitive$3,
 		isRegExp: isRegExp$1,
 		isString: isString$1,
@@ -6454,7 +6373,7 @@
 	}
 
 	var $TypeError$2 = type;
-	var isObject$1 = isObject$4;
+	var isObject$2 = isObject$4;
 	var callBound = callBound$4;
 	var OwnPropertyKeys = ownKeys;
 
@@ -6477,7 +6396,7 @@
 	// https://262.ecma-international.org/12.0/#sec-copydataproperties
 
 	var CopyDataProperties = function CopyDataProperties(target, source, excludedItems) {
-		if (!isObject$1(target)) {
+		if (!isObject$2(target)) {
 			throw new $TypeError$2('Assertion failed: "target" must be an Object');
 		}
 
@@ -6526,14 +6445,14 @@
 	var $TypeError$1 = type;
 
 	var hasOwn = hasown;
-	var isObject = isObject$4;
+	var isObject$1 = isObject$4;
 
 	var isPropertyKey = isPropertyKey$2;
 
 	// https://262.ecma-international.org/6.0/#sec-hasownproperty
 
 	var HasOwnProperty = function HasOwnProperty(O, P) {
-		if (!isObject(O)) {
+		if (!isObject$1(O)) {
 			throw new $TypeError$1('Assertion failed: `O` must be an Object');
 		}
 		if (!isPropertyKey(P)) {
@@ -6585,6 +6504,47 @@
 	};
 
 	var IsIntegralNumber$1 = /*@__PURE__*/getDefaultExportFromCjs(IsIntegralNumber);
+
+	var isObject = isObject$4;
+
+	// https://262.ecma-international.org/5.1/#sec-8
+
+	var Type$2 = function Type(x) {
+		if (x === null) {
+			return 'Null';
+		}
+		if (typeof x === 'undefined') {
+			return 'Undefined';
+		}
+		if (isObject(x)) {
+			return 'Object';
+		}
+		if (typeof x === 'number') {
+			return 'Number';
+		}
+		if (typeof x === 'boolean') {
+			return 'Boolean';
+		}
+		if (typeof x === 'string') {
+			return 'String';
+		}
+	};
+
+	var ES5Type = Type$2;
+
+	// https://262.ecma-international.org/11.0/#sec-ecmascript-data-types-and-values
+
+	var Type = function Type(x) {
+		if (typeof x === 'symbol') {
+			return 'Symbol';
+		}
+		if (typeof x === 'bigint') {
+			return 'BigInt';
+		}
+		return ES5Type(x);
+	};
+
+	var Type$1 = /*@__PURE__*/getDefaultExportFromCjs(Type);
 
 	// Instant
 	const EPOCHNANOSECONDS = 'slot-epochNanoSeconds';
@@ -6644,12 +6604,15 @@
 
 	var ESGetIntrinsic = /*@__PURE__*/getDefaultExportFromCjs(GetIntrinsic$1);
 
+	/* global true */
+
 	const INTRINSICS = {};
 	const customUtilInspectFormatters = {
 	  ['Intl.DateTimeFormat'](depth, options, inspect) {
-	    return inspect(GetSlot(this, ORIGINAL), _objectSpread2({
-	      depth
-	    }, options));
+	    return inspect(GetSlot(this, ORIGINAL), {
+	      depth,
+	      ...options
+	    });
 	  },
 	  ['Temporal.Duration'](depth, options) {
 	    const descr = options.stylize(this._repr_, 'special');
@@ -6658,7 +6621,7 @@
 	    const props = ['years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds', 'milliseconds', 'microseconds', 'nanoseconds'];
 	    for (let i = 0; i < props.length; i++) {
 	      const prop = props[i];
-	      if (this[prop] !== 0) Call$1(ArrayPrototypePush, entries, ["  ".concat(prop, ": ").concat(options.stylize(this[prop], 'number'))]);
+	      if (this[prop] !== 0) Call$1(ArrayPrototypePush, entries, [`  ${prop}: ${options.stylize(this[prop], 'number')}`]);
 	    }
 	    return descr + ' {\n' + Call$1(ArrayPrototypeJoin, entries, [',\n']) + '\n}';
 	  }
@@ -6698,11 +6661,11 @@
 	    ObjectDefineProperty(Class.prototype, prop, desc);
 	  }
 	  DefineIntrinsic(name, Class);
-	  DefineIntrinsic("".concat(name, ".prototype"), Class.prototype);
+	  DefineIntrinsic(`${name}.prototype`, Class.prototype);
 	}
 	function DefineIntrinsic(name, value) {
-	  const key = "%".concat(name, "%");
-	  if (INTRINSICS[key] !== undefined) throw new Error("intrinsic ".concat(name, " already exists"));
+	  const key = `%${name}%`;
+	  if (INTRINSICS[key] !== undefined) throw new Error(`intrinsic ${name} already exists`);
 	  INTRINSICS[key] = value;
 	}
 	function GetIntrinsic(intrinsic) {
@@ -6748,7 +6711,7 @@
 	// x and be less than 10**p.
 	function FMAPowerOf10(x, p, z) {
 	  if (x === 0) return z;
-	  const sign = MathSign(x) || MathSign(z);
+	  const sign = MathSign(x);
 	  x = MathAbs(x);
 	  z = MathAbs(z);
 	  const xStr = Call$1(NumberPrototypeToPrecision, x, [MathTrunc(1 + MathLog10(x))]);
@@ -6795,7 +6758,7 @@
 
 	const digitsForMonthNumber = ArrayFrom({
 	  length: 100
-	}, (_, i) => i < 10 ? "0".concat(i) : "".concat(i));
+	}, (_, i) => i < 10 ? `0${i}` : `${i}`);
 	function ParseMonthCode(argument) {
 	  const value = ToPrimitive$2(argument, String$1);
 	  if (typeof value !== 'string') throw new TypeError$1('month code must be a string');
@@ -6803,7 +6766,7 @@
 	  const monthNumber = digits.length === 2 ? +digits | 0 : -1; // -1 ensures failure
 	  const isLeapMonth = value.length === 4;
 	  if (!(monthNumber >= 0) || digits !== digitsForMonthNumber[monthNumber] || value[0] !== 'M' || (isLeapMonth ? value[3] !== 'L' : value.length !== 3 || monthNumber === 0)) {
-	    throw new RangeError$1("bad month code ".concat(value, "; must match M01-M99 or M00L-M99L"));
+	    throw new RangeError$1(`bad month code ${value}; must match M01-M99 or M00L-M99L`);
 	  }
 	  return {
 	    monthNumber,
@@ -6811,8 +6774,8 @@
 	  };
 	}
 	function CreateMonthCode(monthNumber, isLeapMonth) {
-	  const numberPart = Call$1(StringPrototypePadStart, "".concat(monthNumber), [2, '0']);
-	  return isLeapMonth ? "M".concat(numberPart, "L") : "M".concat(numberPart);
+	  const numberPart = Call$1(StringPrototypePadStart, `${monthNumber}`, [2, '0']);
+	  return isLeapMonth ? `M${numberPart}L` : `M${numberPart}`;
 	}
 
 	var BigInteger = {exports: {}};
@@ -8268,8 +8231,9 @@
 	var BigIntegerExports = BigInteger.exports;
 	var bigInt = /*@__PURE__*/getDefaultExportFromCjs(BigIntegerExports);
 
-	var _TimeDuration;
 	class TimeDuration {
+	  static MAX = (() => bigInt('9007199254740991999999999'))();
+	  static ZERO = (() => new TimeDuration(bigInt.zero))();
 	  constructor(totalNs) {
 	    assert(typeof totalNs !== 'number', 'big integer required');
 	    this.totalNs = bigInt(totalNs);
@@ -8281,7 +8245,13 @@
 	    this.sec = quotient.toJSNumber();
 	    this.subsec = remainder.toJSNumber();
 	    assert(NumberIsSafeInteger(this.sec), 'seconds too big');
-	    assert(MathAbs(this.subsec) <= 999999999, 'subseconds too big');
+	    assert(MathAbs(this.subsec) <= 999_999_999, 'subseconds too big');
+	  }
+	  static #validateNew(totalNs, operation) {
+	    if (totalNs.abs().greater(TimeDuration.MAX)) {
+	      throw new RangeError$1(`${operation} of duration time units cannot exceed ${TimeDuration.MAX} s`);
+	    }
+	    return new TimeDuration(totalNs);
 	  }
 	  static fromEpochNsDiff(epochNs1, epochNs2) {
 	    const diff = bigInt(epochNs1).subtract(epochNs2);
@@ -8290,17 +8260,17 @@
 	  }
 	  static fromComponents(h, min, s, ms, µs, ns) {
 	    const totalNs = bigInt(ns).add(bigInt(µs).multiply(1e3)).add(bigInt(ms).multiply(1e6)).add(bigInt(s).multiply(1e9)).add(bigInt(min).multiply(60e9)).add(bigInt(h).multiply(3600e9));
-	    return _validateNew.call(TimeDuration, totalNs, 'total');
+	    return TimeDuration.#validateNew(totalNs, 'total');
 	  }
 	  abs() {
 	    return new TimeDuration(this.totalNs.abs());
 	  }
 	  add(other) {
-	    return _validateNew.call(TimeDuration, this.totalNs.add(other.totalNs), 'sum');
+	    return TimeDuration.#validateNew(this.totalNs.add(other.totalNs), 'sum');
 	  }
 	  add24HourDays(days) {
 	    assert(NumberIsInteger(days), 'days must be an integer');
-	    return _validateNew.call(TimeDuration, this.totalNs.add(bigInt(days).multiply(86400e9)), 'sum');
+	    return TimeDuration.#validateNew(this.totalNs.add(bigInt(days).multiply(86400e9)), 'sum');
 	  }
 	  addToEpochNs(epochNs) {
 	    return bigInt(epochNs).add(this.totalNs);
@@ -8361,40 +8331,45 @@
 	    const unsignedRoundingMode = GetUnsignedRoundingMode(mode, sign);
 	    const rounded = remainder.isZero() ? r1 : ApplyUnsignedRoundingMode(r1, r2, cmp, even, unsignedRoundingMode);
 	    const result = sign === 'positive' ? rounded : rounded.multiply(-1);
-	    return _validateNew.call(TimeDuration, result, 'rounding');
+	    return TimeDuration.#validateNew(result, 'rounding');
 	  }
 	  sign() {
 	    return this.cmp(new TimeDuration(0n));
 	  }
 	  subtract(other) {
-	    return _validateNew.call(TimeDuration, this.totalNs.subtract(other.totalNs), 'difference');
+	    return TimeDuration.#validateNew(this.totalNs.subtract(other.totalNs), 'difference');
 	  }
 	}
-	_TimeDuration = TimeDuration;
-	function _validateNew(totalNs, operation) {
-	  if (totalNs.abs().greater(_TimeDuration.MAX)) {
-	    throw new RangeError$1("".concat(operation, " of duration time units cannot exceed ").concat(_TimeDuration.MAX, " s"));
-	  }
-	  return new _TimeDuration(totalNs);
-	}
-	_defineProperty(TimeDuration, "MAX", bigInt('9007199254740991999999999'));
-	_defineProperty(TimeDuration, "ZERO", new _TimeDuration(bigInt.zero));
 
 	const offsetIdentifierNoCapture = /(?:[+-](?:[01][0-9]|2[0-3])(?::?[0-5][0-9])?)/;
 	const tzComponent = /[A-Za-z._][A-Za-z._0-9+-]*/;
-	const timeZoneID = new RegExp$1("(?:".concat(offsetIdentifierNoCapture.source, "|(?:").concat(tzComponent.source, ")(?:\\/(?:").concat(tzComponent.source, "))*)"));
+	const timeZoneID = new RegExp$1(`(?:${offsetIdentifierNoCapture.source}|(?:${tzComponent.source})(?:\\/(?:${tzComponent.source}))*)`);
 	const yearpart = /(?:[+-]\d{6}|\d{4})/;
 	const monthpart = /(?:0[1-9]|1[0-2])/;
 	const daypart = /(?:0[1-9]|[12]\d|3[01])/;
-	const datesplit = new RegExp$1("(".concat(yearpart.source, ")(?:-(").concat(monthpart.source, ")-(").concat(daypart.source, ")|(").concat(monthpart.source, ")(").concat(daypart.source, "))"));
-	const timesplit = /(\d{2})(?::(\d{2})(?::(\d{2})(?:[.,](\d{1,9}))?)?|(\d{2})(?:(\d{2})(?:[.,](\d{1,9}))?)?)?/;
-	const offsetWithParts = /([+-])([01][0-9]|2[0-3])(?::?([0-5][0-9])(?::?([0-5][0-9])(?:[.,](\d{1,9}))?)?)?/;
-	const offset = /((?:[+-])(?:[01][0-9]|2[0-3])(?::?(?:[0-5][0-9])(?::?(?:[0-5][0-9])(?:[.,](?:\d{1,9}))?)?)?)/;
-	const offsetpart = new RegExp$1("([zZ])|".concat(offset.source, "?"));
+	const datesplit = new RegExp$1(Call$1(ArrayPrototypeJoin, [`(?<yearpart>${yearpart.source})`, `(?:-(?<monthpart>${monthpart.source})-`, `(?<daypart>${daypart.source})|`, `(?<monthpart>${monthpart.source})(?<daypart>${daypart.source}))`], ['']));
+	const sep = /:/;
+	const timesecond = new RegExp$1('(?<second>\\d{2})');
+	const fraction = new RegExp$1('(?:[.,](?<fraction>\\d{1,9}))');
+	const secondspart = new RegExp$1(`(?:${timesecond.source})(?:${fraction.source})?`);
+	const hourminutesecondNoSep = new RegExp$1(`(?<hour>\\d{2})(?:(?<minute>\\d{2}))?(?:${secondspart.source})?`);
+	const hourminutesecondSep = new RegExp$1(`(?<hour>\\d{2})(?:${sep.source}(?<minute>\\d{2}))?(?:${sep.source}${secondspart.source})?`);
+	const timesplit = new RegExp$1(`(?:(?:${hourminutesecondSep.source})|(?:${hourminutesecondNoSep.source}))`);
+	const sign = /[+-]/;
+	const hour = /[01][0-9]|2[0-3]/;
+	const minute = /[0-5][0-9]/;
+	const second = minute;
+	const subseconds = /(?:[.,](?<offsetSubseconds>\d{1,9})?)/;
+	const optionalMinSecWithSep = new RegExp$1(Call$1(ArrayPrototypeJoin, [`(?:${sep.source})(?<offsetMinute>${minute.source})`, `(?:${sep.source}(?<offsetSecond>${second.source})${subseconds.source}?)?`], ['']));
+	const optionalMinSecNoSep = new RegExp$1(`(?<offsetMinute>${minute.source})(?:(?<offsetSecond>${second.source})${subseconds.source}?)?`);
+	const optionalMinSec = new RegExp$1(`(?:${optionalMinSecWithSep.source})|(?:${optionalMinSecNoSep.source})`);
+	const offsetWithParts = new RegExp$1(`^(?<offsetSign>${sign.source})(?<offsetHour>${hour.source})(?:${optionalMinSec.source})?$`);
+	const offset = new RegExp$1(`(?<offset>(?:${sign.source})(?:${hour.source})(?:${optionalMinSec.source})?)`);
+	const offsetpart = new RegExp$1(`(?<z>[zZ])|${offset.source}?`);
 	const offsetIdentifier = /([+-])([01][0-9]|2[0-3])(?::?([0-5][0-9])?)?/;
 	const annotation = /\[(!)?([a-z_][a-z0-9_-]*)=([A-Za-z0-9]+(?:-[A-Za-z0-9]+)*)\]/g;
-	const zoneddatetime = new RegExp$1(Call$1(ArrayPrototypeJoin, ["^".concat(datesplit.source), "(?:(?:[tT]|\\s+)".concat(timesplit.source, "(?:").concat(offsetpart.source, ")?)?"), "(?:\\[!?(".concat(timeZoneID.source, ")\\])?"), "((?:".concat(annotation.source, ")*)$")], ['']));
-	const time = new RegExp$1(Call$1(ArrayPrototypeJoin, ["^[tT]?".concat(timesplit.source), "(?:".concat(offsetpart.source, ")?"), "(?:\\[!?".concat(timeZoneID.source, "\\])?"), "((?:".concat(annotation.source, ")*)$")], ['']));
+	const zoneddatetime = new RegExp$1(Call$1(ArrayPrototypeJoin, [`^${datesplit.source}`, `(?:(?:[tT]|\\s+)${timesplit.source}(?:${offsetpart.source})?)?`, `(?:\\[!?(?<timeZoneID>${timeZoneID.source})\\])?`, `(?<annotation>(?:${annotation.source})*)$`], ['']));
+	const time = new RegExp$1(Call$1(ArrayPrototypeJoin, [`^[tT]?${timesplit.source}`, `(?:${offsetpart.source})?`, `(?:\\[!?((?<timeZoneID>${timeZoneID.source}))\\])?`, `(?<annotation>(?:${annotation.source})*)$`], ['']));
 
 	// The short forms of YearMonth and MonthDay are only for the ISO calendar, but
 	// annotations are still allowed, and will throw if the calendar annotation is
@@ -8406,14 +8381,16 @@
 	// Not ambiguous with HHMMSS because that requires a 'T' prefix
 	// UTC offsets are not allowed, because they are not allowed with any date-only
 	// format; also, YYYY-MM-UU is ambiguous with YYYY-MM-DD
-	const yearmonth = new RegExp$1("^(".concat(yearpart.source, ")-?(").concat(monthpart.source, ")(?:\\[!?").concat(timeZoneID.source, "\\])?((?:").concat(annotation.source, ")*)$"));
-	const monthday = new RegExp$1("^(?:--)?(".concat(monthpart.source, ")-?(").concat(daypart.source, ")(?:\\[!?").concat(timeZoneID.source, "\\])?((?:").concat(annotation.source, ")*)$"));
-	const fraction = /(\d+)(?:[.,](\d{1,9}))?/;
+	const yearmonth = new RegExp$1(`^(${yearpart.source})-?(${monthpart.source})(?:\\[!?${timeZoneID.source}\\])?((?:${annotation.source})*)$`);
+	const monthday = new RegExp$1(`^(?:--)?(${monthpart.source})-?(${daypart.source})(?:\\[!?${timeZoneID.source}\\])?((?:${annotation.source})*)$`);
+	const numberWithOptionalFraction = /(\d+)(?:[.,](\d{1,9}))?/;
 	const durationDate = /(?:(\d+)Y)?(?:(\d+)M)?(?:(\d+)W)?(?:(\d+)D)?/;
-	const durationTime = new RegExp$1("(?:".concat(fraction.source, "H)?(?:").concat(fraction.source, "M)?(?:").concat(fraction.source, "S)?"));
-	const duration = new RegExp$1("^([+-])?P".concat(durationDate.source, "(?:T(?!$)").concat(durationTime.source, ")?$"), 'i');
+	const durationTime = new RegExp$1(Call$1(ArrayPrototypeJoin, [`(?:${numberWithOptionalFraction.source}H)?`, `(?:${numberWithOptionalFraction.source}M)?`, `(?:${numberWithOptionalFraction.source}S)?`], ['']));
+	const duration = new RegExp$1(`^([+-])?P${durationDate.source}(?:T(?!$)${durationTime.source})?$`, 'i');
 
-	const DAY_MS = 86400000;
+	/* global true */
+
+	const DAY_MS = 86400_000;
 	const DAY_NANOS = DAY_MS * 1e6;
 	// Instant range is 100 million days (inclusive) before or after epoch.
 	const MS_MAX = DAY_MS * 1e8;
@@ -8447,17 +8424,14 @@
 	function ToPositiveIntegerWithTruncation(value, property) {
 	  const integer = ToIntegerWithTruncation(value);
 	  if (integer <= 0) {
-	    if (property !== undefined) {
-	      throw new RangeError$1("property '".concat(property, "' cannot be a a number less than one"));
-	    }
-	    throw new RangeError$1('Cannot convert a number less than one to a positive integer');
+	    throw new RangeError$1(`property '${property}' cannot be a a number less than one`);
 	  }
 	  return integer;
 	}
 	function ToIntegerIfIntegral(value) {
 	  const number = ToNumber$2(value);
 	  if (!NumberIsFinite(number)) throw new RangeError$1('infinity is out of range');
-	  if (!IsIntegralNumber$1(number)) throw new RangeError$1("unsupported fractional value ".concat(value));
+	  if (!IsIntegralNumber$1(number)) throw new RangeError$1(`unsupported fractional value ${value}`);
 	  if (number === 0) return 0; // ℝ(value) in spec text; converts -0 to 0
 	  return number;
 	}
@@ -8467,7 +8441,7 @@
 	function RequireString(value) {
 	  if (Type$1(value) !== 'String') {
 	    // Use String() to ensure that Symbols won't throw
-	    throw new TypeError$1("expected a string, not ".concat(String$1(value)));
+	    throw new TypeError$1(`expected a string, not ${String$1(value)}`);
 	  }
 	  return value;
 	}
@@ -8485,7 +8459,7 @@
 	  return value;
 	}
 	const CALENDAR_FIELD_KEYS = ['era', 'eraYear', 'year', 'month', 'monthCode', 'day', 'hour', 'minute', 'second', 'millisecond', 'microsecond', 'nanosecond', 'offset', 'timeZone'];
-	const BUILTIN_CASTS = new Map$1([['era', ToString$1], ['eraYear', ToIntegerWithTruncation], ['year', ToIntegerWithTruncation], ['month', ToPositiveIntegerWithTruncation], ['monthCode', ToMonthCode], ['day', ToPositiveIntegerWithTruncation], ['hour', ToIntegerWithTruncation], ['minute', ToIntegerWithTruncation], ['second', ToIntegerWithTruncation], ['millisecond', ToIntegerWithTruncation], ['microsecond', ToIntegerWithTruncation], ['nanosecond', ToIntegerWithTruncation], ['offset', ToOffsetString], ['timeZone', ToTemporalTimeZoneIdentifier]]);
+	const BUILTIN_CASTS = new Map$1([['era', ToString$1], ['eraYear', ToIntegerWithTruncation], ['year', ToIntegerWithTruncation], ['month', value => ToPositiveIntegerWithTruncation(value, 'month')], ['monthCode', ToMonthCode], ['day', value => ToPositiveIntegerWithTruncation(value, 'day')], ['hour', ToIntegerWithTruncation], ['minute', ToIntegerWithTruncation], ['second', ToIntegerWithTruncation], ['millisecond', ToIntegerWithTruncation], ['microsecond', ToIntegerWithTruncation], ['nanosecond', ToIntegerWithTruncation], ['offset', ToOffsetString], ['timeZone', ToTemporalTimeZoneIdentifier]]);
 	const BUILTIN_DEFAULTS = new Map$1([['hour', 0], ['minute', 0], ['second', 0], ['millisecond', 0], ['microsecond', 0], ['nanosecond', 0]]);
 
 	// each item is [plural, singular, category, (length in ns)]
@@ -8563,7 +8537,7 @@
 	  if (showCalendar === 'never') return '';
 	  if (showCalendar === 'auto' && id === 'iso8601') return '';
 	  const flag = showCalendar === 'critical' ? '!' : '';
-	  return "[".concat(flag, "u-ca=").concat(id, "]");
+	  return `[${flag}u-ca=${id}]`;
 	}
 
 	// Not a separate abstract operation in the spec, because it only occurs in one
@@ -8587,43 +8561,49 @@
 	        calendar = value;
 	        calendarWasCritical = critical === '!';
 	      } else if (critical === '!' || calendarWasCritical) {
-	        throw new RangeError$1("Invalid annotations in ".concat(annotations, ": more than one u-ca present with critical flag"));
+	        throw new RangeError$1(`Invalid annotations in ${annotations}: more than one u-ca present with critical flag`);
 	      }
 	    } else if (critical === '!') {
-	      throw new RangeError$1("Unrecognized annotation: !".concat(key, "=").concat(value));
+	      throw new RangeError$1(`Unrecognized annotation: !${key}=${value}`);
 	    }
 	  }
 	  return calendar;
 	}
 	function ParseISODateTime(isoString) {
-	  var _ref3, _match$, _ref4, _match$2, _match$3, _ref5, _match$4, _ref6, _match$5, _ref7, _match$6;
 	  // ZDT is the superset of fields for every other Temporal type
 	  const match = Call$1(RegExpPrototypeExec, zoneddatetime, [isoString]);
-	  if (!match) throw new RangeError$1("invalid RFC 9557 string: ".concat(isoString));
-	  const calendar = processAnnotations(match[16]);
-	  let yearString = match[1];
-	  if (yearString === '-000000') throw new RangeError$1("invalid RFC 9557 string: ".concat(isoString));
+	  if (!match) throw new RangeError$1(`invalid RFC 9557 string: ${isoString}`);
+	  const calendar = processAnnotations(match.groups.annotation);
+	  let yearString = match.groups.yearpart;
+	  if (yearString === '-000000') throw new RangeError$1(`invalid RFC 9557 string: ${isoString}`);
 	  const year = +yearString;
-	  const month = +((_ref3 = (_match$ = match[2]) !== null && _match$ !== void 0 ? _match$ : match[4]) !== null && _ref3 !== void 0 ? _ref3 : 1);
-	  const day = +((_ref4 = (_match$2 = match[3]) !== null && _match$2 !== void 0 ? _match$2 : match[5]) !== null && _ref4 !== void 0 ? _ref4 : 1);
-	  const hasTime = match[6] !== undefined;
-	  const hour = +((_match$3 = match[6]) !== null && _match$3 !== void 0 ? _match$3 : 0);
-	  const minute = +((_ref5 = (_match$4 = match[7]) !== null && _match$4 !== void 0 ? _match$4 : match[10]) !== null && _ref5 !== void 0 ? _ref5 : 0);
-	  let second = +((_ref6 = (_match$5 = match[8]) !== null && _match$5 !== void 0 ? _match$5 : match[11]) !== null && _ref6 !== void 0 ? _ref6 : 0);
+	  const month = +match.groups.monthpart;
+	  const day = +match.groups.daypart;
+	  assert(month !== undefined && day !== undefined, `Month and day must be present if string ${isoString} matched`);
+	  const hasTime = match.groups.hour !== undefined;
+	  const hasMinute = match.groups.minute !== undefined;
+	  const hasSecond = match.groups.second !== undefined;
+	  const hasFraction = match.groups.fraction !== undefined;
+	  if (hasFraction && (!hasSecond || !hasMinute && hasTime)) {
+	    throw new RangeError$1(`invalid RFC 9557 string: ${isoString}, only seconds may be fractional`);
+	  }
+	  const hour = +(match.groups.hour ?? 0);
+	  const minute = +(match.groups.minute ?? 0);
+	  let second = +(match.groups.second ?? 0);
 	  if (second === 60) second = 59;
-	  const fraction = ((_ref7 = (_match$6 = match[9]) !== null && _match$6 !== void 0 ? _match$6 : match[12]) !== null && _ref7 !== void 0 ? _ref7 : '') + '000000000';
+	  const fraction = (match.groups.fraction ?? '') + '000000000';
 	  const millisecond = +Call$1(StringPrototypeSlice, fraction, [0, 3]);
 	  const microsecond = +Call$1(StringPrototypeSlice, fraction, [3, 6]);
 	  const nanosecond = +Call$1(StringPrototypeSlice, fraction, [6, 9]);
 	  let offset;
 	  let z = false;
-	  if (match[13]) {
+	  if (match.groups.z) {
 	    offset = undefined;
 	    z = true;
-	  } else if (match[14]) {
-	    offset = match[14];
+	  } else if (match.groups.offset) {
+	    offset = match.groups.offset;
 	  }
-	  const tzAnnotation = match[15];
+	  const tzAnnotation = match.groups.timeZoneID;
 	  RejectDateTime(year, month, day, hour, minute, second, millisecond, microsecond, nanosecond);
 	  return {
 	    year,
@@ -8661,25 +8641,32 @@
 	}
 	function ParseTemporalTimeString(isoString) {
 	  const match = Call$1(RegExpPrototypeExec, time, [isoString]);
-	  let hour, minute, second, millisecond, microsecond, nanosecond;
+	  let hour, minute, second, millisecond, microsecond, nanosecond, calendar;
 	  if (match) {
-	    var _match$7, _ref8, _match$8, _ref9, _match$9, _ref0, _match$0;
-	    processAnnotations(match[10]); // ignore found calendar
-	    hour = +((_match$7 = match[1]) !== null && _match$7 !== void 0 ? _match$7 : 0);
-	    minute = +((_ref8 = (_match$8 = match[2]) !== null && _match$8 !== void 0 ? _match$8 : match[5]) !== null && _ref8 !== void 0 ? _ref8 : 0);
-	    second = +((_ref9 = (_match$9 = match[3]) !== null && _match$9 !== void 0 ? _match$9 : match[6]) !== null && _ref9 !== void 0 ? _ref9 : 0);
+	    calendar = processAnnotations(match.groups.annotation);
+	    const hasFraction = match.groups.fraction !== undefined;
+	    const hasSecond = match.groups.second !== undefined;
+	    const hasMinute = match.groups.minute !== undefined;
+	    const hasHour = match.groups.hour !== undefined;
+	    if (hasFraction && (!hasSecond || !hasMinute && hasHour)) {
+	      throw new RangeError$1(`invalid RFC 9557 string: ${isoString}, only seconds may be fractional`);
+	    }
+	    hour = +match.groups.hour;
+	    assert(hour !== undefined, `Hour must be present if string ${isoString} matched`);
+	    minute = +(match.groups.minute ?? 0);
+	    second = +(match.groups.second ?? 0);
 	    if (second === 60) second = 59;
-	    const fraction = ((_ref0 = (_match$0 = match[4]) !== null && _match$0 !== void 0 ? _match$0 : match[7]) !== null && _ref0 !== void 0 ? _ref0 : '') + '000000000';
+	    const fraction = (match.groups.fraction ?? '') + '000000000';
 	    millisecond = +Call$1(StringPrototypeSlice, fraction, [0, 3]);
 	    microsecond = +Call$1(StringPrototypeSlice, fraction, [3, 6]);
 	    nanosecond = +Call$1(StringPrototypeSlice, fraction, [6, 9]);
-	    if (match[8]) throw new RangeError$1('Z designator not supported for PlainTime');
+	    if (match.groups.z) throw new RangeError$1('Z designator not supported for PlainTime');
 	  } else {
 	    const {
 	      time,
 	      z
 	    } = ParseISODateTime(isoString);
-	    if (time === 'start-of-day') throw new RangeError$1("time is missing in string: ".concat(isoString));
+	    if (time === 'start-of-day') throw new RangeError$1(`time is missing in string: ${isoString}`);
 	    if (z) throw new RangeError$1('Z designator not supported for PlainTime');
 	    ({
 	      hour,
@@ -8699,7 +8686,8 @@
 	      second,
 	      millisecond,
 	      microsecond,
-	      nanosecond
+	      nanosecond,
+	      calendar
 	    };
 	  }
 	  // Reject strings that are ambiguous with PlainMonthDay or PlainYearMonth.
@@ -8709,25 +8697,26 @@
 	      day
 	    } = ParseTemporalMonthDayString(isoString);
 	    RejectISODate(1972, month, day);
-	  } catch (_unused) {
+	  } catch {
 	    try {
 	      const {
 	        year,
 	        month
 	      } = ParseTemporalYearMonthString(isoString);
 	      RejectISODate(year, month, 1);
-	    } catch (_unused2) {
+	    } catch {
 	      return {
 	        hour,
 	        minute,
 	        second,
 	        millisecond,
 	        microsecond,
-	        nanosecond
+	        nanosecond,
+	        calendar
 	      };
 	    }
 	  }
-	  throw new RangeError$1("invalid RFC 9557 time-only string ".concat(isoString, "; may need a T prefix"));
+	  throw new RangeError$1(`invalid RFC 9557 time-only string ${isoString}; may need a T prefix`);
 	}
 	function ParseTemporalYearMonthString(isoString) {
 	  const match = Call$1(RegExpPrototypeExec, yearmonth, [isoString]);
@@ -8735,12 +8724,15 @@
 	  if (match) {
 	    calendar = processAnnotations(match[3]);
 	    let yearString = match[1];
-	    if (yearString === '-000000') throw new RangeError$1("invalid RFC 9557 string: ".concat(isoString));
+	    if (yearString === '-000000') throw new RangeError$1(`invalid RFC 9557 string: ${isoString}`);
 	    year = +yearString;
 	    month = +match[2];
 	    referenceISODay = 1;
-	    if (calendar !== undefined && calendar !== 'iso8601') {
-	      throw new RangeError$1('YYYY-MM format is only valid with iso8601 calendar');
+	    if (calendar !== undefined) {
+	      calendar = ASCIILowercase(calendar);
+	      if (calendar !== 'iso8601') {
+	        throw new RangeError$1('YYYY-MM format is only valid with iso8601 calendar');
+	      }
 	    }
 	  } else {
 	    let z;
@@ -8767,8 +8759,11 @@
 	    calendar = processAnnotations(match[3]);
 	    month = +match[1];
 	    day = +match[2];
-	    if (calendar !== undefined && calendar !== 'iso8601') {
-	      throw new RangeError$1('MM-DD format is only valid with iso8601 calendar');
+	    if (calendar !== undefined) {
+	      calendar = ASCIILowercase(calendar);
+	      if (calendar !== 'iso8601') {
+	        throw new RangeError$1('MM-DD format is only valid with iso8601 calendar');
+	      }
 	    }
 	  } else {
 	    let z;
@@ -8788,15 +8783,15 @@
 	    referenceISOYear
 	  };
 	}
-	const TIMEZONE_IDENTIFIER = new RegExp$1("^".concat(timeZoneID.source, "$"), 'i');
-	const OFFSET_IDENTIFIER = new RegExp$1("^".concat(offsetIdentifier.source, "$"));
+	const TIMEZONE_IDENTIFIER = new RegExp$1(`^${timeZoneID.source}$`, 'i');
+	const OFFSET_IDENTIFIER = new RegExp$1(`^${offsetIdentifier.source}$`);
 	function throwBadTimeZoneStringError(timeZoneString) {
 	  // Offset identifiers only support minute precision, but offsets in ISO
 	  // strings support nanosecond precision. If the identifier is invalid but
 	  // it's a valid ISO offset, then it has sub-minute precision. Show a clearer
 	  // error message in that case.
 	  const msg = Call$1(RegExpPrototypeTest, OFFSET, [timeZoneString]) ? 'Seconds not allowed in offset time zone' : 'Invalid time zone';
-	  throw new RangeError$1("".concat(msg, ": ").concat(timeZoneString));
+	  throw new RangeError$1(`${msg}: ${timeZoneString}`);
 	}
 	function ParseTimeZoneIdentifier(identifier) {
 	  if (!Call$1(RegExpPrototypeTest, TIMEZONE_IDENTIFIER, [identifier])) {
@@ -8840,7 +8835,7 @@
 	        z
 	      };
 	    }
-	  } catch (_unused3) {
+	  } catch {
 	    // fall through
 	  }
 	  throwBadTimeZoneStringError(timeZoneString);
@@ -8859,9 +8854,9 @@
 	}
 	function ParseTemporalDurationStringRaw(isoString) {
 	  const match = Call$1(RegExpPrototypeExec, duration, [isoString]);
-	  if (!match) throw new RangeError$1("invalid duration: ".concat(isoString));
+	  if (!match) throw new RangeError$1(`invalid duration: ${isoString}`);
 	  if (Call$1(ArrayPrototypeEvery, match, [(part, i) => i < 2 || part === undefined])) {
-	    throw new RangeError$1("invalid duration: ".concat(isoString));
+	    throw new RangeError$1(`invalid duration: ${isoString}`);
 	  }
 	  const sign = match[1] === '-' ? -1 : 1;
 	  const years = match[2] === undefined ? 0 : ToIntegerWithTruncation(match[2]) * sign;
@@ -8879,16 +8874,14 @@
 	  // fractional hours, minutes, or seconds, expressed in whole nanoseconds:
 	  let excessNanoseconds = 0;
 	  if (fHours !== undefined) {
-	    var _ref1, _ref10, _ref11;
-	    if ((_ref1 = (_ref10 = (_ref11 = minutesStr !== null && minutesStr !== void 0 ? minutesStr : fMinutes) !== null && _ref11 !== void 0 ? _ref11 : secondsStr) !== null && _ref10 !== void 0 ? _ref10 : fSeconds) !== null && _ref1 !== void 0 ? _ref1 : false) {
+	    if (minutesStr ?? fMinutes ?? secondsStr ?? fSeconds ?? false) {
 	      throw new RangeError$1('only the smallest unit can be fractional');
 	    }
 	    excessNanoseconds = ToIntegerWithTruncation(Call$1(StringPrototypeSlice, fHours + '000000000', [0, 9])) * 3600 * sign;
 	  } else {
 	    minutes = minutesStr === undefined ? 0 : ToIntegerWithTruncation(minutesStr) * sign;
 	    if (fMinutes !== undefined) {
-	      var _ref12;
-	      if ((_ref12 = secondsStr !== null && secondsStr !== void 0 ? secondsStr : fSeconds) !== null && _ref12 !== void 0 ? _ref12 : false) {
+	      if (secondsStr ?? fSeconds ?? false) {
 	        throw new RangeError$1('only the smallest unit can be fractional');
 	      }
 	      excessNanoseconds = ToIntegerWithTruncation(Call$1(StringPrototypeSlice, fMinutes + '000000000', [0, 9])) * 60 * sign;
@@ -9006,18 +8999,18 @@
 	  }
 	  return result;
 	}
-	function AdjustDateDurationRecord(_ref13, newDays, newWeeks, newMonths) {
+	function AdjustDateDurationRecord(_ref3, newDays, newWeeks, newMonths) {
 	  let {
 	    years,
 	    months,
-	    weeks,
-	    days
-	  } = _ref13;
+	    weeks
+	  } = _ref3;
+	  assert(newDays !== undefined, 'days must be provided to AdjustDateDurationRecord');
 	  return {
 	    years,
-	    months: newMonths !== null && newMonths !== void 0 ? newMonths : months,
-	    weeks: newWeeks !== null && newWeeks !== void 0 ? newWeeks : weeks,
-	    days: newDays !== null && newDays !== void 0 ? newDays : days
+	    months: newMonths ?? months,
+	    weeks: newWeeks ?? weeks,
+	    days: newDays
 	  };
 	}
 	function ZeroDateDuration() {
@@ -9099,17 +9092,17 @@
 	  if (increment === undefined) return 1;
 	  const integerIncrement = ToIntegerWithTruncation(increment);
 	  if (integerIncrement < 1 || integerIncrement > 1e9) {
-	    throw new RangeError$1("roundingIncrement must be at least 1 and at most 1e9, not ".concat(increment));
+	    throw new RangeError$1(`roundingIncrement must be at least 1 and at most 1e9, not ${increment}`);
 	  }
 	  return integerIncrement;
 	}
 	function ValidateTemporalRoundingIncrement(increment, dividend, inclusive) {
 	  const maximum = inclusive ? dividend : dividend - 1;
 	  if (increment > maximum) {
-	    throw new RangeError$1("roundingIncrement must be at least 1 and less than ".concat(maximum, ", not ").concat(increment));
+	    throw new RangeError$1(`roundingIncrement must be at least 1 and less than ${maximum}, not ${increment}`);
 	  }
 	  if (dividend % increment !== 0) {
-	    throw new RangeError$1("Rounding increment must divide evenly into ".concat(dividend));
+	    throw new RangeError$1(`Rounding increment must divide evenly into ${dividend}`);
 	  }
 	}
 	function GetTemporalFractionalSecondDigitsOption(options) {
@@ -9118,13 +9111,13 @@
 	  if (Type$1(digitsValue) !== 'Number') {
 	    const digitsString = ToString$1(digitsValue);
 	    if (digitsString !== 'auto') {
-	      throw new RangeError$1("fractionalSecondDigits must be 'auto' or 0 through 9, not ".concat(digitsString));
+	      throw new RangeError$1(`fractionalSecondDigits must be 'auto' or 0 through 9, not ${digitsString}`);
 	    }
 	    return 'auto';
 	  }
 	  const digitCount = MathFloor(digitsValue);
 	  if (!NumberIsFinite(digitCount) || digitCount < 0 || digitCount > 9) {
-	    throw new RangeError$1("fractionalSecondDigits must be 'auto' or 0 through 9, not ".concat(digitsValue));
+	    throw new RangeError$1(`fractionalSecondDigits must be 'auto' or 0 through 9, not ${digitsValue}`);
 	  }
 	  return digitCount;
 	}
@@ -9228,7 +9221,7 @@
 	    if (value !== singular && value !== plural) continue;
 	    if (unitGroup === 'datetime' || unitGroup === category) return;
 	  }
-	  throw new RangeError$1("".concat(value, " not allowed as a ").concat(unitGroup, " unit"));
+	  throw new RangeError$1(`${value} not allowed as a ${unitGroup} unit`);
 	}
 	function GetTemporalRelativeToOption(options) {
 	  // returns: {
@@ -9290,7 +9283,7 @@
 	      if (offset) {
 	        const offsetParseResult = Call$1(RegExpPrototypeExec, OFFSET_WITH_PARTS, [offset]);
 	        assert(offsetParseResult, 'offset string must re-parse');
-	        const offsetSecondsPart = offsetParseResult[4];
+	        const offsetSecondsPart = offsetParseResult.groups.offsetSecond;
 	        if (offsetSecondsPart) matchMinutes = false;
 	      }
 	    } else if (z) {
@@ -9380,7 +9373,7 @@
 	      result[property] = Call$1(MapPrototypeGet, BUILTIN_CASTS, [property])(value);
 	    } else if (requiredFields !== 'partial') {
 	      if (Call$1(ArrayPrototypeIncludes, requiredFields, [property])) {
-	        throw new TypeError$1("required property '".concat(property, "' missing or undefined"));
+	        throw new TypeError$1(`required property '${property}' missing or undefined`);
 	      }
 	      result[property] = Call$1(MapPrototypeGet, BUILTIN_DEFAULTS, [property]);
 	    }
@@ -9534,7 +9527,7 @@
 	}
 	function ToTemporalInstant(item) {
 	  const TemporalInstant = GetIntrinsic('%Temporal.Instant%');
-	  if (Type$1(item === 'Object')) {
+	  if (Type$1(item) === 'Object') {
 	    if (IsTemporalInstant(item) || IsTemporalZonedDateTime(item)) {
 	      return new TemporalInstant(GetSlot(item, EPOCHNANOSECONDS));
 	    }
@@ -9548,14 +9541,15 @@
 	    offset,
 	    z
 	  } = ParseTemporalInstantString(RequireString(item));
+	  assert(time !== 'start-of-day', 'Instant string must include a time');
 	  const {
-	    hour = 0,
-	    minute = 0,
-	    second = 0,
-	    millisecond = 0,
-	    microsecond = 0,
-	    nanosecond = 0
-	  } = time === 'start-of-day' ? {} : time;
+	    hour,
+	    minute,
+	    second,
+	    millisecond,
+	    microsecond,
+	    nanosecond
+	  } = time;
 
 	  // ParseTemporalInstantString ensures that either `z` is true or or `offset` is non-undefined
 	  const offsetNanoseconds = z ? 0 : ParseDateTimeUTCOffset(offset);
@@ -9727,7 +9721,7 @@
 	  if (offsetOpt === 'reject') {
 	    const offsetStr = FormatUTCOffsetNanoseconds(offsetNs);
 	    const dtStr = ISODateTimeToString(dt, 'iso8601', 'auto');
-	    throw new RangeError$1("Offset ".concat(offsetStr, " is invalid for ").concat(dtStr, " in ").concat(timeZone));
+	    throw new RangeError$1(`Offset ${offsetStr} is invalid for ${dtStr} in ${timeZone}`);
 	  }
 	  // fall through: offsetOpt === 'prefer', but the offset doesn't match
 	  // so fall back to use the time zone instead.
@@ -9782,7 +9776,7 @@
 	    if (offset) {
 	      const offsetParseResult = Call$1(RegExpPrototypeExec, OFFSET_WITH_PARTS, [offset]);
 	      assert(offsetParseResult, 'offset string must re-parse');
-	      const offsetSecondsPart = offsetParseResult[4];
+	      const offsetSecondsPart = offsetParseResult.groups.offsetSecond;
 	      if (offsetSecondsPart) matchMinute = false;
 	    }
 	    const resolvedOptions = GetOptionsObject(options);
@@ -9815,7 +9809,7 @@
 	  {
 	    const repr = TemporalDateToString(result, 'auto');
 	    ObjectDefineProperty(result, '_repr_', {
-	      value: "Temporal.PlainDate <".concat(repr, ">"),
+	      value: `Temporal.PlainDate <${repr}>`,
 	      writable: false,
 	      enumerable: false,
 	      configurable: false
@@ -9837,7 +9831,7 @@
 	  {
 	    let repr = ISODateTimeToString(isoDateTime, calendar, 'auto');
 	    ObjectDefineProperty(result, '_repr_', {
-	      value: "Temporal.PlainDateTime <".concat(repr, ">"),
+	      value: `Temporal.PlainDateTime <${repr}>`,
 	      writable: false,
 	      enumerable: false,
 	      configurable: false
@@ -9860,7 +9854,7 @@
 	  {
 	    const repr = TemporalMonthDayToString(result, 'auto');
 	    ObjectDefineProperty(result, '_repr_', {
-	      value: "Temporal.PlainMonthDay <".concat(repr, ">"),
+	      value: `Temporal.PlainMonthDay <${repr}>`,
 	      writable: false,
 	      enumerable: false,
 	      configurable: false
@@ -9878,7 +9872,7 @@
 	  SetSlot(result, TIME, time);
 	  {
 	    ObjectDefineProperty(result, '_repr_', {
-	      value: "Temporal.PlainTime <".concat(TimeRecordToString(time, 'auto'), ">"),
+	      value: `Temporal.PlainTime <${TimeRecordToString(time, 'auto')}>`,
 	      writable: false,
 	      enumerable: false,
 	      configurable: false
@@ -9900,7 +9894,7 @@
 	  {
 	    const repr = TemporalYearMonthToString(result, 'auto');
 	    ObjectDefineProperty(result, '_repr_', {
-	      value: "Temporal.PlainYearMonth <".concat(repr, ">"),
+	      value: `Temporal.PlainYearMonth <${repr}>`,
 	      writable: false,
 	      enumerable: false,
 	      configurable: false
@@ -9922,7 +9916,7 @@
 	  {
 	    const repr = TemporalZonedDateTimeToString(result, 'auto');
 	    ObjectDefineProperty(result, '_repr_', {
-	      value: "Temporal.ZonedDateTime <".concat(repr, ">"),
+	      value: `Temporal.ZonedDateTime <${repr}>`,
 	      writable: false,
 	      enumerable: false,
 	      configurable: false
@@ -9963,6 +9957,14 @@
 	  return result;
 	}
 	function CalendarDateUntil(calendar, isoDate, isoOtherDate, largestUnit) {
+	  if (CompareISODate(isoDate, isoOtherDate) === 0) {
+	    return {
+	      years: 0,
+	      months: 0,
+	      weeks: 0,
+	      days: 0
+	    };
+	  }
 	  return calendarImplForID(calendar).dateUntil(isoDate, isoOtherDate, largestUnit);
 	}
 	function ToTemporalCalendarIdentifier(calendarLike) {
@@ -9973,7 +9975,7 @@
 	  try {
 	    // Fast path: identifier is a calendar type, no ISO string parsing needed
 	    return CanonicalizeCalendar(identifier);
-	  } catch (_unused4) {
+	  } catch {
 	    // fall through
 	  }
 	  let calendar;
@@ -9981,17 +9983,17 @@
 	    ({
 	      calendar
 	    } = ParseISODateTime(identifier));
-	  } catch (_unused5) {
+	  } catch {
 	    try {
 	      ({
 	        calendar
 	      } = ParseTemporalTimeString(identifier));
-	    } catch (_unused6) {
+	    } catch {
 	      try {
 	        ({
 	          calendar
 	        } = ParseTemporalYearMonthString(identifier));
-	      } catch (_unused7) {
+	      } catch {
 	        ({
 	          calendar
 	        } = ParseTemporalMonthDayString(identifier));
@@ -10050,27 +10052,20 @@
 	  }
 	  // if offsetMinutes is undefined, then tzName must be present
 	  const record = GetAvailableNamedTimeZoneIdentifier(tzName);
-	  if (!record) throw new RangeError$1("Unrecognized time zone ".concat(tzName));
+	  if (!record) throw new RangeError$1(`Unrecognized time zone ${tzName}`);
 	  return record.identifier;
 	}
 	function TimeZoneEquals(one, two) {
 	  if (one === two) return true;
-	  const offsetMinutes1 = ParseTimeZoneIdentifier(one).offsetMinutes;
-	  const offsetMinutes2 = ParseTimeZoneIdentifier(two).offsetMinutes;
-	  if (offsetMinutes1 === undefined && offsetMinutes2 === undefined) {
-	    // Calling GetAvailableNamedTimeZoneIdentifier is costly, so (unlike the
-	    // spec) the polyfill will early-return if one of them isn't recognized. Try
-	    // the second ID first because it's more likely to be unknown, because it
-	    // can come from the argument of TimeZone.p.equals as opposed to the first
-	    // ID which comes from the receiver.
-	    const idRecord2 = GetAvailableNamedTimeZoneIdentifier(two);
-	    if (!idRecord2) return false;
+	  if (!IsOffsetTimeZoneIdentifier(one) && !IsOffsetTimeZoneIdentifier(two)) {
 	    const idRecord1 = GetAvailableNamedTimeZoneIdentifier(one);
-	    if (!idRecord1) return false;
+	    const idRecord2 = GetAvailableNamedTimeZoneIdentifier(two);
+	    assert(idRecord1, `${JSONStringify(one)} has an invalid time zone`);
+	    assert(idRecord2, `${JSONStringify(two)} has an invalid time zone`);
 	    return idRecord1.primaryIdentifier === idRecord2.primaryIdentifier;
-	  } else {
-	    return offsetMinutes1 === offsetMinutes2;
 	  }
+	  assert(ParseTimeZoneIdentifier(one).offsetMinutes !== ParseTimeZoneIdentifier(two).offsetMinutes);
+	  return false;
 	}
 	function GetOffsetNanosecondsFor(timeZone, epochNs) {
 	  const offsetMinutes = ParseTimeZoneIdentifier(timeZone).offsetMinutes;
@@ -10086,7 +10081,7 @@
 	  const subSecondNs = absoluteNs % 1e9;
 	  const precision = second === 0 && subSecondNs === 0 ? 'minute' : 'auto';
 	  const timeString = FormatTimeString(hour, minute, second, subSecondNs, precision);
-	  return "".concat(sign).concat(timeString);
+	  return `${sign}${timeString}`;
 	}
 	function GetISODateTimeFor(timeZone, epochNs) {
 	  const offsetNs = GetOffsetNanosecondsFor(timeZone, epochNs);
@@ -10145,7 +10140,7 @@
 	      {
 	        const timeDuration = TimeDuration.fromComponents(0, 0, 0, 0, 0, -nanoseconds);
 	        const earlierTime = AddTime(isoDateTime.time, timeDuration);
-	        const earlierDate = BalanceISODate(isoDateTime.isoDate.year, isoDateTime.isoDate.month, isoDateTime.isoDate.day + earlierTime.deltaDays);
+	        const earlierDate = AddDaysToISODate(isoDateTime.isoDate, earlierTime.deltaDays);
 	        const earlier = CombineISODateAndTimeRecord(earlierDate, earlierTime);
 	        return GetPossibleEpochNanoseconds(timeZone, earlier)[0];
 	      }
@@ -10155,7 +10150,7 @@
 	      {
 	        const timeDuration = TimeDuration.fromComponents(0, 0, 0, 0, 0, nanoseconds);
 	        const laterTime = AddTime(isoDateTime.time, timeDuration);
-	        const laterDate = BalanceISODate(isoDateTime.isoDate.year, isoDateTime.isoDate.month, isoDateTime.isoDate.day + laterTime.deltaDays);
+	        const laterDate = AddDaysToISODate(isoDateTime.isoDate, laterTime.deltaDays);
 	        const later = CombineISODateAndTimeRecord(laterDate, laterTime);
 	        const possible = GetPossibleEpochNanoseconds(timeZone, later);
 	        return possible[possible.length - 1];
@@ -10164,13 +10159,15 @@
 	      /* c8 ignore next */assertNotReached('reject handled earlier');
 	  }
 	  /* c8 ignore next */
-	  assertNotReached("invalid disambiguation value ".concat(disambiguation));
+	  assertNotReached(`invalid disambiguation value ${disambiguation}`);
 	}
 	function GetPossibleEpochNanoseconds(timeZone, isoDateTime) {
 	  // UTC fast path
 	  if (timeZone === 'UTC') {
 	    CheckISODaysRange(isoDateTime.isoDate);
-	    return [GetUTCEpochNanoseconds(isoDateTime)];
+	    const epochNs = GetUTCEpochNanoseconds(isoDateTime);
+	    ValidateEpochNanoseconds(epochNs);
+	    return [epochNs];
 	  }
 	  const offsetMinutes = ParseTimeZoneIdentifier(timeZone).offsetMinutes;
 	  if (offsetMinutes !== undefined) {
@@ -10228,12 +10225,12 @@
 	    const fractionFullPrecision = ToZeroPaddedDecimalString(subSecondNanoseconds, 9);
 	    fraction = Call$1(StringPrototypeSlice, fractionFullPrecision, [0, precision]);
 	  }
-	  return ".".concat(fraction);
+	  return `.${fraction}`;
 	}
 	function FormatTimeString(hour, minute, second, subSecondNanoseconds, precision) {
-	  let result = "".concat(ISODateTimePartString(hour), ":").concat(ISODateTimePartString(minute));
+	  let result = `${ISODateTimePartString(hour)}:${ISODateTimePartString(minute)}`;
 	  if (precision === 'minute') return result;
-	  result += ":".concat(ISODateTimePartString(second));
+	  result += `:${ISODateTimePartString(second)}`;
 	  result += FormatFractionalSeconds(subSecondNanoseconds, precision);
 	  return result;
 	}
@@ -10248,7 +10245,7 @@
 	    const offsetNs = GetOffsetNanosecondsFor(outputTimeZone, epochNs);
 	    timeZoneString = FormatDateTimeUTCOffsetRounded(offsetNs);
 	  }
-	  return "".concat(dateTimeString).concat(timeZoneString);
+	  return `${dateTimeString}${timeZoneString}`;
 	}
 	function formatAsDecimalNumber(num) {
 	  if (num <= NumberMaxSafeInteger) return Call$1(NumberPrototypeToString, num, [10]);
@@ -10263,13 +10260,13 @@
 	  const minutes = GetSlot(duration, MINUTES);
 	  const sign = DurationSign(duration);
 	  let datePart = '';
-	  if (years !== 0) datePart += "".concat(formatAsDecimalNumber(MathAbs(years)), "Y");
-	  if (months !== 0) datePart += "".concat(formatAsDecimalNumber(MathAbs(months)), "M");
-	  if (weeks !== 0) datePart += "".concat(formatAsDecimalNumber(MathAbs(weeks)), "W");
-	  if (days !== 0) datePart += "".concat(formatAsDecimalNumber(MathAbs(days)), "D");
+	  if (years !== 0) datePart += `${formatAsDecimalNumber(MathAbs(years))}Y`;
+	  if (months !== 0) datePart += `${formatAsDecimalNumber(MathAbs(months))}M`;
+	  if (weeks !== 0) datePart += `${formatAsDecimalNumber(MathAbs(weeks))}W`;
+	  if (days !== 0) datePart += `${formatAsDecimalNumber(MathAbs(days))}D`;
 	  let timePart = '';
-	  if (hours !== 0) timePart += "".concat(formatAsDecimalNumber(MathAbs(hours)), "H");
-	  if (minutes !== 0) timePart += "".concat(formatAsDecimalNumber(MathAbs(minutes)), "M");
+	  if (hours !== 0) timePart += `${formatAsDecimalNumber(MathAbs(hours))}H`;
+	  if (minutes !== 0) timePart += `${formatAsDecimalNumber(MathAbs(minutes))}M`;
 
 	  // Keeping sub-second units separate avoids losing precision after resolving
 	  // any overflows from rounding
@@ -10277,22 +10274,22 @@
 	  if (!secondsDuration.isZero() || Call$1(ArrayPrototypeIncludes, ['second', 'millisecond', 'microsecond', 'nanosecond'], [DefaultTemporalLargestUnit(duration)]) || precision !== 'auto') {
 	    const secondsPart = formatAsDecimalNumber(MathAbs(secondsDuration.sec));
 	    const subSecondsPart = FormatFractionalSeconds(MathAbs(secondsDuration.subsec), precision);
-	    timePart += "".concat(secondsPart).concat(subSecondsPart, "S");
+	    timePart += `${secondsPart}${subSecondsPart}S`;
 	  }
-	  let result = "".concat(sign < 0 ? '-' : '', "P").concat(datePart);
-	  if (timePart) result = "".concat(result, "T").concat(timePart);
+	  let result = `${sign < 0 ? '-' : ''}P${datePart}`;
+	  if (timePart) result = `${result}T${timePart}`;
 	  return result;
 	}
-	function ISODateToString(_ref14) {
+	function ISODateToString(_ref4) {
 	  let {
 	    year,
 	    month,
 	    day
-	  } = _ref14;
+	  } = _ref4;
 	  const yearString = ISOYearString(year);
 	  const monthString = ISODateTimePartString(month);
 	  const dayString = ISODateTimePartString(day);
-	  return "".concat(yearString, "-").concat(monthString, "-").concat(dayString);
+	  return `${yearString}-${monthString}-${dayString}`;
 	}
 	function TemporalDateToString(date) {
 	  let showCalendar = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'auto';
@@ -10300,7 +10297,7 @@
 	  const calendar = FormatCalendarAnnotation(GetSlot(date, CALENDAR), showCalendar);
 	  return dateString + calendar;
 	}
-	function TimeRecordToString(_ref15, precision) {
+	function TimeRecordToString(_ref5, precision) {
 	  let {
 	    hour,
 	    minute,
@@ -10308,7 +10305,7 @@
 	    millisecond,
 	    microsecond,
 	    nanosecond
-	  } = _ref15;
+	  } = _ref5;
 	  const subSecondNanoseconds = millisecond * 1e6 + microsecond * 1e3 + nanosecond;
 	  return FormatTimeString(hour, minute, second, subSecondNanoseconds, precision);
 	}
@@ -10335,7 +10332,7 @@
 	  const subSecondNanoseconds = millisecond * 1e6 + microsecond * 1e3 + nanosecond;
 	  const timeString = FormatTimeString(hour, minute, second, subSecondNanoseconds, precision);
 	  const calendarString = FormatCalendarAnnotation(calendar, showCalendar);
-	  return "".concat(yearString, "-").concat(monthString, "-").concat(dayString, "T").concat(timeString).concat(calendarString);
+	  return `${yearString}-${monthString}-${dayString}T${timeString}${calendarString}`;
 	}
 	function TemporalMonthDayToString(monthDay) {
 	  let showCalendar = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'auto';
@@ -10346,11 +10343,11 @@
 	  } = GetSlot(monthDay, ISO_DATE);
 	  const monthString = ISODateTimePartString(month);
 	  const dayString = ISODateTimePartString(day);
-	  let resultString = "".concat(monthString, "-").concat(dayString);
+	  let resultString = `${monthString}-${dayString}`;
 	  const calendar = GetSlot(monthDay, CALENDAR);
 	  if (showCalendar === 'always' || showCalendar === 'critical' || calendar !== 'iso8601') {
 	    const yearString = ISOYearString(year);
-	    resultString = "".concat(yearString, "-").concat(resultString);
+	    resultString = `${yearString}-${resultString}`;
 	  }
 	  const calendarString = FormatCalendarAnnotation(calendar, showCalendar);
 	  if (calendarString) resultString += calendarString;
@@ -10365,11 +10362,11 @@
 	  } = GetSlot(yearMonth, ISO_DATE);
 	  const yearString = ISOYearString(year);
 	  const monthString = ISODateTimePartString(month);
-	  let resultString = "".concat(yearString, "-").concat(monthString);
+	  let resultString = `${yearString}-${monthString}`;
 	  const calendar = GetSlot(yearMonth, CALENDAR);
 	  if (showCalendar === 'always' || showCalendar === 'critical' || calendar !== 'iso8601') {
 	    const dayString = ISODateTimePartString(day);
-	    resultString += "-".concat(dayString);
+	    resultString += `-${dayString}`;
 	  }
 	  const calendarString = FormatCalendarAnnotation(calendar, showCalendar);
 	  if (calendarString) resultString += calendarString;
@@ -10398,7 +10395,7 @@
 	  }
 	  if (showTimeZone !== 'never') {
 	    const flag = showTimeZone === 'critical' ? '!' : '';
-	    dateTimeString += "[".concat(flag).concat(tz, "]");
+	    dateTimeString += `[${flag}${tz}]`;
 	  }
 	  dateTimeString += FormatCalendarAnnotation(GetSlot(zdt, CALENDAR), showCalendar);
 	  return dateTimeString;
@@ -10409,13 +10406,13 @@
 	function ParseDateTimeUTCOffset(string) {
 	  const match = Call$1(RegExpPrototypeExec, OFFSET_WITH_PARTS, [string]);
 	  if (!match) {
-	    throw new RangeError$1("invalid time zone offset: ".concat(string, "; must match \xB1HH:MM[:SS.SSSSSSSSS]"));
+	    throw new RangeError$1(`invalid time zone offset: ${string}; must match ±HH:MM[:SS.SSSSSSSSS]`);
 	  }
-	  const sign = match[1] === '-' ? -1 : +1;
-	  const hours = +match[2];
-	  const minutes = +(match[3] || 0);
-	  const seconds = +(match[4] || 0);
-	  const nanoseconds = +Call$1(StringPrototypeSlice, (match[5] || 0) + '000000000', [0, 9]);
+	  const sign = match.groups.offsetSign === '-' ? -1 : +1;
+	  const hours = +match.groups.offsetHour;
+	  const minutes = +(match.groups.offsetMinute || 0);
+	  const seconds = +(match.groups.offsetSecond || 0);
+	  const nanoseconds = +Call$1(StringPrototypeSlice, (match.groups.offsetSubseconds || 0) + '000000000', [0, 9]);
 	  const offsetNanoseconds = sign * (((hours * 60 + minutes) * 60 + seconds) * 1e9 + nanoseconds);
 	  return offsetNanoseconds;
 	}
@@ -10426,12 +10423,11 @@
 	  _: true
 	});
 	function GetAvailableNamedTimeZoneIdentifier(identifier) {
-	  var _specialCases$segment, _specialCases$segment2;
 	  // The most common case is when the identifier is a canonical time zone ID.
 	  // Fast-path that case by caching all canonical IDs. For old ECMAScript
 	  // implementations lacking this API, set the cache to `null` to avoid retries.
 	  if (canonicalTimeZoneIdsCache === undefined) {
-	    const canonicalTimeZoneIds = IntlSupportedValuesOf === null || IntlSupportedValuesOf === void 0 ? void 0 : IntlSupportedValuesOf('timeZone');
+	    const canonicalTimeZoneIds = IntlSupportedValuesOf?.('timeZone');
 	    if (canonicalTimeZoneIds) {
 	      canonicalTimeZoneIdsCache = new Map$1();
 	      for (let ix = 0; ix < canonicalTimeZoneIds.length; ix++) {
@@ -10454,7 +10450,7 @@
 	  try {
 	    const formatter = getIntlDateTimeFormatEnUsForTimeZone(identifier);
 	    primaryIdentifier = Call$1(IntlDateTimeFormatPrototypeResolvedOptions, formatter, []).timeZone;
-	  } catch (_unused8) {
+	  } catch {
 	    return undefined;
 	  }
 
@@ -10467,7 +10463,7 @@
 	  // Reject them even if the implementation's Intl supports them, as they are
 	  // not present in the IANA time zone database.
 	  if (Call$1(SetPrototypeHas, ICU_LEGACY_TIME_ZONE_IDS, [identifier])) {
-	    throw new RangeError$1("".concat(identifier, " is a legacy time zone identifier from ICU. Use ").concat(primaryIdentifier, " instead"));
+	    throw new RangeError$1(`${identifier} is a legacy time zone identifier from ICU. Use ${primaryIdentifier} instead`);
 	  }
 
 	  // The identifier is an alias (a deprecated identifier that's a synonym for a
@@ -10501,14 +10497,14 @@
 	  if (segments[0] === 'Etc') {
 	    const etcName = Call$1(ArrayPrototypeIncludes, ['Zulu', 'Greenwich', 'Universal'], [segments[1]]) ? segments[1] : Call$1(StringPrototypeToUpperCase, segments[1], []);
 	    return {
-	      identifier: "Etc/".concat(etcName),
+	      identifier: `Etc/${etcName}`,
 	      primaryIdentifier
 	    };
 	  }
 
 	  // Legacy US identifiers like US/Alaska or US/Indiana-Starke are 2 segments and use standard form.
 	  if (segments[0] === 'Us') return {
-	    identifier: "US/".concat(segments[1]),
+	    identifier: `US/${segments[1]}`,
 	    primaryIdentifier
 	  };
 
@@ -10529,8 +10525,8 @@
 	    Bajanorte: 'BajaNorte',
 	    Bajasur: 'BajaSur'
 	  };
-	  segments[1] = (_specialCases$segment = specialCases[segments[1]]) !== null && _specialCases$segment !== void 0 ? _specialCases$segment : segments[1];
-	  if (segments.length > 2) segments[2] = (_specialCases$segment2 = specialCases[segments[2]]) !== null && _specialCases$segment2 !== void 0 ? _specialCases$segment2 : segments[2];
+	  segments[1] = specialCases[segments[1]] ?? segments[1];
+	  if (segments.length > 2) segments[2] = specialCases[segments[2]] ?? segments[2];
 	  return {
 	    identifier: Call$1(ArrayPrototypeJoin, segments, ['/']),
 	    primaryIdentifier
@@ -10571,7 +10567,7 @@
 	  const hour = MathFloor(absoluteMinutes / 60);
 	  const minute = absoluteMinutes % 60;
 	  const timeString = FormatTimeString(hour, minute, 0, 0, 'minute');
-	  return "".concat(sign).concat(timeString);
+	  return `${sign}${timeString}`;
 	}
 	function FormatDateTimeUTCOffsetRounded(offsetNanoseconds) {
 	  offsetNanoseconds = RoundNumberToIncrement(offsetNanoseconds, 60e9, 'halfExpand');
@@ -10836,7 +10832,7 @@
 	  return Call$1(ArrayPrototypeFilter, candidates, [x => x !== undefined]);
 	}
 	function LeapYear(year) {
-	  if (undefined === year) return false;
+	  assert(year !== undefined, 'undefined year in LeapYear');
 	  const isDiv4 = year % 4 === 0;
 	  const isDiv100 = year % 100 === 0;
 	  const isDiv400 = year % 400 === 0;
@@ -10871,7 +10867,7 @@
 	  return duration.time.sign();
 	}
 	function BalanceISOYearMonth(year, month) {
-	  if (!NumberIsFinite(year) || !NumberIsFinite(month)) throw new RangeError$1('infinity is out of range');
+	  assert(NumberIsFinite(year) && NumberIsFinite(month), 'BalanceISOYearMonth: infinity is out of range');
 	  month -= 1;
 	  year += MathFloor(month / 12);
 	  month %= 12;
@@ -10882,12 +10878,12 @@
 	    month
 	  };
 	}
-	function BalanceISODate(year, month, day) {
-	  if (!NumberIsFinite(day)) throw new RangeError$1('infinity is out of range');
-	  ({
+	function AddDaysToISODate(isoDate, days) {
+	  let day = isoDate.day + days;
+	  let {
 	    year,
 	    month
-	  } = BalanceISOYearMonth(year, month));
+	  } = BalanceISOYearMonth(isoDate.year, isoDate.month);
 
 	  // The pattern of leap years in the ISO 8601 calendar repeats every 400
 	  // years. So if we have more than 400 years in days, there's no need to
@@ -10934,7 +10930,11 @@
 	}
 	function BalanceISODateTime(year, month, day, hour, minute, second, millisecond, microsecond, nanosecond) {
 	  const time = BalanceTime(hour, minute, second, millisecond, microsecond, nanosecond);
-	  const isoDate = BalanceISODate(year, month, day + time.deltaDays);
+	  const isoDate = AddDaysToISODate({
+	    year,
+	    month,
+	    day
+	  }, time.deltaDays);
 	  return CombineISODateAndTimeRecord(isoDate, time);
 	}
 	function BalanceTime(hour, minute, second, millisecond, microsecond, nanosecond) {
@@ -11030,7 +11030,7 @@
 	  };
 	}
 	function RejectToRange(value, min, max) {
-	  if (value < min || value > max) throw new RangeError$1("value out of range: ".concat(min, " <= ").concat(value, " <= ").concat(max));
+	  if (value < min || value > max) throw new RangeError$1(`value out of range: ${min} <= ${value} <= ${max}`);
 	}
 	function RejectISODate(year, month, day) {
 	  RejectToRange(month, 1, 12);
@@ -11042,7 +11042,7 @@
 	  const ns = GetUTCEpochNanoseconds(isoDateTime);
 	  if (ns.lesser(DATETIME_NS_MIN) || ns.greater(DATETIME_NS_MAX)) {
 	    const dateString = ISODateToString(isoDateTime.isoDate);
-	    throw new RangeError$1("".concat(dateString, " is outside of supported range"));
+	    throw new RangeError$1(`${dateString} is outside of supported range`);
 	  }
 	}
 	function RejectTime(hour, minute, second, millisecond, microsecond, nanosecond) {
@@ -11060,15 +11060,15 @@
 	function RejectDateTimeRange(isoDateTime) {
 	  const ns = GetUTCEpochNanoseconds(isoDateTime);
 	  if (ns.lesser(DATETIME_NS_MIN) || ns.greater(DATETIME_NS_MAX)) {
-	    const dateTimeString = ISODateTimeToString(isoDateTime, undefined, undefined, 'never');
-	    throw new RangeError$1("".concat(dateTimeString, " is outside of supported range"));
+	    const dateTimeString = ISODateTimeToString(isoDateTime, 'auto', 'auto', 'never');
+	    throw new RangeError$1(`${dateTimeString} is outside of supported range`);
 	  }
 	}
 
 	// Same as above, but throws a different, non-user-facing error
 	function AssertISODateTimeWithinLimits(isoDateTime) {
 	  const ns = GetUTCEpochNanoseconds(isoDateTime);
-	  assert(ns.geq(DATETIME_NS_MIN) && ns.leq(DATETIME_NS_MAX), "".concat(ISODateTimeToString(isoDateTime, undefined, undefined, 'never'), " is outside the representable range"));
+	  assert(ns.geq(DATETIME_NS_MIN) && ns.leq(DATETIME_NS_MAX), `${ISODateTimeToString(isoDateTime, 'auto', 'auto', 'never')} is outside the representable range`);
 	}
 
 	// In the spec, IsValidEpochNanoseconds returns a boolean and call sites are
@@ -11079,11 +11079,11 @@
 	    throw new RangeError$1('date/time value is outside of supported range');
 	  }
 	}
-	function RejectYearMonthRange(_ref16) {
+	function RejectYearMonthRange(_ref6) {
 	  let {
 	    year,
 	    month
-	  } = _ref16;
+	  } = _ref6;
 	  RejectToRange(year, YEAR_MIN, YEAR_MAX);
 	  if (year === YEAR_MIN) {
 	    RejectToRange(month, 4, 12);
@@ -11096,7 +11096,7 @@
 	  const fields = [y, mon, w, d, h, min, s, ms, µs, ns];
 	  for (let index = 0; index < fields.length; index++) {
 	    const prop = fields[index];
-	    if (!NumberIsFinite(prop)) throw new RangeError$1('infinite values not allowed as duration fields');
+	    assert(NumberIsFinite(prop), 'infinite values not allowed as duration fields');
 	    const propSign = MathSign(prop);
 	    if (propSign !== 0) {
 	      if (sign !== 0 && propSign !== sign) throw new RangeError$1('mixed-sign values not allowed as duration fields');
@@ -11145,9 +11145,10 @@
 	  const internalDuration = ToInternalDurationRecordWith24HourDays(duration);
 	  const days = MathTrunc(internalDuration.time.sec / 86400);
 	  RejectDuration(internalDuration.date.years, internalDuration.date.months, internalDuration.date.weeks, days, 0, 0, 0, 0, 0, 0);
-	  return _objectSpread2(_objectSpread2({}, internalDuration.date), {}, {
+	  return {
+	    ...internalDuration.date,
 	    days
-	  });
+	  };
 	}
 	function TemporalDurationFromInternal(internalDuration, largestUnit) {
 	  const sign = internalDuration.time.sign();
@@ -11256,14 +11257,14 @@
 	// which is ill-defined in how it handles large year numbers. If the issue
 	// https://github.com/tc39/ecma262/issues/1087 is fixed, this can be removed
 	// with no observable changes.
-	function CheckISODaysRange(_ref17) {
+	function CheckISODaysRange(_ref7) {
 	  let {
 	    year,
 	    month,
 	    day
-	  } = _ref17;
+	  } = _ref7;
 	  if (MathAbs(ISODateToEpochDays(year, month - 1, day)) > 1e8) {
-	    throw new RangeError$1('date/time value is outside the supported range');
+	    throw new RangeError$1(`date/time value ${year}-${month}-${day} is outside the supported range`);
 	  }
 	}
 	function DifferenceTime(time1, time2) {
@@ -11292,7 +11293,7 @@
 	  // back-off a day from date2 so that the signs of the date and time diff match
 	  let adjustedDate = isoDateTime2.isoDate;
 	  if (dateSign === timeSign) {
-	    adjustedDate = BalanceISODate(adjustedDate.year, adjustedDate.month, adjustedDate.day + timeSign);
+	    adjustedDate = AddDaysToISODate(adjustedDate, timeSign);
 	    timeDuration = timeDuration.add24HourDays(-timeSign);
 	  }
 	  const dateLargestUnit = LargerOfTwoTemporalUnits('day', largestUnit);
@@ -11310,7 +11311,7 @@
 	    date: ZeroDateDuration(),
 	    time: TimeDuration.ZERO
 	  };
-	  const sign = nsDiff.lt(0) ? -1 : 1;
+	  const sign = nsDiff.lt(0) ? 1 : -1;
 
 	  // Convert start/end instants to datetimes
 	  const isoDtStart = GetISODateTimeFor(timeZone, ns1);
@@ -11344,17 +11345,17 @@
 	  // Only the forward direction allows for an additional 1 day correction caused by a push-forward
 	  // 'compatible' DST transition causing the wall-clock to overshoot again.
 	  // This max value is inclusive.
-	  let maxDayCorrection = sign === 1 ? 2 : 1;
+	  let maxDayCorrection = sign === -1 ? 2 : 1;
 
 	  // Detect ISO wall-clock overshoot.
 	  // If the diff of the ISO wall-clock times is opposite to the overall diff's sign,
 	  // we are guaranteed to need at least one day correction.
 	  let timeDuration = DifferenceTime(isoDtStart.time, isoDtEnd.time);
-	  if (timeDuration.sign() === -sign) {
+	  if (timeDuration.sign() === sign) {
 	    dayCorrection++;
 	  }
 	  for (; dayCorrection <= maxDayCorrection; dayCorrection++) {
-	    const intermediateDate = BalanceISODate(isoDtEnd.isoDate.year, isoDtEnd.isoDate.month, isoDtEnd.isoDate.day - dayCorrection * sign);
+	    const intermediateDate = AddDaysToISODate(isoDtEnd.isoDate, dayCorrection * sign);
 
 	    // Incorporate time parts from dtStart
 	    intermediateDateTime = CombineISODateAndTimeRecord(intermediateDate, isoDtStart.time);
@@ -11367,11 +11368,11 @@
 
 	    // Did intermediateNs NOT surpass ns2?
 	    // If so, exit the loop with success (without incrementing dayCorrection past maxDayCorrection)
-	    if (timeDuration.sign() !== -sign) {
+	    if (timeDuration.sign() !== sign) {
 	      break;
 	    }
 	  }
-	  assert(dayCorrection <= maxDayCorrection, "more than ".concat(maxDayCorrection, " day correction needed"));
+	  assert(dayCorrection <= maxDayCorrection, `more than ${maxDayCorrection} day correction needed`);
 
 	  // Similar to what happens in DifferenceISODateTime with date parts only:
 	  const dateLargestUnit = LargerOfTwoTemporalUnits('day', largestUnit);
@@ -11379,13 +11380,8 @@
 	  return CombineDateAndTimeDuration(dateDifference, timeDuration);
 	}
 
-	// Epoch-nanosecond bounding technique where the start/end of the calendar-unit
-	// interval are converted to epoch-nanosecond times and destEpochNs is nudged to
-	// either one.
-	function NudgeToCalendarUnit(sign, duration, originEpochNs, destEpochNs, isoDateTime, timeZone, calendar, increment, unit, roundingMode) {
-	  // unit must be day, week, month, or year
-	  // timeZone may be undefined
-
+	// Returns: { r1, r2, startEpochNs, endEpochNs, startDuration, endDuration }
+	function ComputeNudgeWindow(sign, duration, originEpochNs, isoDateTime, timeZone, calendar, increment, unit, additionalShift) {
 	  // Create a duration with smallestUnit trunc'd towards zero
 	  // Create a separate duration that incorporates roundingIncrement
 	  let r1, r2, startDuration, endDuration;
@@ -11393,24 +11389,25 @@
 	    case 'year':
 	      {
 	        const years = RoundNumberToIncrement(duration.date.years, increment, 'trunc');
-	        r1 = years;
-	        r2 = years + increment * sign;
+	        r1 = !additionalShift ? years : years + increment * sign;
+	        r2 = r1 + increment * sign;
 	        startDuration = {
 	          years: r1,
 	          months: 0,
 	          weeks: 0,
 	          days: 0
 	        };
-	        endDuration = _objectSpread2(_objectSpread2({}, startDuration), {}, {
+	        endDuration = {
+	          ...startDuration,
 	          years: r2
-	        });
+	        };
 	        break;
 	      }
 	    case 'month':
 	      {
 	        const months = RoundNumberToIncrement(duration.date.months, increment, 'trunc');
-	        r1 = months;
-	        r2 = months + increment * sign;
+	        r1 = !additionalShift ? months : months + increment * sign;
+	        r2 = r1 + increment * sign;
 	        startDuration = AdjustDateDurationRecord(duration.date, 0, 0, r1);
 	        endDuration = AdjustDateDurationRecord(duration.date, 0, 0, r2);
 	        break;
@@ -11419,7 +11416,7 @@
 	      {
 	        const yearsMonths = AdjustDateDurationRecord(duration.date, 0, 0);
 	        const weeksStart = CalendarDateAdd(calendar, isoDateTime.isoDate, yearsMonths, 'constrain');
-	        const weeksEnd = BalanceISODate(weeksStart.year, weeksStart.month, weeksStart.day + duration.date.days);
+	        const weeksEnd = AddDaysToISODate(weeksStart, duration.date.days);
 	        const untilResult = CalendarDateUntil(calendar, weeksStart, weeksEnd, 'week');
 	        const weeks = RoundNumberToIncrement(duration.date.weeks + untilResult.weeks, increment, 'trunc');
 	        r1 = weeks;
@@ -11440,8 +11437,8 @@
 	    default:
 	      /* c8 ignore next */assertNotReached();
 	  }
-	  if (sign === 1) assert(r1 >= 0 && r1 < r2, "positive ordering of r1, r2: 0 \u2264 ".concat(r1, " < ").concat(r2));
-	  if (sign === -1) assert(r1 <= 0 && r1 > r2, "negative ordering of r1, r2: 0 \u2265 ".concat(r1, " > ").concat(r2));
+	  if (sign === 1) assert(r1 >= 0 && r1 < r2, `positive ordering of r1, r2: 0 ≤ ${r1} < ${r2}`);
+	  if (sign === -1) assert(r1 <= 0 && r1 > r2, `negative ordering of r1, r2: 0 ≥ ${r1} > ${r2}`);
 
 	  // Convert to bound-START to epoch-nanoseconds
 	  let startEpochNs;
@@ -11449,7 +11446,7 @@
 	    // If the start of the bound is the same as the "origin" (aka relativeTo),
 	    // use the origin's epoch-nanoseconds as-is instead of relying on isoDateTime,
 	    // which then gets zoned and converted back to epoch-nanoseconds,
-	    // which looses precision and creates a distorted bounding window.
+	    // which loses precision and creates a distorted bounding window.
 	    startEpochNs = originEpochNs;
 	  } else {
 	    const start = CalendarDateAdd(calendar, isoDateTime.isoDate, startDuration, 'constrain');
@@ -11461,10 +11458,58 @@
 	  const end = CalendarDateAdd(calendar, isoDateTime.isoDate, endDuration, 'constrain');
 	  const endDateTime = CombineISODateAndTimeRecord(end, isoDateTime.time);
 	  const endEpochNs = timeZone ? GetEpochNanosecondsFor(timeZone, endDateTime, 'compatible') : GetUTCEpochNanoseconds(endDateTime);
+	  return {
+	    r1,
+	    r2,
+	    startEpochNs,
+	    endEpochNs,
+	    startDuration,
+	    endDuration
+	  };
+	}
+
+	// Epoch-nanosecond bounding technique where the start/end of the calendar-unit
+	// interval are converted to epoch-nanosecond times and destEpochNs is nudged to
+	// either one.
+	function NudgeToCalendarUnit(sign, duration, originEpochNs, destEpochNs, isoDateTime, timeZone, calendar, increment, unit, roundingMode) {
+	  // unit must be day, week, month, or year
+	  // timeZone may be undefined
+
+	  var didExpandCalendarUnit = false;
+	  let nudgeWindow = ComputeNudgeWindow(sign, duration, originEpochNs, isoDateTime, timeZone, calendar, increment, unit, false);
+	  var {
+	    r1,
+	    r2,
+	    startEpochNs,
+	    endEpochNs,
+	    startDuration,
+	    endDuration
+	  } = nudgeWindow;
 
 	  // Round the smallestUnit within the epoch-nanosecond span
-	  if (sign === 1) assert(startEpochNs.leq(destEpochNs) && destEpochNs.leq(endEpochNs), "".concat(unit, " was 0 days long"));
-	  if (sign === -1) assert(endEpochNs.leq(destEpochNs) && destEpochNs.leq(startEpochNs), "".concat(unit, " was 0 days long"));
+	  if (sign === 1) {
+	    if (!(nudgeWindow.startEpochNs.leq(destEpochNs) && destEpochNs.leq(nudgeWindow.endEpochNs))) {
+	      // Retry nudge window if it's out of bounds
+	      nudgeWindow = ComputeNudgeWindow(sign, duration, originEpochNs, isoDateTime, timeZone, calendar, increment, unit, true);
+	      assert(nudgeWindow.startEpochNs.leq(destEpochNs) && destEpochNs.leq(nudgeWindow.endEpochNs), `${unit} was 0 days long`);
+	      didExpandCalendarUnit = true;
+	    }
+	  } else if (sign == -1) {
+	    if (!(nudgeWindow.endEpochNs.leq(destEpochNs) && destEpochNs.leq(nudgeWindow.startEpochNs))) {
+	      // Retry nudge window if it's out of bounds
+	      nudgeWindow = ComputeNudgeWindow(sign, duration, originEpochNs, isoDateTime, timeZone, calendar, increment, unit, true);
+	      assert(nudgeWindow.endEpochNs.leq(destEpochNs) && destEpochNs.leq(nudgeWindow.startEpochNs), `${unit} was 0 days long`);
+	      didExpandCalendarUnit = true;
+	    }
+	  }
+	  ({
+	    r1,
+	    r2,
+	    startEpochNs,
+	    endEpochNs,
+	    startDuration,
+	    endDuration
+	  } = nudgeWindow);
 	  assert(!endEpochNs.equals(startEpochNs), 'startEpochNs must ≠ endEpochNs');
 	  const numerator = TimeDuration.fromEpochNsDiff(destEpochNs, startEpochNs);
 	  const denominator = TimeDuration.fromEpochNsDiff(endEpochNs, startEpochNs);
@@ -11473,16 +11518,20 @@
 	  const even = MathAbs(r1) / increment % 2 === 0;
 	  const roundedUnit = numerator.isZero() ? MathAbs(r1) : !numerator.cmp(denominator) // equal?
 	  ? MathAbs(r2) : ApplyUnsignedRoundingMode(MathAbs(r1), MathAbs(r2), cmp, even, unsignedRoundingMode);
-
-	  // Trick to minimize rounding error, due to the lack of fma() in JS
-	  const fakeNumerator = new TimeDuration(denominator.totalNs.times(r1).add(numerator.totalNs.times(increment * sign)));
-	  const total = fakeNumerator.fdiv(denominator.totalNs);
-	  assert(MathAbs(r1) <= MathAbs(total) && MathAbs(total) <= MathAbs(r2), 'r1 ≤ total ≤ r2');
+	  let total = null;
+	  if (increment === 1) {
+	    // Calculate total with a trick to minimize rounding error, due to the lack
+	    // of fma() in JS. total is only used when calling from total(), which is
+	    // definitely not the case when increment ≠ 1
+	    const fakeNumerator = new TimeDuration(denominator.totalNs.times(r1).add(numerator.totalNs.times(sign)));
+	    total = fakeNumerator.fdiv(denominator.totalNs);
+	    assert(MathAbs(r1) <= MathAbs(total) && MathAbs(total) <= MathAbs(r2), 'r1 ≤ total ≤ r2');
+	  }
 
 	  // Determine whether expanded or contracted
-	  const didExpandCalendarUnit = roundedUnit === MathAbs(r2);
+	  didExpandCalendarUnit ||= roundedUnit === MathAbs(r2);
 	  duration = {
-	    date: didExpandCalendarUnit ? endDuration : startDuration,
+	    date: roundedUnit == MathAbs(r2) ? endDuration : startDuration,
 	    time: TimeDuration.ZERO
 	  };
 	  const nudgeResult = {
@@ -11505,7 +11554,7 @@
 	  // Apply to origin, output start/end of the day as PlainDateTimes
 	  const start = CalendarDateAdd(calendar, isoDateTime.isoDate, duration.date, 'constrain');
 	  const startDateTime = CombineISODateAndTimeRecord(start, isoDateTime.time);
-	  const endDate = BalanceISODate(start.year, start.month, start.day + sign);
+	  const endDate = AddDaysToISODate(start, sign);
 	  const endDateTime = CombineISODateAndTimeRecord(endDate, isoDateTime.time);
 
 	  // Compute the epoch-nanosecond start/end of the final whole-day interval
@@ -11554,7 +11603,7 @@
 	  const timeDuration = duration.time.add24HourDays(duration.date.days);
 	  // Convert to nanoseconds and round
 	  const unitLength = Call$1(MapPrototypeGet, NS_PER_TIME_UNIT, [smallestUnit]);
-	  const roundedTime = timeDuration.round(increment * unitLength, roundingMode);
+	  const roundedTime = timeDuration.round(bigInt(increment).multiply(unitLength), roundingMode);
 	  const diffTime = roundedTime.subtract(timeDuration);
 
 	  // Determine if whole days expanded
@@ -11776,18 +11825,18 @@
 	  ValidateTemporalUnitValue(largestUnit, group, ['auto']);
 	  if (!largestUnit) largestUnit = 'auto';
 	  if (Call$1(ArrayPrototypeIncludes, disallowed, [largestUnit])) {
-	    throw new RangeError$1("largestUnit must be one of ".concat(Call$1(ArrayPrototypeJoin, ALLOWED_UNITS, [', ']), ", not ").concat(largestUnit));
+	    throw new RangeError$1(`largestUnit must be one of ${Call$1(ArrayPrototypeJoin, ALLOWED_UNITS, [', '])}, not ${largestUnit}`);
 	  }
 	  if (op === 'since') roundingMode = NegateRoundingMode(roundingMode);
 	  ValidateTemporalUnitValue(smallestUnit, group);
 	  if (!smallestUnit) smallestUnit = fallbackSmallest;
 	  if (Call$1(ArrayPrototypeIncludes, disallowed, [smallestUnit])) {
-	    throw new RangeError$1("smallestUnit must be one of ".concat(Call$1(ArrayPrototypeJoin, ALLOWED_UNITS, [', ']), ", not ").concat(smallestUnit));
+	    throw new RangeError$1(`smallestUnit must be one of ${Call$1(ArrayPrototypeJoin, ALLOWED_UNITS, [', '])}, not ${smallestUnit}`);
 	  }
 	  const defaultLargestUnit = LargerOfTwoTemporalUnits(smallestLargestDefaultUnit, smallestUnit);
 	  if (largestUnit === 'auto') largestUnit = defaultLargestUnit;
 	  if (LargerOfTwoTemporalUnits(largestUnit, smallestUnit) !== largestUnit) {
-	    throw new RangeError$1("largestUnit ".concat(largestUnit, " cannot be smaller than smallestUnit ").concat(smallestUnit));
+	    throw new RangeError$1(`largestUnit ${largestUnit} cannot be smaller than smallestUnit ${smallestUnit}`);
 	  }
 	  const MAX_DIFFERENCE_INCREMENTS = {
 	    hour: 24,
@@ -11822,7 +11871,7 @@
 	  const calendar = GetSlot(plainDate, CALENDAR);
 	  const otherCalendar = GetSlot(other, CALENDAR);
 	  if (!CalendarEquals(calendar, otherCalendar)) {
-	    throw new RangeError$1("cannot compute difference between dates of ".concat(calendar, " and ").concat(otherCalendar, " calendars"));
+	    throw new RangeError$1(`cannot compute difference between dates of ${calendar} and ${otherCalendar} calendars`);
 	  }
 	  const resolvedOptions = GetOptionsObject(options);
 	  const settings = GetDifferenceSettings(operation, resolvedOptions, 'date', [], 'day', 'day');
@@ -11852,7 +11901,7 @@
 	  const calendar = GetSlot(plainDateTime, CALENDAR);
 	  const otherCalendar = GetSlot(other, CALENDAR);
 	  if (!CalendarEquals(calendar, otherCalendar)) {
-	    throw new RangeError$1("cannot compute difference between dates of ".concat(calendar, " and ").concat(otherCalendar, " calendars"));
+	    throw new RangeError$1(`cannot compute difference between dates of ${calendar} and ${otherCalendar} calendars`);
 	  }
 	  const resolvedOptions = GetOptionsObject(options);
 	  const settings = GetDifferenceSettings(operation, resolvedOptions, 'datetime', [], 'nanosecond', 'day');
@@ -11881,7 +11930,7 @@
 	  const calendar = GetSlot(yearMonth, CALENDAR);
 	  const otherCalendar = GetSlot(other, CALENDAR);
 	  if (!CalendarEquals(calendar, otherCalendar)) {
-	    throw new RangeError$1("cannot compute difference between months of ".concat(calendar, " and ").concat(otherCalendar, " calendars"));
+	    throw new RangeError$1(`cannot compute difference between months of ${calendar} and ${otherCalendar} calendars`);
 	  }
 	  const resolvedOptions = GetOptionsObject(options);
 	  const settings = GetDifferenceSettings(operation, resolvedOptions, 'date', ['week', 'day'], 'month', 'year');
@@ -11916,7 +11965,7 @@
 	  const calendar = GetSlot(zonedDateTime, CALENDAR);
 	  const otherCalendar = GetSlot(other, CALENDAR);
 	  if (!CalendarEquals(calendar, otherCalendar)) {
-	    throw new RangeError$1("cannot compute difference between dates of ".concat(calendar, " and ").concat(otherCalendar, " calendars"));
+	    throw new RangeError$1(`cannot compute difference between dates of ${calendar} and ${otherCalendar} calendars`);
 	  }
 	  const resolvedOptions = GetOptionsObject(options);
 	  const settings = GetDifferenceSettings(operation, resolvedOptions, 'datetime', [], 'nanosecond', 'hour');
@@ -11940,7 +11989,7 @@
 	  if (operation === 'since') result = CreateNegatedTemporalDuration(result);
 	  return result;
 	}
-	function AddTime(_ref18, timeDuration) {
+	function AddTime(_ref8, timeDuration) {
 	  let {
 	    hour,
 	    minute,
@@ -11948,10 +11997,13 @@
 	    millisecond,
 	    microsecond,
 	    nanosecond
-	  } = _ref18;
-	  second += timeDuration.sec;
-	  nanosecond += timeDuration.subsec;
-	  return BalanceTime(hour, minute, second, millisecond, microsecond, nanosecond);
+	  } = _ref8;
+	  // timeDuration.sec is a safe integer, but second+timeDuration.sec may not be.
+	  // minute+trunc(timeDuration.sec/60) is safe. nanosecond+timeDuration.subsec
+	  // is also safe.
+	  const minutes = Math.trunc(timeDuration.sec / 60);
+	  const seconds = timeDuration.sec - minutes * 60;
+	  return BalanceTime(hour, minute + minutes, second + seconds, millisecond, microsecond, nanosecond + timeDuration.subsec);
 	}
 	function AddInstant(epochNanoseconds, timeDuration) {
 	  const result = timeDuration.addToEpochNs(epochNanoseconds);
@@ -12000,7 +12052,7 @@
 	  if (operation === 'subtract') duration = CreateNegatedTemporalDuration(duration);
 	  const largestUnit = DefaultTemporalLargestUnit(duration);
 	  if (TemporalUnitCategory(largestUnit) === 'date') {
-	    throw new RangeError$1("Duration field ".concat(largestUnit, " not supported by Temporal.Instant. Try Temporal.ZonedDateTime instead."));
+	    throw new RangeError$1(`Duration field ${largestUnit} not supported by Temporal.Instant. Try Temporal.ZonedDateTime instead.`);
 	  }
 	  const internalDuration = ToInternalDurationRecordWith24HourDays(duration);
 	  const ns = AddInstant(GetSlot(instant, EPOCHNANOSECONDS), internalDuration.time);
@@ -12054,22 +12106,18 @@
 	function AddDurationToYearMonth(operation, yearMonth, durationLike, options) {
 	  let duration = ToTemporalDuration(durationLike);
 	  if (operation === 'subtract') duration = CreateNegatedTemporalDuration(duration);
+	  const internalDuration = ToInternalDurationRecord(duration);
 	  const resolvedOptions = GetOptionsObject(options);
 	  const overflow = GetTemporalOverflowOption(resolvedOptions);
-	  const sign = DurationSign(duration);
+	  const durationToAdd = internalDuration.date;
+	  if (durationToAdd.weeks !== 0 || durationToAdd.days !== 0 || !internalDuration.time.isZero()) {
+	    throw new RangeError$1('only years and months can be added to Temporal.PlainYearMonth');
+	  }
 	  const calendar = GetSlot(yearMonth, CALENDAR);
 	  const fields = ISODateToFields(calendar, GetSlot(yearMonth, ISO_DATE), 'year-month');
 	  fields.day = 1;
-	  let startDate = CalendarDateFromFields(calendar, fields, 'constrain');
-	  if (sign < 0) {
-	    const nextMonth = CalendarDateAdd(calendar, startDate, {
-	      months: 1
-	    }, 'constrain');
-	    startDate = BalanceISODate(nextMonth.year, nextMonth.month, nextMonth.day - 1);
-	  }
-	  const durationToAdd = ToDateDurationRecordWithoutTime(duration);
-	  RejectDateRange(startDate);
-	  const addedDate = CalendarDateAdd(calendar, startDate, durationToAdd, overflow);
+	  const date = CalendarDateFromFields(calendar, fields, 'constrain');
+	  const addedDate = CalendarDateAdd(calendar, date, durationToAdd, overflow);
 	  const addedDateFields = ISODateToFields(calendar, addedDate, 'year-month');
 	  const isoDate = CalendarYearMonthFromFields(calendar, addedDateFields, overflow);
 	  return CreateTemporalYearMonth(isoDate, calendar);
@@ -12123,16 +12171,11 @@
 	}
 	function RoundISODateTime(isoDateTime, increment, unit, roundingMode) {
 	  AssertISODateTimeWithinLimits(isoDateTime);
-	  const {
-	    year,
-	    month,
-	    day
-	  } = isoDateTime.isoDate;
 	  const time = RoundTime(isoDateTime.time, increment, unit, roundingMode);
-	  const isoDate = BalanceISODate(year, month, day + time.deltaDays);
+	  const isoDate = AddDaysToISODate(isoDateTime.isoDate, time.deltaDays);
 	  return CombineISODateAndTimeRecord(isoDate, time);
 	}
-	function RoundTime(_ref19, increment, unit, roundingMode) {
+	function RoundTime(_ref9, increment, unit, roundingMode) {
 	  let {
 	    hour,
 	    minute,
@@ -12140,7 +12183,7 @@
 	    millisecond,
 	    microsecond,
 	    nanosecond
-	  } = _ref19;
+	  } = _ref9;
 	  let quantity;
 	  switch (unit) {
 	    case 'day':
@@ -12190,9 +12233,9 @@
 	  }
 	}
 	function RoundTimeDuration(timeDuration, increment, unit, roundingMode) {
-	  // unit must be a time unit
 	  const divisor = Call$1(MapPrototypeGet, NS_PER_TIME_UNIT, [unit]);
-	  return timeDuration.round(divisor * increment, roundingMode);
+	  // Use bigInt multiplication to avoid exceeding MAX_SAFE_INTEGER
+	  return timeDuration.round(bigInt(divisor).multiply(increment), roundingMode);
 	}
 	function TotalTimeDuration(timeDuration, unit) {
 	  const divisor = Call$1(MapPrototypeGet, NS_PER_TIME_UNIT, [unit]);
@@ -12245,7 +12288,7 @@
 	    case 'object':
 	    case 'number':
 	    case 'symbol':
-	      throw new TypeError$1("cannot convert ".concat(typeof arg, " to bigint"));
+	      throw new TypeError$1(`cannot convert ${typeof arg} to bigint`);
 	    case 'string':
 	      if (!Call$1(StringPrototypeMatch, prim, [/^\s*(?:[+-]?\d+\s*)?$/])) {
 	        throw new SyntaxError$1('invalid BigInt syntax');
@@ -12291,18 +12334,18 @@
 	function GetOptionsObject(options) {
 	  if (options === undefined) return ObjectCreate(null);
 	  if (Type$1(options) === 'Object') return options;
-	  throw new TypeError$1("Options parameter must be an object, not ".concat(options === null ? 'null' : "a ".concat(typeof options)));
+	  throw new TypeError$1(`Options parameter must be an object, not ${options === null ? 'null' : `a ${typeof options}`}`);
 	}
 	function GetOption(options, property, allowedValues, fallback) {
 	  let value = options[property];
 	  if (value !== undefined) {
 	    value = ToString$1(value);
 	    if (!Call$1(ArrayPrototypeIncludes, allowedValues, [value])) {
-	      throw new RangeError$1("".concat(property, " must be one of ").concat(Call$1(ArrayPrototypeJoin, allowedValues, [', ']), ", not ").concat(value));
+	      throw new RangeError$1(`${property} must be one of ${Call$1(ArrayPrototypeJoin, allowedValues, [', '])}, not ${value}`);
 	    }
 	    return value;
 	  }
-	  if (fallback === REQUIRED) throw new RangeError$1("".concat(property, " option is required"));
+	  if (fallback === REQUIRED) throw new RangeError$1(`${property} option is required`);
 	  return fallback;
 	}
 
@@ -12313,7 +12356,7 @@
 	function CanonicalizeCalendar(id) {
 	  id = ASCIILowercase(id);
 	  if (!Call$1(ArrayPrototypeIncludes, BUILTIN_CALENDAR_IDS, [ASCIILowercase(id)])) {
-	    throw new RangeError$1("invalid calendar identifier ".concat(id));
+	    throw new RangeError$1(`invalid calendar identifier ${id}`);
 	  }
 	  switch (id) {
 	    case 'ethiopic-amete-alem':
@@ -12351,11 +12394,11 @@
 	// This function isn't in the spec, but we put it in the polyfill to avoid
 	// repeating the same (long) error message in many files.
 	function ValueOfThrows(constructorName) {
-	  const compareCode = constructorName === 'PlainMonthDay' ? 'Temporal.PlainDate.compare(obj1.toPlainDate(year), obj2.toPlainDate(year))' : "Temporal.".concat(constructorName, ".compare(obj1, obj2)");
-	  throw new TypeError$1('Do not use built-in arithmetic operators with Temporal objects. ' + "When comparing, use ".concat(compareCode, ", not obj1 > obj2. ") + "When coercing to strings, use `${obj}` or String(obj), not '' + obj. " + 'When coercing to numbers, use properties or methods of the object, not `+obj`. ' + 'When concatenating with strings, use `${str}${obj}` or str.concat(obj), not str + obj. ' + 'In React, coerce to a string before rendering a Temporal object.');
+	  const compareCode = constructorName === 'PlainMonthDay' ? 'Temporal.PlainDate.compare(obj1.toPlainDate(year), obj2.toPlainDate(year))' : `Temporal.${constructorName}.compare(obj1, obj2)`;
+	  throw new TypeError$1('Do not use built-in arithmetic operators with Temporal objects. ' + `When comparing, use ${compareCode}, not obj1 > obj2. ` + "When coercing to strings, use `${obj}` or String(obj), not '' + obj. " + 'When coercing to numbers, use properties or methods of the object, not `+obj`. ' + 'When concatenating with strings, use `${str}${obj}` or str.concat(obj), not str + obj. ' + 'In React, coerce to a string before rendering a Temporal object.');
 	}
-	const OFFSET = new RegExp$1("^".concat(offset.source, "$"));
-	const OFFSET_WITH_PARTS = new RegExp$1("^".concat(offsetWithParts.source, "$"));
+	const OFFSET = new RegExp$1(`^${offset.source}$`);
+	const OFFSET_WITH_PARTS = new RegExp$1(`^${offsetWithParts.source}$`);
 	function bisect(getState, left, right) {
 	  let lstate = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : getState(left);
 	  let rstate = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : getState(right);
@@ -12369,7 +12412,7 @@
 	      right = middle;
 	      rstate = mstate;
 	    } else {
-	      /* c8 ignore next */assertNotReached("invalid state in bisection ".concat(lstate, " - ").concat(mstate, " - ").concat(rstate));
+	      /* c8 ignore next */assertNotReached(`invalid state in bisection ${lstate} - ${mstate} - ${rstate}`);
 	    }
 	  }
 	  return right;
@@ -12440,9 +12483,9 @@
 	    var lastDoy = daysInYear;
 	    if (dayOfYear >= lastDoy - 5) {
 	      var lastRelDow = (relDow + lastDoy - dayOfYear) % 7;
-	      if (lastRelDow < 0) {
-	        lastRelDow += 7;
-	      }
+	      // lastRelDow must be non-negative because relDow is positive
+	      // and lastDoy >= dayOfYear
+	      assert(lastRelDow >= 0);
 	      if (6 - lastRelDow >= mdow && dayOfYear + 7 - relDow > lastDoy) {
 	        woy = 1;
 	        yow++;
@@ -12454,30 +12497,27 @@
 	    year: yow
 	  };
 	}
-	function ISODateSurpasses(sign, baseDate, isoDate2, years, months, weeks, days) {
-	  const yearMonth = BalanceISOYearMonth(baseDate.year + years, baseDate.month + months);
-	  let y1 = yearMonth.year;
-	  let m1 = yearMonth.month;
-	  let d1 = baseDate.day;
-	  if (weeks !== 0 || days !== 0) {
-	    const regulatedDate = RegulateISODate(y1, m1, d1, 'constrain');
-	    ({
-	      year: y1,
-	      month: m1,
-	      day: d1
-	    } = BalanceISODate(regulatedDate.year, regulatedDate.month, regulatedDate.day + 7 * weeks + days));
-	  }
-	  if (y1 !== isoDate2.year) {
-	    if (sign * (y1 - isoDate2.year) > 0) return true;
-	  } else if (m1 !== isoDate2.month) {
-	    if (sign * (m1 - isoDate2.month) > 0) return true;
-	  } else if (d1 !== isoDate2.day) {
-	    if (sign * (d1 - isoDate2.day) > 0) return true;
+	function CompareSurpasses(sign, year, month, day, target) {
+	  // Optimization: monthCode is not used, instead month codes are compared
+	  // lexicographically in untilCalendar() before this function is called
+	  if (year !== target.year) {
+	    if (sign * (year - target.year) > 0) return true;
+	  } else if (month !== target.month) {
+	    if (sign * (month - target.month) > 0) return true;
+	  } else if (day !== target.day) {
+	    if (sign * (day - target.day) > 0) return true;
 	  }
 	  return false;
 	}
-	function addDaysISO(isoDate, days) {
-	  return BalanceISODate(isoDate.year, isoDate.month, isoDate.day + days);
+	function ISODateSurpasses(sign, baseDate, isoDate2, years, months) {
+	  const y0 = baseDate.year + years;
+	  if (CompareSurpasses(sign, y0, baseDate.month, baseDate.day, isoDate2)) return true;
+	  if (months === 0) return false;
+	  const m0 = baseDate.month + months;
+	  const monthsAdded = BalanceISOYearMonth(y0, m0);
+	  return CompareSurpasses(sign, monthsAdded.year, monthsAdded.month, baseDate.day, isoDate2);
+	  // Skip the weeks and days addition in the spec, as we currently optimize that
+	  // out in iso8601 date difference calculation
 	}
 	const impl = {};
 	impl['iso8601'] = {
@@ -12494,12 +12534,11 @@
 	    return RegulateISODate(fields.year, fields.month, fields.day, overflow);
 	  },
 	  monthDayToISOReferenceDate(fields, overflow) {
-	    var _fields$year;
 	    const referenceISOYear = 1972;
 	    const {
 	      month,
 	      day
-	    } = RegulateISODate((_fields$year = fields.year) !== null && _fields$year !== void 0 ? _fields$year : referenceISOYear, fields.month, fields.day, overflow);
+	    } = RegulateISODate(fields.year ?? referenceISOYear, fields.month, fields.day, overflow);
 	    return {
 	      month,
 	      day,
@@ -12540,22 +12579,14 @@
 	      year,
 	      month
 	    } = BalanceISOYearMonth(year, month));
-	    ({
-	      year,
-	      month,
-	      day
-	    } = RegulateISODate(year, month, day, overflow));
-	    day += days + 7 * weeks;
-	    return BalanceISODate(year, month, day);
+	    const intermediate = RegulateISODate(year, month, day, overflow);
+	    days += 7 * weeks;
+	    return AddDaysToISODate(intermediate, days);
 	  },
 	  dateUntil(one, two, largestUnit) {
 	    const sign = -CompareISODate(one, two);
-	    if (sign === 0) return {
-	      years: 0,
-	      months: 0,
-	      weeks: 0,
-	      days: 0
-	    };
+	    // This case was checked in CalendarDateUntil
+	    assert(sign !== 0);
 	    let years = 0;
 	    let months = 0;
 	    if (largestUnit === 'year' || largestUnit === 'month') {
@@ -12564,13 +12595,13 @@
 	      let candidateYears = two.year - one.year;
 	      if (candidateYears !== 0) candidateYears -= sign;
 	      // loops at most twice
-	      while (!ISODateSurpasses(sign, one, two, candidateYears, 0, 0, 0)) {
+	      while (!ISODateSurpasses(sign, one, two, candidateYears, 0)) {
 	        years = candidateYears;
 	        candidateYears += sign;
 	      }
 	      let candidateMonths = sign;
 	      // loops at most 12 times
-	      while (!ISODateSurpasses(sign, one, two, years, candidateMonths, 0, 0)) {
+	      while (!ISODateSurpasses(sign, one, two, years, candidateMonths)) {
 	        months = candidateMonths;
 	        candidateMonths += sign;
 	      }
@@ -12714,20 +12745,21 @@
 	    monthCode = CreateMonthCode(month, false);
 	  } else {
 	    if (!IsValidMonthCodeForCalendar(calendar, monthCode)) {
-	      throw new RangeError$1("Invalid monthCode: ".concat(monthCode, " does not exist in calendar ").concat(calendar));
+	      throw new RangeError$1(`Invalid monthCode: ${monthCode} does not exist in calendar ${calendar}`);
 	    }
 	    const {
 	      monthNumber
 	    } = ParseMonthCode(monthCode);
 	    if (month !== undefined && month !== monthNumber) {
-	      throw new RangeError$1("monthCode ".concat(monthCode, " and month ").concat(month, " must match if both are present"));
+	      throw new RangeError$1(`monthCode ${monthCode} and month ${month} must match if both are present`);
 	    }
 	    month = monthNumber;
 	  }
-	  return _objectSpread2(_objectSpread2({}, calendarDate), {}, {
+	  return {
+	    ...calendarDate,
 	    month,
 	    monthCode
-	  });
+	  };
 	}
 	function weekNumber(firstDayOfWeek, minimalDaysInFirstWeek, desiredDay, dayOfWeek) {
 	  var periodStartDayOfWeek = (dayOfWeek - firstDayOfWeek - desiredDay + 1) % 7;
@@ -12947,13 +12979,89 @@
 	  const yearString = ISOYearString(isoYear);
 	  const monthString = ISODateTimePartString(isoMonth);
 	  const dayString = ISODateTimePartString(isoDay);
-	  return "".concat(yearString, "-").concat(monthString, "-").concat(dayString, "T00:00Z");
+	  return `${yearString}-${monthString}-${dayString}T00:00Z`;
 	}
 	function simpleDateDiff(one, two) {
 	  return {
 	    years: one.year - two.year,
 	    months: one.month - two.month,
 	    days: one.day - two.day
+	  };
+	}
+	function clampISODate(iso) {
+	  const cmp = compareISODateToLegacyDateRange(iso);
+	  if (cmp < 0) return {
+	    year: -271821,
+	    month: 4,
+	    day: 19
+	  };
+	  if (cmp > 0) return {
+	    year: 275760,
+	    month: 9,
+	    day: 13
+	  };
+	  return iso;
+	}
+	function compareISODateToLegacyDateRange(isoDate) {
+	  const {
+	    year,
+	    month,
+	    day
+	  } = isoDate;
+	  if (year < -271821 || year === -271821 && (month < 4 || month === 4 && day < 19)) return -1;
+	  if (year > 275760 || year === 275760 && (month > 9 || month === 9 && day > 13)) return 1;
+	  return 0;
+	}
+	function makeShiftedIsoToCalendarDate(cycleYears) {
+	  return function isoToCalendarDate(isoDate, cache) {
+	    if (compareISODateToLegacyDateRange(isoDate) === 0) {
+	      return nonIsoHelperBase.isoToCalendarDate.call(this, isoDate, cache);
+	    }
+	    const offset = MathRound((isoDate.year - 2000) / cycleYears) * cycleYears;
+	    const safeIsoDate = {
+	      ...isoDate,
+	      year: isoDate.year - offset
+	    };
+	    const result = nonIsoHelperBase.isoToCalendarDate.call(this, safeIsoDate, cache);
+	    const adjusted = {
+	      ...result,
+	      year: result.year + offset
+	    };
+	    if (adjusted.eraYear !== undefined) adjusted.eraYear += offset;
+	    const key = OneObjectCache.generateISOToCalendarKey(isoDate);
+	    cache.set(key, adjusted);
+	    Call$1(ArrayPrototypeForEach, ['constrain', 'reject'], [overflow => {
+	      cache.set(OneObjectCache.generateCalendarToISOKey(adjusted, overflow), isoDate);
+	    }]);
+	    return adjusted;
+	  };
+	}
+	function makeDayShiftedIsoToCalendarDate(cycleDays, cycleYears) {
+	  return function isoToCalendarDate(isoDate, cache) {
+	    if (compareISODateToLegacyDateRange(isoDate) === 0) {
+	      return nonIsoHelperBase.isoToCalendarDate.call(this, isoDate, cache);
+	    }
+	    // Shift by the minimum number of cycles to bring the date within the
+	    // legacy Date range. Using a minimal shift avoids accumulated errors for
+	    // calendars where the cycle length is approximate (e.g., islamic-umalqura).
+	    const direction = isoDate.year > 0 ? 1 : -1;
+	    const approxDaysBeyond = MathAbs(isoDate.year - direction * 2000) * 365;
+	    let numCycles = MathMax(1, MathFloor(approxDaysBeyond / cycleDays));
+	    let safeIsoDate = AddDaysToISODate(isoDate, -numCycles * cycleDays * direction);
+	    assert(compareISODateToLegacyDateRange(safeIsoDate) === 0, 'numCycles calculation should be correct');
+	    const yearShift = numCycles * cycleYears * direction;
+	    const result = nonIsoHelperBase.isoToCalendarDate.call(this, safeIsoDate, cache);
+	    const adjusted = {
+	      ...result,
+	      year: result.year + yearShift
+	    };
+	    if (adjusted.eraYear !== undefined) adjusted.eraYear += yearShift;
+	    const key = OneObjectCache.generateISOToCalendarKey(isoDate);
+	    cache.set(key, adjusted);
+	    Call$1(ArrayPrototypeForEach, ['constrain', 'reject'], [overflow => {
+	      cache.set(OneObjectCache.generateCalendarToISOKey(adjusted, overflow), isoDate);
+	    }]);
+	    return adjusted;
 	  };
 	}
 
@@ -12970,7 +13078,7 @@
 	    // into each calendar's implementation before any cache is created, so
 	    // each calendar gets its own separate cached formatter.
 	    if (typeof this.formatter === 'undefined') {
-	      this.formatter = new IntlDateTimeFormat("en-US-u-ca-".concat(this.id), {
+	      this.formatter = new IntlDateTimeFormat(`en-US-u-ca-${this.id}`, {
 	        day: 'numeric',
 	        month: 'numeric',
 	        year: 'numeric',
@@ -12991,15 +13099,16 @@
 	    // because we create a new Intl.DateTimeFormat.
 	    if (isoString === '-271821-04-19T00:00Z') {
 	      const options = dateTimeFormat.resolvedOptions();
-	      dateTimeFormat = new IntlDateTimeFormat(options.locale, _objectSpread2(_objectSpread2({}, options), {}, {
+	      dateTimeFormat = new IntlDateTimeFormat(options.locale, {
+	        ...options,
 	        timeZone: 'Etc/GMT+1'
-	      }));
+	      });
 	      legacyDate = new Date$1('-271821-04-20T00:00Z');
 	    }
 	    try {
 	      return Call$1(IntlDateTimeFormatPrototypeFormatToParts, dateTimeFormat, [legacyDate]);
 	    } catch (e) {
-	      if (e instanceof RangeError$1) throw new RangeError$1("Invalid ISO date: ".concat(isoString));
+	      if (e instanceof RangeError$1) throw new RangeError$1(`Invalid ISO date: ${isoString}`);
 	      throw e;
 	    }
 	  },
@@ -13029,9 +13138,11 @@
 	        }
 	      }
 	      if (type === 'month') {
-	        const matches = Call$1(RegExpPrototypeExec, /^([0-9]*)(.*?)$/, [value]);
+	        // Newer ICU data has some formats with "Mo11" / "Mo9bis" for Chinese
+	        // and Dangi months
+	        const matches = Call$1(RegExpPrototypeExec, /^(?:Mo)?([0-9]*)(.*?)$/, [value]);
 	        if (!matches || matches.length != 3 || !matches[1] && !matches[2]) {
-	          throw new RangeError$1("Unexpected month: ".concat(value));
+	          throw new RangeError$1(`Unexpected month: ${value}`);
 	        }
 	        // If the month has no numeric part (should only see this for the Hebrew
 	        // calendar with newer FF / Chromium versions; see
@@ -13041,10 +13152,10 @@
 	        // `monthExtra`.
 	        result.month = matches[1] ? +matches[1] : 1;
 	        if (result.month < 1) {
-	          throw new RangeError$1("Invalid month ".concat(value, " from ").concat(isoString, "[u-ca-").concat(this.id, "]") + ' (probably due to https://bugs.chromium.org/p/v8/issues/detail?id=10527)');
+	          throw new RangeError$1(`Invalid month ${value} from ${isoString}[u-ca-${this.id}]` + ' (probably due to https://bugs.chromium.org/p/v8/issues/detail?id=10527)');
 	        }
 	        if (result.month > 13) {
-	          throw new RangeError$1("Invalid month ".concat(value, " from ").concat(isoString, "[u-ca-").concat(this.id, "]") + ' (probably due to https://bugs.chromium.org/p/v8/issues/detail?id=10529)');
+	          throw new RangeError$1(`Invalid month ${value} from ${isoString}[u-ca-${this.id}]` + ' (probably due to https://bugs.chromium.org/p/v8/issues/detail?id=10529)');
 	        }
 
 	        // The ICU formats for the Hebrew calendar no longer support a numeric
@@ -13064,16 +13175,27 @@
 	        // ignore extra content in parentheses like JPN era date ranges.
 	        value = Call$1(StringPrototypeSplit, value, [' ('])[0];
 	        value = Call$1(StringPrototypeNormalize, value, ['NFD']);
-	        value = Call$1(StringPrototypeReplace, value, [/(?:[\0-\x1F!-,\.\/:-@\[-`\{-\xA9\xAB-\xB4\xB6-\xB9\xBB-\xBF\xD7\xF7\u02C2-\u02C5\u02D2-\u02DF\u02E5-\u02EB\u02ED\u02EF-\u036F\u0375\u0378\u0379\u037E\u0380-\u0385\u0387\u038B\u038D\u03A2\u03F6\u0482-\u0489\u0530\u0557\u0558\u055A-\u055F\u0589-\u05CF\u05EB-\u05EE\u05F3-\u061F\u064B-\u066D\u0670\u06D4\u06D6-\u06E4\u06E7-\u06ED\u06F0-\u06F9\u06FD\u06FE\u0700-\u070F\u0711\u0730-\u074C\u07A6-\u07B0\u07B2-\u07C9\u07EB-\u07F3\u07F6-\u07F9\u07FB-\u07FF\u0816-\u0819\u081B-\u0823\u0825-\u0827\u0829-\u083F\u0859-\u085F\u086B-\u086F\u0888\u0890-\u089F\u08CA-\u0903\u093A-\u093C\u093E-\u094F\u0951-\u0957\u0962-\u0970\u0981-\u0984\u098D\u098E\u0991\u0992\u09A9\u09B1\u09B3-\u09B5\u09BA-\u09BC\u09BE-\u09CD\u09CF-\u09DB\u09DE\u09E2-\u09EF\u09F2-\u09FB\u09FD-\u0A04\u0A0B-\u0A0E\u0A11\u0A12\u0A29\u0A31\u0A34\u0A37\u0A3A-\u0A58\u0A5D\u0A5F-\u0A71\u0A75-\u0A84\u0A8E\u0A92\u0AA9\u0AB1\u0AB4\u0ABA-\u0ABC\u0ABE-\u0ACF\u0AD1-\u0ADF\u0AE2-\u0AF8\u0AFA-\u0B04\u0B0D\u0B0E\u0B11\u0B12\u0B29\u0B31\u0B34\u0B3A-\u0B3C\u0B3E-\u0B5B\u0B5E\u0B62-\u0B70\u0B72-\u0B82\u0B84\u0B8B-\u0B8D\u0B91\u0B96-\u0B98\u0B9B\u0B9D\u0BA0-\u0BA2\u0BA5-\u0BA7\u0BAB-\u0BAD\u0BBA-\u0BCF\u0BD1-\u0C04\u0C0D\u0C11\u0C29\u0C3A-\u0C3C\u0C3E-\u0C57\u0C5B\u0C5E\u0C5F\u0C62-\u0C7F\u0C81-\u0C84\u0C8D\u0C91\u0CA9\u0CB4\u0CBA-\u0CBC\u0CBE-\u0CDB\u0CDF\u0CE2-\u0CF0\u0CF3-\u0D03\u0D0D\u0D11\u0D3B\u0D3C\u0D3E-\u0D4D\u0D4F-\u0D53\u0D57-\u0D5E\u0D62-\u0D79\u0D80-\u0D84\u0D97-\u0D99\u0DB2\u0DBC\u0DBE\u0DBF\u0DC7-\u0E00\u0E31\u0E34-\u0E3F\u0E47-\u0E80\u0E83\u0E85\u0E8B\u0EA4\u0EA6\u0EB1\u0EB4-\u0EBC\u0EBE\u0EBF\u0EC5\u0EC7-\u0EDB\u0EE0-\u0EFF\u0F01-\u0F3F\u0F48\u0F6D-\u0F87\u0F8D-\u0FFF\u102B-\u103E\u1040-\u104F\u1056-\u1059\u105E-\u1060\u1062-\u1064\u1067-\u106D\u1071-\u1074\u1082-\u108D\u108F-\u109F\u10C6\u10C8-\u10CC\u10CE\u10CF\u10FB\u1249\u124E\u124F\u1257\u1259\u125E\u125F\u1289\u128E\u128F\u12B1\u12B6\u12B7\u12BF\u12C1\u12C6\u12C7\u12D7\u1311\u1316\u1317\u135B-\u137F\u1390-\u139F\u13F6\u13F7\u13FE-\u1400\u166D\u166E\u1680\u169B-\u169F\u16EB-\u16F0\u16F9-\u16FF\u1712-\u171E\u1732-\u173F\u1752-\u175F\u176D\u1771-\u177F\u17B4-\u17D6\u17D8-\u17DB\u17DD-\u181F\u1879-\u187F\u1885\u1886\u18A9\u18AB-\u18AF\u18F6-\u18FF\u191F-\u194F\u196E\u196F\u1975-\u197F\u19AC-\u19AF\u19CA-\u19FF\u1A17-\u1A1F\u1A55-\u1AA6\u1AA8-\u1B04\u1B34-\u1B44\u1B4D-\u1B82\u1BA1-\u1BAD\u1BB0-\u1BB9\u1BE6-\u1BFF\u1C24-\u1C4C\u1C50-\u1C59\u1C7E\u1C7F\u1C8B-\u1C8F\u1CBB\u1CBC\u1CC0-\u1CE8\u1CED\u1CF4\u1CF7-\u1CF9\u1CFB-\u1CFF\u1DC0-\u1DFF\u1F16\u1F17\u1F1E\u1F1F\u1F46\u1F47\u1F4E\u1F4F\u1F58\u1F5A\u1F5C\u1F5E\u1F7E\u1F7F\u1FB5\u1FBD\u1FBF-\u1FC1\u1FC5\u1FCD-\u1FCF\u1FD4\u1FD5\u1FDC-\u1FDF\u1FED-\u1FF1\u1FF5\u1FFD-\u2070\u2072-\u207E\u2080-\u208F\u209D-\u2101\u2103-\u2106\u2108\u2109\u2114\u2116-\u2118\u211E-\u2123\u2125\u2127\u2129\u212E\u213A\u213B\u2140-\u2144\u214A-\u214D\u214F-\u2182\u2185-\u2BFF\u2CE5-\u2CEA\u2CEF-\u2CF1\u2CF4-\u2CFF\u2D26\u2D28-\u2D2C\u2D2E\u2D2F\u2D68-\u2D6E\u2D70-\u2D7F\u2D97-\u2D9F\u2DA7\u2DAF\u2DB7\u2DBF\u2DC7\u2DCF\u2DD7\u2DDF-\u2E2E\u2E30-\u3004\u3007-\u3030\u3036-\u303A\u303D-\u3040\u3097-\u309C\u30A0\u30FB\u3100-\u3104\u3130\u318F-\u319F\u31C0-\u31EF\u3200-\u33FF\u4DC0-\u4DFF\uA48D-\uA4CF\uA4FE\uA4FF\uA60D-\uA60F\uA620-\uA629\uA62C-\uA63F\uA66F-\uA67E\uA69E\uA69F\uA6E6-\uA716\uA720\uA721\uA789\uA78A\uA7DD-\uA7F0\uA802\uA806\uA80B\uA823-\uA83F\uA874-\uA881\uA8B4-\uA8F1\uA8F8-\uA8FA\uA8FC\uA8FF-\uA909\uA926-\uA92F\uA947-\uA95F\uA97D-\uA983\uA9B3-\uA9CE\uA9D0-\uA9DF\uA9E5\uA9F0-\uA9F9\uA9FF\uAA29-\uAA3F\uAA43\uAA4C-\uAA5F\uAA77-\uAA79\uAA7B-\uAA7D\uAAB0\uAAB2-\uAAB4\uAAB7\uAAB8\uAABE\uAABF\uAAC1\uAAC3-\uAADA\uAADE\uAADF\uAAEB-\uAAF1\uAAF5-\uAB00\uAB07\uAB08\uAB0F\uAB10\uAB17-\uAB1F\uAB27\uAB2F\uAB5B\uAB6A-\uAB6F\uABE3-\uABFF\uD7A4-\uD7AF\uD7C7-\uD7CA\uD7FC-\uD7FF\uE000-\uF8FF\uFA6E\uFA6F\uFADA-\uFAFF\uFB07-\uFB12\uFB18-\uFB1C\uFB1E\uFB29\uFB37\uFB3D\uFB3F\uFB42\uFB45\uFBB2-\uFBD2\uFD3E-\uFD4F\uFD90\uFD91\uFDC8-\uFDEF\uFDFC-\uFE6F\uFE75\uFEFD-\uFF20\uFF3B-\uFF40\uFF5B-\uFF65\uFFBF-\uFFC1\uFFC8\uFFC9\uFFD0\uFFD1\uFFD8\uFFD9\uFFDD-\uFFFF]|\uD800[\uDC0C\uDC27\uDC3B\uDC3E\uDC4E\uDC4F\uDC5E-\uDC7F\uDCFB-\uDE7F\uDE9D-\uDE9F\uDED1-\uDEFF\uDF20-\uDF2C\uDF41\uDF4A-\uDF4F\uDF76-\uDF7F\uDF9E\uDF9F\uDFC4-\uDFC7\uDFD0-\uDFFF]|\uD801[\uDC9E-\uDCAF\uDCD4-\uDCD7\uDCFC-\uDCFF\uDD28-\uDD2F\uDD64-\uDD6F\uDD7B\uDD8B\uDD93\uDD96\uDDA2\uDDB2\uDDBA\uDDBD-\uDDBF\uDDF4-\uDDFF\uDF37-\uDF3F\uDF56-\uDF5F\uDF68-\uDF7F\uDF86\uDFB1\uDFBB-\uDFFF]|\uD802[\uDC06\uDC07\uDC09\uDC36\uDC39-\uDC3B\uDC3D\uDC3E\uDC56-\uDC5F\uDC77-\uDC7F\uDC9F-\uDCDF\uDCF3\uDCF6-\uDCFF\uDD16-\uDD1F\uDD3A-\uDD3F\uDD5A-\uDD7F\uDDB8-\uDDBD\uDDC0-\uDDFF\uDE01-\uDE0F\uDE14\uDE18\uDE36-\uDE5F\uDE7D-\uDE7F\uDE9D-\uDEBF\uDEC8\uDEE5-\uDEFF\uDF36-\uDF3F\uDF56-\uDF5F\uDF73-\uDF7F\uDF92-\uDFFF]|\uD803[\uDC49-\uDC7F\uDCB3-\uDCBF\uDCF3-\uDCFF\uDD24-\uDD49\uDD66-\uDD6E\uDD86-\uDE7F\uDEAA-\uDEAF\uDEB2-\uDEC1\uDEC8-\uDEFF\uDF1D-\uDF26\uDF28-\uDF2F\uDF46-\uDF6F\uDF82-\uDFAF\uDFC5-\uDFDF\uDFF7-\uDFFF]|\uD804[\uDC00-\uDC02\uDC38-\uDC70\uDC73\uDC74\uDC76-\uDC82\uDCB0-\uDCCF\uDCE9-\uDD02\uDD27-\uDD43\uDD45\uDD46\uDD48-\uDD4F\uDD73-\uDD75\uDD77-\uDD82\uDDB3-\uDDC0\uDDC5-\uDDD9\uDDDB\uDDDD-\uDDFF\uDE12\uDE2C-\uDE3E\uDE41-\uDE7F\uDE87\uDE89\uDE8E\uDE9E\uDEA9-\uDEAF\uDEDF-\uDF04\uDF0D\uDF0E\uDF11\uDF12\uDF29\uDF31\uDF34\uDF3A-\uDF3C\uDF3E-\uDF4F\uDF51-\uDF5C\uDF62-\uDF7F\uDF8A\uDF8C\uDF8D\uDF8F\uDFB6\uDFB8-\uDFD0\uDFD2\uDFD4-\uDFFF]|\uD805[\uDC35-\uDC46\uDC4B-\uDC5E\uDC62-\uDC7F\uDCB0-\uDCC3\uDCC6\uDCC8-\uDD7F\uDDAF-\uDDD7\uDDDC-\uDDFF\uDE30-\uDE43\uDE45-\uDE7F\uDEAB-\uDEB7\uDEB9-\uDEFF\uDF1B-\uDF3F\uDF47-\uDFFF]|\uD806[\uDC2C-\uDC9F\uDCE0-\uDCFE\uDD07\uDD08\uDD0A\uDD0B\uDD14\uDD17\uDD30-\uDD3E\uDD40\uDD42-\uDD9F\uDDA8\uDDA9\uDDD1-\uDDE0\uDDE2\uDDE4-\uDDFF\uDE01-\uDE0A\uDE33-\uDE39\uDE3B-\uDE4F\uDE51-\uDE5B\uDE8A-\uDE9C\uDE9E-\uDEAF\uDEF9-\uDFBF\uDFE1-\uDFFF]|\uD807[\uDC09\uDC2F-\uDC3F\uDC41-\uDC71\uDC90-\uDCFF\uDD07\uDD0A\uDD31-\uDD45\uDD47-\uDD5F\uDD66\uDD69\uDD8A-\uDD97\uDD99-\uDDAF\uDDDC-\uDEDF\uDEF3-\uDF01\uDF03\uDF11\uDF34-\uDFAF\uDFB1-\uDFFF]|\uD808[\uDF9A-\uDFFF]|\uD809[\uDC00-\uDC7F\uDD44-\uDFFF]|[\uD80A\uD812-\uD817\uD819\uD824-\uD82A\uD82D\uD82E\uD830-\uD834\uD836\uD83C-\uD83F\uD87C\uD87D\uD87F\uD88E-\uDBFF][\uDC00-\uDFFF]|\uD80B[\uDC00-\uDF8F\uDFF1-\uDFFF]|\uD80D[\uDC30-\uDC40\uDC47-\uDC5F]|\uD810[\uDFFB-\uDFFF]|\uD811[\uDE47-\uDFFF]|\uD818[\uDC00-\uDCFF\uDD1E-\uDFFF]|\uD81A[\uDE39-\uDE3F\uDE5F-\uDE6F\uDEBF-\uDECF\uDEEE-\uDEFF\uDF30-\uDF3F\uDF44-\uDF62\uDF78-\uDF7C\uDF90-\uDFFF]|\uD81B[\uDC00-\uDD3F\uDD6D-\uDE3F\uDE80-\uDE9F\uDEB9\uDEBA\uDED4-\uDEFF\uDF4B-\uDF4F\uDF51-\uDF92\uDFA0-\uDFDF\uDFE2\uDFE4-\uDFF1\uDFF4-\uDFFF]|\uD823[\uDCD6-\uDCFE\uDD1F-\uDD7F\uDDF3-\uDFFF]|\uD82B[\uDC00-\uDFEF\uDFF4\uDFFC\uDFFF]|\uD82C[\uDD23-\uDD31\uDD33-\uDD4F\uDD53\uDD54\uDD56-\uDD63\uDD68-\uDD6F\uDEFC-\uDFFF]|\uD82F[\uDC6B-\uDC6F\uDC7D-\uDC7F\uDC89-\uDC8F\uDC9A-\uDFFF]|\uD835[\uDC55\uDC9D\uDCA0\uDCA1\uDCA3\uDCA4\uDCA7\uDCA8\uDCAD\uDCBA\uDCBC\uDCC4\uDD06\uDD0B\uDD0C\uDD15\uDD1D\uDD3A\uDD3F\uDD45\uDD47-\uDD49\uDD51\uDEA6\uDEA7\uDEC1\uDEDB\uDEFB\uDF15\uDF35\uDF4F\uDF6F\uDF89\uDFA9\uDFC3\uDFCC-\uDFFF]|\uD837[\uDC00-\uDEFF\uDF1F-\uDF24\uDF2B-\uDFFF]|\uD838[\uDC00-\uDC2F\uDC6E-\uDCFF\uDD2D-\uDD36\uDD3E-\uDD4D\uDD4F-\uDE8F\uDEAE-\uDEBF\uDEEC-\uDFFF]|\uD839[\uDC00-\uDCCF\uDCEC-\uDDCF\uDDEE\uDDEF\uDDF1-\uDEBF\uDEDF\uDEE3\uDEE6\uDEEE\uDEEF\uDEF5-\uDEFD\uDF00-\uDFDF\uDFE7\uDFEC\uDFEF\uDFFF]|\uD83A[\uDCC5-\uDCFF\uDD44-\uDD4A\uDD4C-\uDFFF]|\uD83B[\uDC00-\uDDFF\uDE04\uDE20\uDE23\uDE25\uDE26\uDE28\uDE33\uDE38\uDE3A\uDE3C-\uDE41\uDE43-\uDE46\uDE48\uDE4A\uDE4C\uDE50\uDE53\uDE55\uDE56\uDE58\uDE5A\uDE5C\uDE5E\uDE60\uDE63\uDE65\uDE66\uDE6B\uDE73\uDE78\uDE7D\uDE7F\uDE8A\uDE9C-\uDEA0\uDEA4\uDEAA\uDEBC-\uDFFF]|\uD869[\uDEE0-\uDEFF]|\uD86E[\uDC1E\uDC1F]|\uD873[\uDEAE\uDEAF]|\uD87A[\uDFE1-\uDFEF]|\uD87B[\uDE5E-\uDFFF]|\uD87E[\uDE1E-\uDFFF]|\uD884[\uDF4B-\uDF4F]|\uD88D[\uDC7A-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])/g, '']);
+	        value = Call$1(StringPrototypeReplace, value, [/[^-0-9 \p{L}]/gu, '']);
 	        value = Call$1(StringPrototypeReplace, value, [/ /g, '-']);
 	        value = Call$1(StringPrototypeToLowerCase, value, []);
 	        result.era = value;
 	      }
 	    }
+	    if (hasEra && !result.era) {
+	      // Work around ICU bug that neglects to provide an era code for negative
+	      // eraYear in the coptic calendar
+	      if (this.id !== 'coptic') {
+	        // If missing from any other calendar, it's an as-yet-unknown bug
+	        throw new RangeError$1(`Intl.DateTimeFormat.formatToParts lacks era in ${this.id} calendar.`);
+	      }
+	      // eraYear is also reversed, but using the legacy era code will set it
+	      // right
+	      result.era = 'era0';
+	    }
 	    if (hasEra && result.eraYear === undefined) {
 	      // Node 12 has outdated ICU data that lacks the `relatedYear` field in the
 	      // output of Intl.DateTimeFormat.formatToParts.
-	      throw new RangeError$1("Intl.DateTimeFormat.formatToParts lacks relatedYear in ".concat(this.id, " calendar. Try Node 14+ or modern browsers."));
+	      throw new RangeError$1(`Intl.DateTimeFormat.formatToParts lacks relatedYear in ${this.id} calendar. Try Node 14+ or modern browsers.`);
 	    }
 	    // Translate old ICU era codes "ERA0" etc. into canonical era names.
 	    if (hasEra) {
@@ -13092,11 +13214,9 @@
 	    }
 	    if (this.checkIcuBugs) this.checkIcuBugs(isoDate);
 	    const calendarDate = this.adjustCalendarDate(result, cache, 'constrain', true);
-	    if (calendarDate.year === undefined) throw new RangeError$1("Missing year converting ".concat(JSONStringify(isoDate)));
-	    if (calendarDate.month === undefined) {
-	      throw new RangeError$1("Missing month converting ".concat(JSONStringify(isoDate)));
-	    }
-	    if (calendarDate.day === undefined) throw new RangeError$1("Missing day converting ".concat(JSONStringify(isoDate)));
+	    assert(calendarDate.year !== undefined, `Missing year converting ${JSONStringify(isoDate)}`);
+	    assert(calendarDate.month !== undefined, `Missing month converting ${JSONStringify(isoDate)}`);
+	    assert(calendarDate.day !== undefined, `Missing day converting ${JSONStringify(isoDate)}`);
 	    cache.set(key, calendarDate);
 	    // Also cache the reverse mapping
 	    const cacheReverse = overflow => {
@@ -13122,13 +13242,11 @@
 	    if (month === undefined && monthCode === undefined) throw new TypeError$1('month or monthCode is required');
 	    if (day === undefined) throw new RangeError$1('Missing day');
 	    if (monthCode !== undefined) {
-	      if (typeof monthCode !== 'string') {
-	        throw new RangeError$1("monthCode must be a string, not ".concat(Call$1(StringPrototypeToLowerCase, Type$1(monthCode), [])));
-	      }
+	      assert(typeof monthCode === 'string', `monthCode must be a string, not ${typeof monthCode}`);
 	      const {
 	        monthNumber
 	      } = ParseMonthCode(monthCode);
-	      if (monthNumber < 1 || monthNumber > 13) throw new RangeError$1("Invalid monthCode: ".concat(monthCode));
+	      if (monthNumber < 1 || monthNumber > 13) throw new RangeError$1(`Invalid monthCode: ${monthCode}`);
 	    }
 	    if (CalendarSupportsEra(this.id)) {
 	      if (calendarDate['era'] === undefined !== (calendarDate['eraYear'] === undefined)) {
@@ -13152,23 +13270,27 @@
 	        if (e.reverseOf) {
 	          // This is a reverse-sign era (like BCE) which must be the oldest
 	          // era. Count years backwards.
-	          if (year > 0) throw new RangeError$1("Signed year ".concat(year, " is invalid for era ").concat(e.name));
+	          // The year must be negative, because the reverse-sign era is always last,
+	          // and if the year was positive, the (comparison >= 0) would have been true
+	          // and this closure would already have returned true
+	          assert(year <= 0, 'year must not be positive in eraFromYear');
 	          eraYear = e.anchorEpoch.year - year;
 	          return true;
 	        }
 	        // last era always gets all "leftover" (older than epoch) years,
 	        // so no need for a comparison like below.
-	        eraYear = year - e.anchorEpoch.year + (e.hasYearZero ? 0 : 1);
+	        eraYear = year - e.anchorEpoch.year + e.startingYear;
 	        return true;
 	      }
 	      const comparison = nonIsoHelperBase.compareCalendarDates(calendarDate, e.anchorEpoch);
 	      if (comparison >= 0) {
-	        eraYear = year - e.anchorEpoch.year + (e.hasYearZero ? 0 : 1);
+	        eraYear = year - e.anchorEpoch.year + e.startingYear;
 	        return true;
 	      }
 	      return false;
 	    }]);
-	    if (ix === -1) throw new RangeError$1("Year ".concat(year, " was not matched by any era"));
+	    // Last era in the list should always match if no other era does
+	    assert(ix >= 0, `Year ${year} was not matched by any era`);
 	    let matchingEra = this.eras[ix];
 	    if (matchingEra.skip) matchingEra = this.eras[ix - 1];
 	    return {
@@ -13190,10 +13312,10 @@
 	        era
 	      } = matchData);
 	      if (calendarDate.era !== undefined && CanonicalizeEraInCalendar(this.id, calendarDate.era) !== era) {
-	        throw new RangeError$1("Input era ".concat(calendarDate.era, " doesn't match calculated value ").concat(era));
+	        throw new RangeError$1(`Input era ${calendarDate.era} doesn't match calculated value ${era}`);
 	      }
 	      if (calendarDate.eraYear !== undefined && calendarDate.eraYear !== eraYear) {
-	        throw new RangeError$1("Input eraYear ".concat(calendarDate.eraYear, " doesn't match calculated value ").concat(eraYear));
+	        throw new RangeError$1(`Input eraYear ${calendarDate.eraYear} doesn't match calculated value ${eraYear}`);
 	      }
 	    } else if (eraYear !== undefined) {
 	      const canonicalName = CanonicalizeEraInCalendar(this.id, era);
@@ -13203,14 +13325,11 @@
 	        } = _ref6;
 	        return code === canonicalName;
 	      }]);
-	      if (!matchingEra) throw new RangeError$1("Era ".concat(era, " (ISO year ").concat(eraYear, ") was not matched by any era"));
+	      if (!matchingEra) throw new RangeError$1(`Era ${era} (ISO year ${eraYear}) was not matched by any era`);
 	      if (matchingEra.reverseOf) {
 	        year = matchingEra.anchorEpoch.year - eraYear;
 	      } else {
-	        year = eraYear + matchingEra.anchorEpoch.year - (matchingEra.hasYearZero ? 0 : 1);
-	      }
-	      if (calendarDate.year !== undefined && calendarDate.year !== year) {
-	        throw new RangeError$1("Input year ".concat(calendarDate.year, " doesn't match calculated value ").concat(year));
+	        year = eraYear + matchingEra.anchorEpoch.year - matchingEra.startingYear;
 	      }
 	      // We'll accept dates where the month/day is earlier than the start of
 	      // the era or after its end as long as it's in the same year. If that
@@ -13228,11 +13347,12 @@
 	    }
 	    // validateCalendarDate already ensured that either year or era+eraYear are
 	    // present
-	    return _objectSpread2(_objectSpread2({}, calendarDate), {}, {
+	    return {
+	      ...calendarDate,
 	      year,
 	      eraYear,
 	      era
-	    });
+	    };
 	  },
 	  /**
 	   * Allows derived calendars to add additional fields and/or to make
@@ -13255,10 +13375,11 @@
 	      month,
 	      monthCode
 	    } = resolveNonLunisolarMonth(calendarDate, this.id, overflow));
-	    calendarDate = _objectSpread2(_objectSpread2({}, calendarDate), {}, {
+	    calendarDate = {
+	      ...calendarDate,
 	      month,
 	      monthCode
-	    });
+	    };
 	    if (CalendarSupportsEra(this.id)) calendarDate = this.completeEraYear(calendarDate);
 	    return calendarDate;
 	  },
@@ -13273,14 +13394,16 @@
 	      RejectToRange(day, 1, this.maximumMonthLength(calendarDate));
 	    } else {
 	      month = ConstrainToRange(month, 1, largestMonth);
-	      day = ConstrainToRange(day, 1, this.maximumMonthLength(_objectSpread2(_objectSpread2({}, calendarDate), {}, {
+	      day = ConstrainToRange(day, 1, this.maximumMonthLength({
+	        ...calendarDate,
 	        month
-	      })));
+	      }));
 	    }
-	    return _objectSpread2(_objectSpread2({}, calendarDate), {}, {
+	    return {
+	      ...calendarDate,
 	      month,
 	      day
-	    });
+	    };
 	  },
 	  calendarToIsoDate(date) {
 	    let overflow = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'constrain';
@@ -13312,11 +13435,11 @@
 	    }
 
 	    // First, try to roughly guess the result
-	    let isoEstimate = this.estimateIsoDate({
+	    let isoEstimate = clampISODate(this.estimateIsoDate({
 	      year,
 	      month,
 	      day
-	    });
+	    }));
 	    const calculateSameMonthResult = diffDays => {
 	      // If the estimate is in the same year & month as the target, then we can
 	      // calculate the result exactly and short-circuit any additional logic.
@@ -13327,17 +13450,17 @@
 	      // that's currently worked around by a custom calendarToIsoDate
 	      // implementation in those calendars. So this optimization should be safe
 	      // for all ICU calendars.
-	      let testIsoEstimate = addDaysISO(isoEstimate, diffDays);
+	      let testIsoEstimate = AddDaysToISODate(isoEstimate, diffDays);
 	      if (date.day > this.minimumMonthLength(date)) {
 	        // There's a chance that the calendar date is out of range. Throw or
 	        // constrain if so.
 	        let testCalendarDate = this.isoToCalendarDate(testIsoEstimate, cache);
 	        while (testCalendarDate.month !== month || testCalendarDate.year !== year) {
 	          if (overflow === 'reject') {
-	            throw new RangeError$1("day ".concat(day, " does not exist in month ").concat(month, " of year ").concat(year));
+	            throw new RangeError$1(`day ${day} does not exist in month ${month} of year ${year}`);
 	          }
 	          // Back up a day at a time until we're not hanging over the month end
-	          testIsoEstimate = addDaysISO(testIsoEstimate, -1);
+	          testIsoEstimate = AddDaysToISODate(testIsoEstimate, -1);
 	          testCalendarDate = this.isoToCalendarDate(testIsoEstimate, cache);
 	        }
 	      }
@@ -13348,7 +13471,7 @@
 	    let diff = simpleDateDiff(date, roundtripEstimate);
 	    if (diff.years !== 0 || diff.months !== 0 || diff.days !== 0) {
 	      const diffTotalDaysEstimate = diff.years * 365 + diff.months * 30 + diff.days;
-	      isoEstimate = addDaysISO(isoEstimate, diffTotalDaysEstimate);
+	      isoEstimate = clampISODate(AddDaysToISODate(isoEstimate, diffTotalDaysEstimate));
 	      roundtripEstimate = this.isoToCalendarDate(isoEstimate, cache);
 	      diff = simpleDateDiff(date, roundtripEstimate);
 	      if (diff.years === 0 && diff.months === 0) {
@@ -13357,49 +13480,30 @@
 	        sign = this.compareCalendarDates(date, roundtripEstimate);
 	      }
 	    }
-	    // If the initial guess is not in the same month, then bisect the
-	    // distance to the target, starting with 8 days per step.
-	    let increment = 8;
+	    // If the initial guess is not in the same month, search in 8-day increments
+	    // towards the target, until we get into the same month. From there we can
+	    // calculate the number of days directly.
+	    const increment = 8;
+	    const oldSign = sign;
 	    while (sign) {
-	      isoEstimate = addDaysISO(isoEstimate, sign * increment);
-	      const oldRoundtripEstimate = roundtripEstimate;
+	      isoEstimate = AddDaysToISODate(isoEstimate, sign * increment);
 	      roundtripEstimate = this.isoToCalendarDate(isoEstimate, cache);
-	      const oldSign = sign;
 	      sign = this.compareCalendarDates(date, roundtripEstimate);
-	      if (sign) {
-	        diff = simpleDateDiff(date, roundtripEstimate);
-	        if (diff.years === 0 && diff.months === 0) {
-	          isoEstimate = calculateSameMonthResult(diff.days);
-	          // Signal the loop condition that there's a match.
-	          sign = 0;
-	        } else if (oldSign && sign !== oldSign) {
-	          if (increment > 1) {
-	            // If the estimate overshot the target, try again with a smaller increment
-	            // in the reverse direction.
-	            increment /= 2;
-	          } else {
-	            // Increment is 1, and neither the previous estimate nor the new
-	            // estimate is correct. The only way that can happen is if the
-	            // original date was an invalid value that will be constrained or
-	            // rejected here.
-	            if (overflow === 'reject') {
-	              throw new RangeError$1("Can't find ISO date from calendar date: ".concat(JSONStringify(_objectSpread2({}, originalDate))));
-	            } else {
-	              // To constrain, pick the earliest value
-	              const order = this.compareCalendarDates(roundtripEstimate, oldRoundtripEstimate);
-	              // If current value is larger, then back up to the previous value.
-	              if (order > 0) isoEstimate = addDaysISO(isoEstimate, -1);
-	              sign = 0;
-	            }
-	          }
-	        }
+	      if (sign === 0) break;
+	      diff = simpleDateDiff(date, roundtripEstimate);
+	      if (diff.years === 0 && diff.months === 0) {
+	        isoEstimate = calculateSameMonthResult(diff.days);
+	        break;
 	      }
+	      assert(sign === oldSign, 'calendarToIsoDate search should not overshoot a month entirely');
 	    }
 	    cache.set(key, isoEstimate);
 	    if (keyOriginal) cache.set(keyOriginal, isoEstimate);
-	    if (date.year === undefined || date.month === undefined || date.day === undefined || date.monthCode === undefined || CalendarSupportsEra(this.id) && (date.era === undefined || date.eraYear === undefined)) {
-	      throw new RangeError$1('Unexpected missing property');
-	    }
+	    assert(date.year !== undefined, 'Missing year');
+	    assert(date.month !== undefined, 'Missing month');
+	    assert(date.day !== undefined, 'Missing day');
+	    assert(date.monthCode !== undefined, 'Missing monthCode');
+	    assert(!CalendarSupportsEra(this.id) || date.era !== undefined && date.eraYear !== undefined, 'Unexpected missing property');
 	    return isoEstimate;
 	  },
 	  compareCalendarDates(date1, date2) {
@@ -13417,7 +13521,7 @@
 	  },
 	  addDaysCalendar(calendarDate, days, cache) {
 	    const isoDate = this.calendarToIsoDate(calendarDate, 'constrain', cache);
-	    const addedIso = addDaysISO(isoDate, days);
+	    const addedIso = AddDaysToISODate(isoDate, days);
 	    const addedCalendar = this.isoToCalendarDate(addedIso, cache);
 	    return addedCalendar;
 	  },
@@ -13432,7 +13536,7 @@
 	      const oldCalendarDate = calendarDate;
 	      const days = months < 0 ? -MathMax(day, this.daysInPreviousMonth(calendarDate, cache)) : this.daysInMonth(calendarDate, cache);
 	      const isoDate = this.calendarToIsoDate(calendarDate, 'constrain', cache);
-	      let addedIso = addDaysISO(isoDate, days);
+	      let addedIso = AddDaysToISODate(isoDate, days);
 	      calendarDate = this.isoToCalendarDate(addedIso, cache);
 
 	      // Normally, we can advance one month by adding the number of days in the
@@ -13443,21 +13547,22 @@
 	      if (months > 0) {
 	        const monthsInOldYear = this.monthsInYear(oldCalendarDate, cache);
 	        while (calendarDate.month - 1 !== month % monthsInOldYear) {
-	          addedIso = addDaysISO(addedIso, -1);
+	          addedIso = AddDaysToISODate(addedIso, -1);
 	          calendarDate = this.isoToCalendarDate(addedIso, cache);
 	        }
 	      }
 	      if (calendarDate.day !== day) {
 	        // try to retain the original day-of-month, if possible
-	        calendarDate = this.regulateDate(_objectSpread2(_objectSpread2({}, calendarDate), {}, {
+	        calendarDate = this.regulateDate({
+	          ...calendarDate,
 	          day
-	        }), 'constrain', cache);
+	        }, 'constrain', cache);
 	      }
 	    }
 	    if (overflow === 'reject' && calendarDate.day !== day) {
-	      throw new RangeError$1("Day ".concat(day, " does not exist in resulting calendar month"));
+	      throw new RangeError$1(`Day ${day} does not exist in resulting calendar month`);
 	    }
-	    return calendarDate;
+	    return this.regulateDate(calendarDate, overflow, cache);
 	  },
 	  addCalendar(calendarDate, _ref7, overflow, cache) {
 	    let {
@@ -13485,95 +13590,106 @@
 	      year: year + years,
 	      monthCode,
 	      day
-	    }, cache);
+	    }, cache, overflow);
 	    const addedMonths = this.addMonthsCalendar(addedYears, months, overflow, cache);
 	    days += weeks * 7;
 	    const addedDays = this.addDaysCalendar(addedMonths, days, cache);
 	    return addedDays;
 	  },
 	  untilCalendar(calendarOne, calendarTwo, largestUnit, cache) {
-	    let days = 0;
-	    let weeks = 0;
 	    let months = 0;
 	    let years = 0;
-	    switch (largestUnit) {
-	      case 'day':
-	        days = this.calendarDaysUntil(calendarOne, calendarTwo, cache);
-	        break;
-	      case 'week':
-	        {
-	          const totalDays = this.calendarDaysUntil(calendarOne, calendarTwo, cache);
-	          days = totalDays % 7;
-	          weeks = (totalDays - days) / 7;
-	          break;
-	        }
-	      case 'month':
-	      case 'year':
-	        {
-	          const sign = this.compareCalendarDates(calendarTwo, calendarOne);
-	          if (!sign) {
-	            return {
-	              years: 0,
-	              months: 0,
-	              weeks: 0,
-	              days: 0
-	            };
-	          }
-	          const diffYears = calendarTwo.year - calendarOne.year;
-	          const diffDays = calendarTwo.day - calendarOne.day;
-	          const monthInfo = monthCodeInfo[this.id];
-	          const cycleInfo = monthInfo ? monthInfo.cycleInfo : {
-	            years: 1,
-	            months: 12
-	          };
-	          if (diffYears && (largestUnit === 'year' || cycleInfo)) {
-	            let diffInYearSign = 0;
-	            if (calendarTwo.monthCode > calendarOne.monthCode) diffInYearSign = 1;
-	            if (calendarTwo.monthCode < calendarOne.monthCode) diffInYearSign = -1;
-	            if (!diffInYearSign) diffInYearSign = MathSign(diffDays);
-	            const isOneFurtherInYear = diffInYearSign * sign < 0;
-	            years = isOneFurtherInYear ? diffYears - sign : diffYears;
-	          }
-	          // Try to skip ahead as many months as possible for this calendar
-	          // without adding month by month in a loop
-	          if (largestUnit === 'month') {
-	            if (cycleInfo && MathAbs(years) >= cycleInfo.years) {
-	              const cycleCount = MathTrunc(years / cycleInfo.years);
-	              months = cycleCount * cycleInfo.months;
-	            }
-	            years = 0;
-	          }
-	          const intermediate = years || months ? this.addCalendar(calendarOne, {
-	            years,
-	            months
-	          }, 'constrain', cache) : calendarOne;
-	          // Now we have less than one cycle remaining. Add one month at a time
-	          // until we go over the target, then back up one month and calculate
-	          // remaining days.
-	          let current;
-	          let next = intermediate;
-	          do {
-	            months += sign;
-	            current = next;
-	            next = this.addMonthsCalendar(current, sign, 'constrain', cache);
-	            if (next.day !== calendarOne.day) {
-	              // In case the day was constrained down, un-constrain it (even if
-	              // that's not a real date)
-	              next = _objectSpread2(_objectSpread2({}, next), {}, {
-	                day: calendarOne.day
-	              });
-	            }
-	          } while (this.compareCalendarDates(calendarTwo, next) * sign >= 0);
-	          months -= sign; // correct for loop above which overshoots by 1
-	          const remainingDays = this.calendarDaysUntil(current, calendarTwo, cache);
-	          days = remainingDays;
-	          break;
-	        }
+	    assert(largestUnit === 'month' || largestUnit === 'year', 'weeks and days handed in dateUntil');
+
+	    // Sign is -1 if calendarTwo < calendarOne, 1 if calendarTwo > calendarOne
+	    const sign = this.compareCalendarDates(calendarTwo, calendarOne);
+	    // If dates were equal, this would have been checked in CalendarDateUntil
+	    assert(sign, 'equal dates should have been checked earlier');
+	    // Take the difference between the years of the two dates
+	    const diffYears = calendarTwo.year - calendarOne.year;
+	    // Take the difference between the days of the two dates
+	    const diffDays = calendarTwo.day - calendarOne.day;
+	    // Get list of additional months, and possibly cycle info
+	    const monthInfo = monthCodeInfo[this.id];
+	    const cycleInfo = monthInfo ? monthInfo.cycleInfo : {
+	      years: 1,
+	      months: 12
+	    };
+	    // Compute years difference if necessary
+	    if (diffYears && (largestUnit === 'year' || cycleInfo)) {
+	      // diffInYearSign is the result of comparing the month-day of calendarOne
+	      // and the month-day of calendarTwo, in the forwards direction
+	      let diffInYearSign = 0;
+	      // If calendarTwo's month is greater than calendarOne's month,
+	      // then the years difference should be positive (or negative if sign < 0).
+	      if (calendarTwo.monthCode > calendarOne.monthCode) diffInYearSign = 1;
+	      // If calendarTwo's month is less than calendarOne's month,
+	      // then the years difference should be negative (or positive if sign < 0).
+	      if (calendarTwo.monthCode < calendarOne.monthCode) diffInYearSign = -1;
+	      // If the two months are equal, the sign of the years difference should be
+	      // the sign of the days difference.
+	      if (!diffInYearSign) diffInYearSign = MathSign(diffDays);
+	      // isCalendarOneFurtherInYear is true iff the ordering of the years
+	      // doesn't match the ordering of the month/days.
+	      const isCalendarOneFurtherInYear = diffInYearSign * sign < 0;
+	      // Add either 1 or -1 to years if isCalendarOneFurtherInYear is true.
+	      // If monthday-two is later in the year than monthday-one, need
+	      // to correct diffYears because it's gone one too far.
+	      years = isCalendarOneFurtherInYear ? diffYears - sign : diffYears;
 	    }
+	    // Try to skip ahead as many months as possible for this calendar
+	    // without adding month by month in a loop
+	    if (largestUnit === 'month') {
+	      if (cycleInfo && MathAbs(years) >= cycleInfo.years) {
+	        const cycleCount = MathTrunc(years / cycleInfo.years);
+	        months = cycleCount * cycleInfo.months;
+	      }
+	      years = 0;
+	    }
+
+	    // intermediate should be a date between calendarOne and calendarTwo,
+	    // that is within a year of calendarTwo.
+	    const intermediate = years || months ? this.addCalendar(calendarOne, {
+	      years,
+	      months
+	    }, 'constrain', cache) : calendarOne;
+
+	    // At this point, intermediate could fail to be in between calendarOne and calendarTwo
+	    // due to leap years.
+	    // In that case, add or subtract an extra year from years,
+	    // so that the months can be totaled up correctly.
+	    if (CompareSurpasses(sign, intermediate.year, intermediate.month, calendarOne.day, calendarTwo)) {
+	      years -= sign;
+	    }
+
+	    // Now we have less than one cycle remaining. Add one month at a time
+	    // until we go over the target, then back up one month and calculate
+	    // remaining days.
+	    let current;
+	    // Need to re-add years and months because years might have changed
+	    let next = years || months ? this.addCalendar(calendarOne, {
+	      years,
+	      months
+	    }, 'constrain', cache) : calendarOne;
+	    next.day = calendarOne.day;
+	    do {
+	      months += sign;
+	      current = next;
+	      next = this.addMonthsCalendar(current, sign, 'constrain', cache);
+	      // In case the day was constrained down, un-constrain it (even if that's
+	      // not a real date)
+	      next.day = calendarOne.day;
+	    } while (!CompareSurpasses(sign, next.year, next.month, next.day, calendarTwo));
+	    months -= sign; // correct for loop above which overshoots by 1
+	    const days = this.calendarDaysUntil(current, calendarTwo, cache);
+
+	    // This may return a duration like <P12M11D> that appears to have unbalanced months.
+	    // But that's fine, because subtracting <P12M11D> from a date may have different
+	    // results than subtracting <P1Y11D> from the same date, in the presence of leap months.
 	    return {
 	      years,
 	      months,
-	      weeks,
+	      weeks: 0,
 	      days
 	    };
 	  },
@@ -13597,11 +13713,11 @@
 	    // Add enough days to get into the next month, without skipping it
 	    const increment = day <= max - min ? max : min;
 	    const isoDate = this.calendarToIsoDate(calendarDate, 'constrain', cache);
-	    const addedIsoDate = addDaysISO(isoDate, increment);
+	    const addedIsoDate = AddDaysToISODate(isoDate, increment);
 	    const addedCalendarDate = this.isoToCalendarDate(addedIsoDate, cache);
 
 	    // Now back up to the last day of the original month
-	    const endOfMonthIso = addDaysISO(addedIsoDate, -addedCalendarDate.day);
+	    const endOfMonthIso = AddDaysToISODate(addedIsoDate, -addedCalendarDate.day);
 	    const endOfMonthCalendar = this.isoToCalendarDate(endOfMonthIso, cache);
 	    return endOfMonthCalendar.day;
 	  },
@@ -13620,14 +13736,15 @@
 	      day: 1
 	    };
 	    const previousMonth = month > 1 ? month - 1 : this.monthsInYear(previousMonthDate, cache);
-	    previousMonthDate = _objectSpread2(_objectSpread2({}, previousMonthDate), {}, {
+	    previousMonthDate = {
+	      ...previousMonthDate,
 	      month: previousMonth
-	    });
+	    };
 	    const min = this.minimumMonthLength(previousMonthDate);
 	    const max = this.maximumMonthLength(previousMonthDate);
 	    if (min === max) return max;
 	    const isoDate = this.calendarToIsoDate(calendarDate, 'constrain', cache);
-	    const lastDayOfPreviousMonthIso = addDaysISO(isoDate, -day);
+	    const lastDayOfPreviousMonthIso = AddDaysToISODate(isoDate, -day);
 	    const lastDayOfPreviousMonthCalendar = this.isoToCalendarDate(lastDayOfPreviousMonthIso, cache);
 	    return lastDayOfPreviousMonthCalendar.day;
 	  },
@@ -13639,34 +13756,34 @@
 	      day: 1
 	    };
 	  },
-	  startOfCalendarMonth(calendarDate) {
-	    return {
-	      year: calendarDate.year,
-	      month: calendarDate.month,
-	      day: 1
-	    };
-	  },
 	  calendarDaysUntil(calendarOne, calendarTwo, cache) {
 	    const oneIso = this.calendarToIsoDate(calendarOne, 'constrain', cache);
 	    const twoIso = this.calendarToIsoDate(calendarTwo, 'constrain', cache);
 	    return ISODateToEpochDays(twoIso.year, twoIso.month - 1, twoIso.day) - ISODateToEpochDays(oneIso.year, oneIso.month - 1, oneIso.day);
 	  },
-	  // Override this to shortcut the search space if certain month codes only
-	  // occur long in the past
-	  monthDaySearchStartYear: (/* monthCode, day */) => 1972,
+	  // This must be overridden to provide a hardcoded ISO reference year for the
+	  // given month and day.
+	  monthDayISOReferenceYear(/* monthCode, day */
+	  ) {
+	    /* c8 ignore next */assertNotReached(`monthDayISOReferenceYear() should be implemented for ${this.id}`);
+	  },
+	  // This must be overridden to give the maximum month length of the month code
+	  // in any year, for the purposes of overflow in ToTemporalMonthDay. There is
+	  // special behaviour specified for 'chinese' and 'dangi' calendars which may
+	  // adjust the month code or throw an exception. Returns an array of length 2
+	  // consisting of [new month code, max days in month].
+	  maxLengthOfAdjustedMonthCodeInAnyYear(/* monthCode, day, overflow */
+	  ) {
+	    /* c8 ignore next */assertNotReached(`maxLengthOfAdjustedMonthCodeInAnyYear() should be implemented for ${this.id}`);
+	  },
 	  monthDayFromFields(fields, overflow, cache) {
 	    let {
-	      era,
 	      eraYear,
 	      year,
-	      month,
 	      monthCode,
 	      day
 	    } = fields;
 	    const hasEra = CalendarSupportsEra(this.id);
-	    if (month !== undefined && year === undefined && (!hasEra || era === undefined || eraYear === undefined)) {
-	      throw new TypeError$1('when month is present, year (or era and eraYear) are required');
-	    }
 	    if (monthCode === undefined || year !== undefined || hasEra && eraYear !== undefined) {
 	      // Apply overflow behaviour to year/month/day, to get correct monthCode/day
 	      ({
@@ -13674,22 +13791,32 @@
 	        day
 	      } = this.isoToCalendarDate(this.calendarToIsoDate(fields, overflow, cache), cache));
 	    }
-	    let isoYear, isoMonth, isoDay;
-	    let closestCalendar, closestIso;
-	    // Look backwards starting from one of the calendar years spanning ISO year
-	    // 1972, up to 20 calendar years prior, to find a year that has this month
-	    // and day. Normal months and days will match immediately, but for leap days
-	    // and leap months we may have to look for a while. For searches longer than
-	    // 20 years, override the start date in monthDaySearchStartYear.
+
+	    // Shape of property bag is correct, check valid input and apply overflow
+	    if (!IsValidMonthCodeForCalendar(this.id, monthCode)) {
+	      throw new RangeError$1(`Invalid monthCode: ${monthCode} does not exist in calendar ${this.id}`);
+	    }
+	    let maxDayForMonthCode;
+	    [monthCode, maxDayForMonthCode] = this.maxLengthOfAdjustedMonthCodeInAnyYear(monthCode, day, overflow);
+	    if (day > maxDayForMonthCode) {
+	      if (overflow === 'reject') {
+	        throw new RangeError$1(`No ${this.id} year with month code ${monthCode} and day ${day}`);
+	      }
+	      day = maxDayForMonthCode;
+	    }
+
+	    // Find the latest instance before 12-31 of the ISO reference year, of a
+	    // calendar year that has this month code and day.
 	    const startDateIso = {
-	      year: this.monthDaySearchStartYear(monthCode, day),
+	      year: this.monthDayISOReferenceYear(monthCode, day),
 	      month: 12,
 	      day: 31
 	    };
 	    const calendarOfStartDateIso = this.isoToCalendarDate(startDateIso, cache);
 	    // Note: relies on lexicographical ordering of monthCodes
 	    const calendarYear = calendarOfStartDateIso.monthCode > monthCode || calendarOfStartDateIso.monthCode === monthCode && calendarOfStartDateIso.day >= day ? calendarOfStartDateIso.year : calendarOfStartDateIso.year - 1;
-	    for (let i = 0; i < 20; i++) {
+	    // There may be two instances of the same month in the given ISO year
+	    for (let i = 0; i < 2; i++) {
 	      let testCalendarDate = this.adjustCalendarDate({
 	        day,
 	        monthCode,
@@ -13697,38 +13824,12 @@
 	      }, cache);
 	      const isoDate = this.calendarToIsoDate(testCalendarDate, 'constrain', cache);
 	      const roundTripCalendarDate = this.isoToCalendarDate(isoDate, cache);
-	      ({
-	        year: isoYear,
-	        month: isoMonth,
-	        day: isoDay
-	      } = isoDate);
 	      if (roundTripCalendarDate.monthCode === monthCode && roundTripCalendarDate.day === day) {
-	        return {
-	          month: isoMonth,
-	          day: isoDay,
-	          year: isoYear
-	        };
-	      } else if (overflow === 'constrain') {
-	        // If the requested day is never present in any instance of this month
-	        // code, and the round trip date is an instance of this month code with
-	        // the most possible days, we are as close as we can get.
-	        const maxDayForMonthCode = this.maxLengthOfMonthCodeInAnyYear(roundTripCalendarDate.monthCode);
-	        if (roundTripCalendarDate.monthCode === monthCode && roundTripCalendarDate.day === maxDayForMonthCode && day > maxDayForMonthCode) {
-	          return {
-	            month: isoMonth,
-	            day: isoDay,
-	            year: isoYear
-	          };
-	        }
-	        // non-ISO constrain algorithm tries to find the closest date in a matching month
-	        if (closestCalendar === undefined || roundTripCalendarDate.monthCode === closestCalendar.monthCode && roundTripCalendarDate.day > closestCalendar.day) {
-	          closestCalendar = roundTripCalendarDate;
-	          closestIso = isoDate;
-	        }
+	        return isoDate;
 	      }
 	    }
-	    if (overflow === 'constrain' && closestIso !== undefined) return closestIso;
-	    throw new RangeError$1("No recent ".concat(this.id, " year with monthCode ").concat(monthCode, " and day ").concat(day));
+	    /* c8 ignore next */
+	    assertNotReached(`reference year ${startDateIso.year} should be correct for ${monthCode}-${day}`);
 	  }
 	};
 	function makeNonISOHelper(eras, helper) {
@@ -13753,7 +13854,9 @@
 	    // Given that these can be calculated by counting the number of days in
 	    // those months, I assume that these DO NOT need to be exposed as
 	    // Hebrew-only prototype fields or methods.
-	    return (7 * year + 1) % 19 < 7;
+	    let cycleYear = (7 * year + 1) % 19;
+	    if (cycleYear < 0) cycleYear += 19;
+	    return cycleYear < 7;
 	  },
 	  monthsInYear(calendarDate) {
 	    return this.inLeapYear(calendarDate) ? 13 : 12;
@@ -13765,19 +13868,23 @@
 	    return this.minMaxMonthLength(calendarDate, 1);
 	  },
 	  minMaxMonthLength(calendarDate, minOrMax) {
-	    var _calendarDate$monthCo;
 	    const {
 	      month,
 	      year
 	    } = calendarDate;
-	    const monthCode = (_calendarDate$monthCo = calendarDate.monthCode) !== null && _calendarDate$monthCo !== void 0 ? _calendarDate$monthCo : this.getMonthCode(year, month);
+	    const monthCode = calendarDate.monthCode ?? this.getMonthCode(year, month);
 	    const daysInMonth = this.monthLengths[monthCode];
-	    if (daysInMonth === undefined) throw new RangeError$1("unmatched Hebrew month: ".concat(month));
+	    assert(daysInMonth, `missing daysInMonth for Hebrew month ${monthCode}`);
 	    return typeof daysInMonth === 'number' ? daysInMonth : daysInMonth[minOrMax];
 	  },
-	  maxLengthOfMonthCodeInAnyYear(monthCode) {
+	  monthDayISOReferenceYear(monthCode, day) {
+	    if (monthCode === 'M05L') return 1970;
+	    if ((monthCode === 'M02' || monthCode === 'M03') && day === 30) return 1971;
+	    return 1972;
+	  },
+	  maxLengthOfAdjustedMonthCodeInAnyYear(monthCode /*, day, overflow */) {
 	    const daysInMonth = this.monthLengths[monthCode];
-	    return typeof daysInMonth === 'number' ? daysInMonth : daysInMonth[1];
+	    return [monthCode, typeof daysInMonth === 'number' ? daysInMonth : daysInMonth[1]];
 	  },
 	  /** Take a guess at what ISO date a particular calendar date corresponds to */
 	  estimateIsoDate(calendarDate) {
@@ -13895,7 +14002,7 @@
 	      // correct `month` using the string name as a key.
 	      if (monthExtra) {
 	        const monthInfo = this.months[monthExtra];
-	        if (!monthInfo) throw new RangeError$1("Unrecognized month from formatToParts: ".concat(monthExtra));
+	        if (!monthInfo) throw new RangeError$1(`Unrecognized month from formatToParts: ${monthExtra}`);
 	        month = this.inLeapYear({
 	          year
 	        }) ? monthInfo.leap : monthInfo.regular;
@@ -13920,14 +14027,14 @@
 	        } = ParseMonthCode(monthCode);
 	        if (isLeapMonth) {
 	          if (monthNumber !== 5) {
-	            throw new RangeError$1("Hebrew leap month must have monthCode M05L, not ".concat(monthCode));
+	            throw new RangeError$1(`Hebrew leap month must have monthCode M05L, not ${monthCode}`);
 	          }
 	          month = 6;
 	          if (!this.inLeapYear({
 	            year
 	          })) {
 	            if (overflow === 'reject') {
-	              throw new RangeError$1("Hebrew monthCode M05L is invalid in year ".concat(year, " which is not a leap year"));
+	              throw new RangeError$1(`Hebrew monthCode M05L is invalid in year ${year} which is not a leap year`);
 	            } else {
 	              // constrain to same day of next month (Adar)
 	              month = 6;
@@ -13943,7 +14050,7 @@
 	          const largestMonth = this.monthsInYear({
 	            year
 	          });
-	          if (month < 1 || month > largestMonth) throw new RangeError$1("Invalid monthCode: ".concat(monthCode));
+	          if (month < 1 || month > largestMonth) throw new RangeError$1(`Invalid monthCode: ${monthCode}`);
 	        }
 	      } else {
 	        if (overflow === 'reject') {
@@ -13968,18 +14075,19 @@
 	        } else {
 	          const calculatedMonthCode = this.getMonthCode(year, month);
 	          if (calculatedMonthCode !== monthCode) {
-	            throw new RangeError$1("monthCode ".concat(monthCode, " doesn't correspond to month ").concat(month, " in Hebrew year ").concat(year));
+	            throw new RangeError$1(`monthCode ${monthCode} doesn't correspond to month ${month} in Hebrew year ${year}`);
 	          }
 	        }
 	      }
-	      return _objectSpread2(_objectSpread2({}, calendarDate), {}, {
+	      return {
+	        ...calendarDate,
 	        day,
 	        month,
 	        monthCode,
 	        year,
 	        era,
 	        eraYear
-	      });
+	      };
 	    }
 	  }
 	});
@@ -14021,7 +14129,31 @@
 	  },
 	  minimumMonthLength: (/* calendarDate */) => 29,
 	  maximumMonthLength: (/* calendarDate */) => 30,
-	  maxLengthOfMonthCodeInAnyYear: (/* monthCode */) => 30,
+	  observationalDay30ISOReferenceYears: {
+	    M01: 1972,
+	    M02: 1970,
+	    M03: 1971,
+	    M04: 1972,
+	    M05: 1971,
+	    M06: 1972,
+	    M07: 1969,
+	    M08: 1972,
+	    M09: 1972,
+	    M10: 1970,
+	    M11: 1972,
+	    M12: 1971
+	  },
+	  monthDayISOReferenceYear(monthCode, day) {
+	    if (this.tabular && monthCode === 'M12' && day === 30) return 1971;
+	    if (!this.tabular && day === 30) return this.observationalDay30ISOReferenceYears[monthCode];
+	    return 1972;
+	  },
+	  maxLengthOfAdjustedMonthCodeInAnyYear(monthCode /*, day, overflow */) {
+	    if (!this.tabular) return [monthCode, 30]; // if observational, any month can have 29 or 30 days
+	    const month = ParseMonthCode(monthCode).monthNumber;
+	    const daysInMonth = [0, 30, 29, 30, 29, 30, 29, 30, 29, 30, 29, 30, 30][month];
+	    return [monthCode, daysInMonth];
+	  },
 	  DAYS_PER_ISLAMIC_YEAR: 354 + 11 / 30,
 	  DAYS_PER_ISO_YEAR: 365.2425,
 	  estimateIsoDate(calendarDate) {
@@ -14033,7 +14165,8 @@
 	      month: 1,
 	      day: 1
 	    };
-	  }
+	  },
+	  isoToCalendarDate: makeDayShiftedIsoToCalendarDate(10631, 30)
 	});
 	const helperPersian = makeNonISOHelper([{
 	  code: 'ap',
@@ -14071,8 +14204,13 @@
 	    if (month === 12) return 30;
 	    return month <= 6 ? 31 : 30;
 	  },
-	  maxLengthOfMonthCodeInAnyYear(monthCode) {
-	    return ParseMonthCode(monthCode).monthNumber <= 6 ? 31 : 30;
+	  monthDayISOReferenceYear(/* monthCode, day */
+	  ) {
+	    return 1972;
+	  },
+	  maxLengthOfAdjustedMonthCodeInAnyYear(monthCode /*, day, overflow */) {
+	    const daysInMonth = ParseMonthCode(monthCode).monthNumber <= 6 ? 31 : 30;
+	    return [monthCode, daysInMonth];
 	  },
 	  estimateIsoDate(calendarDate) {
 	    const {
@@ -14113,11 +14251,14 @@
 	  maximumMonthLength(calendarDate) {
 	    return this.getMonthInfo(calendarDate).length;
 	  },
-	  maxLengthOfMonthCodeInAnyYear(monthCode) {
-	    var _monthInfo$leap;
+	  monthDayISOReferenceYear(/* monthCode, day */
+	  ) {
+	    return 1972;
+	  },
+	  maxLengthOfAdjustedMonthCodeInAnyYear(monthCode /*, day, overflow */) {
 	    let monthInfo = this.months[ParseMonthCode(monthCode).monthNumber];
-	    monthInfo = (_monthInfo$leap = monthInfo.leap) !== null && _monthInfo$leap !== void 0 ? _monthInfo$leap : monthInfo;
-	    return monthInfo.length;
+	    monthInfo = monthInfo.leap ?? monthInfo;
+	    return [monthCode, monthInfo.length];
 	  },
 	  // Indian months always start at the same well-known Gregorian month and
 	  // day. So this conversion is easy and fast. See
@@ -14196,7 +14337,7 @@
 	      month
 	    } = calendarDate;
 	    let monthInfo = this.months[month];
-	    if (monthInfo === undefined) throw new RangeError$1("Invalid month: ".concat(month));
+	    assert(monthInfo, `getMonthInfo called on date with invalid month ${month}`);
 	    if (this.inLeapYear(calendarDate) && monthInfo.leap) monthInfo = monthInfo.leap;
 	    return monthInfo;
 	  },
@@ -14208,19 +14349,23 @@
 	    const isoYear = calendarDate.year + 78 + (monthInfo.nextYear ? 1 : 0);
 	    const isoMonth = monthInfo.month;
 	    const isoDay = monthInfo.day;
-	    const isoDate = BalanceISODate(isoYear, isoMonth, isoDay + calendarDate.day - 1);
+	    const isoDate = AddDaysToISODate({
+	      year: isoYear,
+	      month: isoMonth,
+	      day: isoDay
+	    }, calendarDate.day - 1);
 	    return isoDate;
 	  },
 	  // https://bugs.chromium.org/p/v8/issues/detail?id=10529 causes Intl's Indian
 	  // calendar output to fail for all dates before 0001-01-01 ISO.  For example,
 	  // in Node 12 0000-01-01 is calculated as 6146/12/-583 instead of 10/11/-79 as
 	  // expected.
-	  vulnerableToBceBug: Call$1(DatePrototypeToLocaleDateString, new Date$1('0000-01-01T00:00Z'), ['en-US-u-ca-indian', {
+	  vulnerableToBceBug: !Call$1(StringPrototypeStartsWith, Call$1(DatePrototypeToLocaleDateString, new Date$1('0000-01-01T00:00Z'), ['en-US-u-ca-indian', {
 	    timeZone: 'UTC'
-	  }]) !== '10/11/-79 Saka',
+	  }]), ['10/11/-79']),
 	  checkIcuBugs(isoDate) {
 	    if (this.vulnerableToBceBug && isoDate.year < 1) {
-	      throw new RangeError$1("calendar '".concat(this.id, "' is broken for ISO dates before 0001-01-01") + ' (see https://bugs.chromium.org/p/v8/issues/detail?id=10529)');
+	      throw new RangeError$1(`calendar '${this.id}' is broken for ISO dates before 0001-01-01` + ' (see https://bugs.chromium.org/p/v8/issues/detail?id=10529)');
 	    }
 	  },
 	  reviseIntlEra(calendarDate /*, isoDate*/) {
@@ -14230,7 +14375,8 @@
 	      era: 'shaka',
 	      eraYear: calendarDate.eraYear
 	    };
-	  }
+	  },
+	  isoToCalendarDate: makeShiftedIsoToCalendarDate(4)
 	});
 
 	/**
@@ -14264,9 +14410,9 @@
 	 *   // the last (oldest) era in the array.
 	 *   reverseOf?: Era;
 	 *
-	 *   // If true, the era's years are 0-based. If omitted or false,
-	 *   // then the era's years are 1-based.
-	 *   hasYearZero?: boolean;
+	 *   // Number of the era's starting year (for example, 0 if there's a Year 0).
+	 *   // If omitted, the era's years are 1-based.
+	 *   startingYear?: number = 1;
 	 *
 	 *   // Override if this era is the anchor. Not normally used because
 	 *   // anchor eras are inferred.
@@ -14275,32 +14421,27 @@
 	 * ```
 	 * */
 	function adjustEras(eras) {
-	  if (eras.length === 0) {
-	    throw new RangeError$1('Invalid era data: eras are required');
-	  }
-	  if (eras.length === 1 && eras[0].reverseOf) {
-	    throw new RangeError$1('Invalid era data: anchor era cannot count years backwards');
-	  }
-	  if (eras.length === 1 && !eras[0].code) {
-	    throw new RangeError$1('Invalid era data: at least one named era is required');
-	  }
-	  if (Call$1(ArrayPrototypeFilter, eras, [e => e.reverseOf != null]).length > 1) {
-	    throw new RangeError$1('Invalid era data: only one era can count years backwards');
-	  }
+	  // It's an internal error if the eras data are malformed
+	  assert(eras.length > 0, 'Invalid era data: eras are required');
+	  assert(!(eras.length === 1 && eras[0].reverseOf), 'Invalid era data: anchor era cannot count years backwards');
+	  assert(!(eras.length === 1 && !eras[0].code), 'Invalid era data: at least one named era is required');
+	  const moreThanOneReverseOf = Call$1(ArrayPrototypeFilter, eras, [e => e.reverseOf != null]).length > 1;
+	  assert(!moreThanOneReverseOf, 'Invalid era data: only one era can count years backwards');
 
 	  // Find the "anchor era" which is the era used for (era-less) `year`. Reversed
 	  // eras can never be anchors. The era without an `anchorEpoch` property is the
 	  // anchor.
 	  let anchorEra;
 	  Call$1(ArrayPrototypeForEach, eras, [e => {
+	    e.startingYear ??= 1;
 	    if (e.isAnchor || !e.anchorEpoch && !e.reverseOf) {
-	      if (anchorEra) throw new RangeError$1('Invalid era data: cannot have multiple anchor eras');
+	      assert(!anchorEra, 'Invalid era data: cannot have multiple anchor eras');
 	      anchorEra = e;
 	      e.anchorEpoch = {
-	        year: e.hasYearZero ? 0 : 1
+	        year: e.startingYear
 	      };
-	    } else if (!e.code) {
-	      throw new RangeError$1('If era name is blank, it must be the anchor era');
+	    } else {
+	      assert(e.code, 'Invalid era data: if era name is blank, it must be the anchor era');
 	    }
 	  }]);
 
@@ -14318,9 +14459,7 @@
 	    } = e;
 	    if (reverseOf) {
 	      const reversedEra = Call$1(ArrayPrototypeFind, eras, [era => era.code === reverseOf]);
-	      if (reversedEra === undefined) {
-	        throw new RangeError$1("Invalid era data: unmatched reverseOf era: ".concat(reverseOf));
-	      }
+	      assert(reversedEra, `Invalid era data: unmatched reverseOf era: ${reverseOf}`);
 	      e.reverseOf = reversedEra;
 	      e.anchorEpoch = reversedEra.anchorEpoch;
 	      e.isoEpoch = reversedEra.isoEpoch;
@@ -14335,7 +14474,7 @@
 	  Call$1(ArrayPrototypeSort, eras, [(e1, e2) => {
 	    if (e1.reverseOf) return 1;
 	    if (e2.reverseOf) return -1;
-	    if (!e1.isoEpoch || !e2.isoEpoch) throw new RangeError$1('Invalid era data: missing ISO epoch');
+	    assert(e1.isoEpoch && e2.isoEpoch, 'Invalid era data: missing ISO epoch');
 	    return e2.isoEpoch.year - e1.isoEpoch.year;
 	  }]);
 
@@ -14343,16 +14482,14 @@
 	  // being reversed.
 	  const lastEraReversed = eras[eras.length - 1].reverseOf;
 	  if (lastEraReversed) {
-	    if (lastEraReversed !== eras[eras.length - 2]) {
-	      throw new RangeError$1('Invalid era data: invalid reverse-sign era');
-	    }
+	    assert(lastEraReversed === eras[eras.length - 2], 'Invalid era data: invalid reverse-sign era');
 	  }
 
 	  // Finally, add a "genericName" property in the format "era{n} where `n` is
 	  // zero-based index, with the oldest era being zero. This format is used by
 	  // older versions of ICU data.
 	  Call$1(ArrayPrototypeForEach, eras, [(e, i) => {
-	    e.genericName = "era".concat(eras.length - 1 - i);
+	    e.genericName = `era${eras.length - 1 - i}`;
 	  }]);
 	  return {
 	    eras,
@@ -14394,9 +14531,14 @@
 	    maximumMonthLength(calendarDate) {
 	      return this.minimumMonthLength(calendarDate);
 	    },
-	    maxLengthOfMonthCodeInAnyYear(monthCode) {
+	    monthDayISOReferenceYear(/* monthCode, day */
+	    ) {
+	      return 1972;
+	    },
+	    maxLengthOfAdjustedMonthCodeInAnyYear(monthCode /*, day, overflow */) {
 	      const month = ParseMonthCode(monthCode).monthNumber;
-	      return [undefined, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
+	      const daysInMonth = [undefined, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
+	      return [monthCode, daysInMonth];
 	    },
 	    estimateIsoDate(calendarDate) {
 	      calendarDate = this.adjustCalendarDate(calendarDate);
@@ -14408,7 +14550,7 @@
 	      const {
 	        anchorEra
 	      } = this;
-	      const isoYearEstimate = year + anchorEra.isoEpoch.year - (anchorEra.hasYearZero ? 0 : 1);
+	      const isoYearEstimate = year + anchorEra.isoEpoch.year - anchorEra.startingYear;
 	      return RegulateISODate(isoYearEstimate, month, day, 'constrain');
 	    }
 	  });
@@ -14475,9 +14617,14 @@
 	    maximumMonthLength(calendarDate) {
 	      return this.minimumMonthLength(calendarDate);
 	    },
-	    maxLengthOfMonthCodeInAnyYear(monthCode) {
-	      return monthCode === 'M13' ? 6 : 30;
-	    }
+	    monthDayISOReferenceYear(monthCode, day) {
+	      if (monthCode === 'M13' && day === 6) return 1971;
+	      return 1972;
+	    },
+	    maxLengthOfAdjustedMonthCodeInAnyYear(monthCode /*, day, overflow */) {
+	      return [monthCode, monthCode === 'M13' ? 6 : 30];
+	    },
+	    isoToCalendarDate: makeDayShiftedIsoToCalendarDate(1461, 4)
 	  });
 	};
 
@@ -14487,7 +14634,7 @@
 	//   two use negative year numbers before epoch)
 	// - Coptic has a different epoch date
 	// - Ethiopic has an additional second era that starts at the same date as the
-	//   zero era of ethioaa.
+	//   zero era of ethioaa, which is the anchor era
 	const helperEthioaa = ObjectAssign(makeHelperOrthodox('ethioaa', [{
 	  code: 'aa',
 	  isoEpoch: {
@@ -14523,14 +14670,15 @@
 	    };
 	  }
 	});
-	// Anchor is currently the older era to match ethioaa, but should it be the newer era?
-	// See https://github.com/tc39/ecma402/issues/534 for discussion.
 	const helperEthiopic = makeHelperOrthodox('ethiopic', [{
 	  code: 'aa',
 	  isoEpoch: {
 	    year: -5492,
 	    month: 7,
 	    day: 17
+	  },
+	  anchorEpoch: {
+	    year: -5499
 	  }
 	}, {
 	  code: 'am',
@@ -14538,9 +14686,6 @@
 	    year: 8,
 	    month: 8,
 	    day: 27
-	  },
-	  anchorEpoch: {
-	    year: 5501
 	  }
 	}]);
 	const helperRoc = makeHelperSameMonthDayAsGregorian('roc', [{
@@ -14562,7 +14707,7 @@
 	    day: 1
 	  }
 	}]));
-	const helperGregory = ObjectAssign(makeHelperSameMonthDayAsGregorian('gregory', [{
+	const helperGregory = makeHelperSameMonthDayAsGregorian('gregory', [{
 	  code: 'ce',
 	  isoEpoch: {
 	    year: 1,
@@ -14572,27 +14717,10 @@
 	}, {
 	  code: 'bce',
 	  reverseOf: 'ce'
-	}]), {
-	  reviseIntlEra(calendarDate /*, isoDate*/) {
-	    let {
-	      era,
-	      eraYear
-	    } = calendarDate;
-	    // Firefox 96 introduced a bug where the `'short'` format of the era
-	    // option mistakenly returns the one-letter (narrow) format instead. The
-	    // code below handles either the correct or Firefox-buggy format. See
-	    // https://bugzilla.mozilla.org/show_bug.cgi?id=1752253
-	    if (era === 'b') era = 'bce';
-	    if (era === 'a') era = 'ce';
-	    return {
-	      era,
-	      eraYear
-	    };
-	  }
-	});
+	}]);
 	const helperJapanese = ObjectAssign(
 	// NOTE: Only the 5 modern eras (Meiji and later) are included. For dates
-	// before Meiji 1, the `ce` and `bce` eras are used. Challenges with pre-Meiji
+	// before Meiji 6, the `ce` and `bce` eras are used. Challenges with pre-Meiji
 	// eras include:
 	// - Start/end dates of older eras are not precisely defined, which is
 	//   challenging given Temporal's need for precision
@@ -14600,10 +14728,10 @@
 	// - As historical research proceeds, new eras are discovered and existing era
 	//   dates are modified, leading to considerable churn which is not good for
 	//   Temporal use.
-	//  - The earliest era (in 645 CE) may not end up being the earliest depending
-	//    on future historical scholarship
-	//  - Before Meiji, Japan used a lunar (or lunisolar?) calendar but AFAIK
-	//    that's not reflected in the ICU implementation.
+	// - The earliest era (in 645 CE) may not end up being the earliest depending
+	//   on future historical scholarship
+	// - Before Meiji, Japan used a lunisolar calendar but that's not reflected in
+	//   the ICU implementation.
 	//
 	// For more discussion: https://github.com/tc39/proposal-temporal/issues/526.
 	//
@@ -14613,13 +14741,8 @@
 	//
 	// NOTE: Japan started using the Gregorian calendar in 6 Meiji, replacing a
 	// lunisolar calendar. So the day before January 1 of 6 Meiji (1873) was not
-	// December 31, but December 2, of 5 Meiji (1872). The existing Ecma-402
-	// Japanese calendar doesn't seem to take this into account, so neither do we:
-	// > args = ['en-ca-u-ca-japanese', { era: 'short' }]
-	// > new Date('1873-01-01T12:00').toLocaleString(...args)
-	// '1 1, 6 Meiji, 12:00:00 PM'
-	// > new Date('1872-12-31T12:00').toLocaleString(...args)
-	// '12 31, 5 Meiji, 12:00:00 PM'
+	// December 31, but M12-02, of 5 Meiji (1872). To avoid confusion between
+	// lunisolar and solar dates we count years prior to 1872 as CE.
 	makeHelperSameMonthDayAsGregorian('japanese', [
 	// The Japanese calendar `year` is just the ISO year, because (unlike other
 	// ICU calendars) there's no obvious "default era", we use the ISO year.
@@ -14674,15 +14797,14 @@
 	}, {
 	  code: 'meiji',
 	  isoEpoch: {
-	    year: 1868,
-	    month: 9,
-	    day: 8
+	    year: 1873,
+	    month: 1,
+	    day: 1
 	  },
 	  anchorEpoch: {
-	    year: 1868,
-	    month: 9,
-	    day: 8
-	  }
+	    year: 1873
+	  },
+	  startingYear: 6
 	}, {
 	  code: 'ce',
 	  isoEpoch: {
@@ -14716,9 +14838,57 @@
 	    };
 	  }
 	});
+
+	// ICU4C's Chinese/Dangi calendar fails for ISO years outside ~-29688 to +70368.
+	// Work around this using the Metonic cycle (see also Hebrew cycleInfo above):
+	// shift by a multiple of 19 years into the safe range, then adjust back.
+	const CHINESE_ICU_SAFE_LOW = -29000;
+	const CHINESE_ICU_SAFE_HIGH = 70000;
 	const helperChinese = ObjectAssign({}, nonIsoHelperBase, {
 	  id: 'chinese',
 	  calendarType: 'lunisolar',
+	  isVulnerableTo70000Bug() {
+	    // https://unicode-org.atlassian.net/browse/ICU-23286
+	    if (this.vulnerableTo70000Bug === undefined) {
+	      const formatter = this.getFormatter();
+	      try {
+	        Call$1(IntlDateTimeFormatPrototypeFormatToParts, formatter, [2146851043199999 + 1]);
+	        this.vulnerableTo70000Bug = false;
+	      } catch {
+	        this.vulnerableTo70000Bug = true;
+	      }
+	    }
+	    return this.vulnerableTo70000Bug;
+	  },
+	  metonicOffset(year) {
+	    if (!this.isVulnerableTo70000Bug()) return 0;
+	    if (year >= CHINESE_ICU_SAFE_LOW && year <= CHINESE_ICU_SAFE_HIGH) return 0;
+	    return MathRound((year - 2000) / 19) * 19;
+	  },
+	  isoToCalendarDate(isoDate, cache) {
+	    const offset = this.metonicOffset(isoDate.year);
+	    if (offset === 0) {
+	      return nonIsoHelperBase.isoToCalendarDate.call(this, isoDate, cache);
+	    }
+	    const safeIsoDate = {
+	      ...isoDate,
+	      year: isoDate.year - offset
+	    };
+	    const result = nonIsoHelperBase.isoToCalendarDate.call(this, safeIsoDate, cache);
+	    const adjusted = {
+	      ...result,
+	      year: result.year + offset
+	    };
+	    // Cache both directions with the original (not shifted) date keys
+	    const key = OneObjectCache.generateISOToCalendarKey(isoDate);
+	    cache.set(key, adjusted);
+	    const cacheReverse = overflow => {
+	      const keyReverse = OneObjectCache.generateCalendarToISOKey(adjusted, overflow);
+	      cache.set(keyReverse, isoDate);
+	    };
+	    Call$1(ArrayPrototypeForEach, ['constrain', 'reject'], [cacheReverse]);
+	    return adjusted;
+	  },
 	  inLeapYear(calendarDate, cache) {
 	    return this.getMonthList(calendarDate.year, cache).monthsInYear === 13;
 	  },
@@ -14731,9 +14901,7 @@
 	      year
 	    } = calendarDate;
 	    const matchingMonthEntry = this.getMonthList(year, cache)[month];
-	    if (matchingMonthEntry === undefined) {
-	      throw new RangeError$1("Invalid month ".concat(month, " in Chinese year ").concat(year));
-	    }
+	    assert(matchingMonthEntry, `Invalid month ${month} in ${this.id} year ${year}`);
 	    return matchingMonthEntry.daysInMonth;
 	  },
 	  daysInPreviousMonth(calendarDate, cache) {
@@ -14755,64 +14923,57 @@
 	  },
 	  minimumMonthLength: (/* calendarDate */) => 29,
 	  maximumMonthLength: (/* calendarDate */) => 30,
-	  maxLengthOfMonthCodeInAnyYear(monthCode) {
-	    // See note below about ICU4C vs ICU4X. It is possible this override should
-	    // always return 30.
-	    if (monthCode === 'M01L' || monthCode === 'M09L' || monthCode === 'M10L' || monthCode === 'M11L' || monthCode === 'M12L') {
-	      return 29;
-	    }
-	    return 30;
+	  monthDayISOReferenceYears: {
+	    M01: [1972, 1970],
+	    M01L: [null, null],
+	    M02: [1972, 1972],
+	    M02L: [1947, null],
+	    M03: [1972, 1966],
+	    M03L: [1966, 1955],
+	    M04: [1972, 1970],
+	    M04L: [1963, 1944],
+	    M05: [1972, 1972],
+	    M05L: [1971, 1952],
+	    M06: [1972, 1971],
+	    M06L: [1960, 1941],
+	    M07: [1972, 1972],
+	    M07L: [1968, 1938],
+	    M08: [1972, 1971],
+	    M08L: [1957, null],
+	    M09: [1972, 1972],
+	    M09L: [2014, null],
+	    M10: [1972, 1972],
+	    M10L: [1984, null],
+	    M11: [1972, 1970],
+	    M11L: [2034, null],
+	    M12: [1972, 1972],
+	    M12L: [null, null]
 	  },
-	  monthDaySearchStartYear(monthCode, day) {
-	    // Note that ICU4C actually has _no_ years in which leap months M01L and
-	    // M09L through M12L have 30 days. The values marked with (*) here are years
-	    // in which the leap month occurs with 29 days. ICU4C disagrees with ICU4X
-	    // here and it is not clear which is correct.
-	    switch (monthCode) {
-	      case 'M01L':
-	        return 1651;
-	      // *
-	      case 'M02L':
-	        return day < 30 ? 1947 : 1765;
-	      case 'M03L':
-	        return day < 30 ? 1966 : 1955;
-	      case 'M04L':
-	        return day < 30 ? 1963 : 1944;
-	      case 'M05L':
-	        return day < 30 ? 1971 : 1952;
-	      case 'M06L':
-	        return day < 30 ? 1960 : 1941;
-	      case 'M07L':
-	        return day < 30 ? 1968 : 1938;
-	      case 'M08L':
-	        return day < 30 ? 1957 : 1718;
-	      case 'M09L':
-	        return 1832;
-	      // *
-	      case 'M10L':
-	        return 1870;
-	      // *
-	      case 'M11L':
-	        return 1814;
-	      // *
-	      case 'M12L':
-	        return 1890;
-	      // *
-	      default:
-	        return 1972;
+	  monthDayISOReferenceYear(monthCode, day) {
+	    return this.monthDayISOReferenceYears[monthCode][day === 30 ? 1 : 0];
+	  },
+	  maxLengthOfAdjustedMonthCodeInAnyYear(monthCode, day, overflow) {
+	    let [refYear29, refYear30] = this.monthDayISOReferenceYears[monthCode];
+	    if (refYear29 === null || day >= 30 && refYear30 === null) {
+	      if (overflow === 'reject') {
+	        throw new RangeError$1(`No ${this.id} year known to exist historically with month code ${monthCode} and day ${day}`);
+	      }
+	      monthCode = CreateMonthCode(ParseMonthCode(monthCode).monthNumber, false);
 	    }
+	    return [monthCode, 30];
 	  },
 	  getMonthList(calendarYear, cache) {
-	    if (calendarYear === undefined) {
-	      throw new TypeError$1('Missing year');
-	    }
+	    assert(calendarYear !== undefined, 'getMonthList called on undefined year');
 	    const key = OneObjectCache.generateMonthListKey(calendarYear);
 	    const cached = cache.get(key);
 	    if (cached) return cached;
+	    const offset = this.metonicOffset(calendarYear);
+	    const effectiveYear = calendarYear - offset;
 
 	    // Reuse the same local object for calendar-specific results, starting with
-	    // a date close to Chinese New Year. Feb 17 will either be in the new year
-	    // or near the end of the previous year's final month.
+	    // a date close to Chinese New Year. Feb 17 will either be in month 1 of the
+	    // new year, in month 2 or a leap month after month 1 (rare), or near the
+	    // end of the previous year's final month.
 	    let daysPastJan31 = 17;
 	    const calendarFields = {
 	      day: undefined,
@@ -14823,7 +14984,7 @@
 	    const updateCalendarFields = () => {
 	      // Abuse GetUTCEpochMilliseconds for automatic rebalancing.
 	      const isoNumbers = {
-	        year: calendarYear,
+	        year: effectiveYear,
 	        month: 2,
 	        day: daysPastJan31
 	      };
@@ -14838,19 +14999,37 @@
 	        if (type === 'day' || type === 'relatedYear') {
 	          calendarFields[type] = +value;
 	        } else if (type === 'month') {
-	          calendarFields.monthString = value;
+	          if (Call$1(StringPrototypeStartsWith, value, ['Mo'])) {
+	            calendarFields.monthString = Call$1(StringPrototypeSlice, value, [2]);
+	          } else {
+	            calendarFields.monthString = value;
+	          }
 	        }
 	      }
 	      if (calendarFields.relatedYear === undefined) {
 	        // Node 12 has outdated ICU data that lacks the `relatedYear` field in the
 	        // output of Intl.DateTimeFormat.formatToParts.
-	        throw new RangeError$1("Intl.DateTimeFormat.formatToParts lacks relatedYear in ".concat(this.id, " calendar. Try Node 14+ or modern browsers."));
+	        throw new RangeError$1(`Intl.DateTimeFormat.formatToParts lacks relatedYear in ${this.id} calendar. Try Node 14+ or modern browsers.`);
 	      }
 	      return calendarFields;
 	    };
 
 	    // Ensure that we're in the first month.
 	    updateCalendarFields();
+	    if (calendarFields.monthString === '2') {
+	      // Rare case: Feb 17 is already in month 2 (e.g. ISO year 7625).
+	      // Back up into month 1 (or, theoretically, 1bis).
+	      daysPastJan31 -= 30;
+	      updateCalendarFields();
+	    }
+	    if (calendarFields.monthString === '1bis') {
+	      // Rare case: there's a leap month after month 1, and Feb 17 landed in it
+	      // (e.g. ISO year 7253). Also handles the theoretical case of backing up
+	      // from month 2 into 1bis. Back up to the previous year's last month,
+	      // then the check below will advance forward into month 1.
+	      daysPastJan31 -= 30;
+	      updateCalendarFields();
+	    }
 	    if (calendarFields.monthString !== '1') {
 	      daysPastJan31 += 29;
 	      updateCalendarFields();
@@ -14868,14 +15047,14 @@
 	        monthString,
 	        relatedYear
 	      } = updateCalendarFields();
-	      if (monthIndex === 1) assert(monthString === '1', "we didn't back up to the beginning of year ".concat(calendarYear));
+	      if (monthIndex === 1) assert(monthString === '1', `we didn't back up to the beginning of year ${calendarYear}`);
 	      const isLeapMonth = Call$1(StringPrototypeEndsWith, monthString, ['bis']);
 	      const monthCode = CreateMonthCode(isLeapMonth ? Call$1(StringPrototypeSlice, monthString, [0, -3]) : monthString, isLeapMonth);
 	      if (oldDay) {
 	        monthList[monthIndex - 1].daysInMonth = oldDay + 30 - day;
 	      }
 	      oldDay = day;
-	      if (relatedYear !== calendarYear) break;
+	      if (relatedYear !== effectiveYear) break;
 	      monthList[monthIndex] = {
 	        monthCode
 	      };
@@ -14912,18 +15091,16 @@
 	      day,
 	      monthCode
 	    } = calendarDate;
-	    if (year === undefined) throw new TypeError$1('Missing property: year');
+	    assert(year !== undefined, `adjustCalendarDate called on date ${JSONStringify(calendarDate)} with undefined year property`);
 	    if (fromLegacyDate) {
 	      // Legacy Date output returns a string that's an integer with an optional
 	      // "bis" suffix used only by the Chinese/Dangi calendar to indicate a leap
 	      // month. Below we'll normalize the output.
-	      if (monthExtra && monthExtra !== 'bis') throw new RangeError$1("Unexpected leap month suffix: ".concat(monthExtra));
+	      if (monthExtra && monthExtra !== 'bis') throw new RangeError$1(`Unexpected leap month suffix: ${monthExtra}`);
 	      const monthCode = CreateMonthCode(month, monthExtra !== undefined);
 	      const months = this.getMonthList(year, cache);
 	      month = months[monthCode];
-	      if (month === undefined) {
-	        throw new RangeError$1("Unmatched month ".concat(month).concat(monthExtra || '', " in Chinese year ").concat(year));
-	      }
+	      assert(month !== undefined, `Unmatched month ${month}${monthExtra || ''} in ${this.id} year ${year}`);
 	      return {
 	        year,
 	        month,
@@ -14949,7 +15126,7 @@
 	          monthCode = adjustedMonthCode;
 	        }
 	        if (month === undefined) {
-	          throw new RangeError$1("Unmatched month ".concat(monthCode, " in Chinese year ").concat(year));
+	          throw new RangeError$1(`Unmatched month ${monthCode} in ${this.id} year ${year}`);
 	        }
 	      } else if (monthCode === undefined) {
 	        const months = this.getMonthList(year, cache);
@@ -14962,32 +15139,36 @@
 	          day = ConstrainToRange(day, 1, this.maximumMonthLength());
 	        }
 	        monthCode = months[month].monthCode;
-	        if (monthCode === undefined) {
-	          throw new RangeError$1("Invalid month ".concat(month, " in Chinese year ").concat(year));
-	        }
+	        assert(monthCode !== undefined, `Invalid month ${month} in ${this.id} year ${year}`);
 	      } else {
 	        // Both month and monthCode are present. Make sure they don't conflict.
 	        const months = this.getMonthList(year, cache);
 	        const monthIndex = months[monthCode];
-	        if (!monthIndex) throw new RangeError$1("Unmatched monthCode ".concat(monthCode, " in Chinese year ").concat(year));
+	        assert(monthIndex, `Unmatched monthCode ${monthCode} in ${this.id} year ${year}`);
 	        if (month !== monthIndex) {
-	          throw new RangeError$1("monthCode ".concat(monthCode, " doesn't correspond to month ").concat(month, " in Chinese year ").concat(year));
+	          throw new RangeError$1(`monthCode ${monthCode} doesn't correspond to month ${month} in ${this.id} year ${year}`);
 	        }
 	      }
-	      return _objectSpread2(_objectSpread2({}, calendarDate), {}, {
+	      return {
+	        ...calendarDate,
 	        year,
 	        month,
 	        monthCode,
 	        day
-	      });
+	      };
 	    }
 	  }
 	});
 
 	// Dangi (Korean) calendar has same implementation as Chinese
-	const helperDangi = _objectSpread2(_objectSpread2({}, helperChinese), {}, {
-	  id: 'dangi'
-	});
+	const helperDangi = {
+	  ...helperChinese,
+	  id: 'dangi',
+	  monthDayISOReferenceYears: {
+	    ...helperChinese.monthDayISOReferenceYears,
+	    M03: [1972, 1968]
+	  }
+	};
 
 	/**
 	 * Common implementation of all non-ISO calendars.
@@ -15002,10 +15183,29 @@
 	    }
 	    return [];
 	  },
-	  resolveFields(fields /* , type */) {
+	  resolveFields(fields, type) {
+	    if ((type === 'date' || type === 'year-month') && fields.year === undefined) {
+	      if (!CalendarSupportsEra(this.helper.id)) {
+	        throw new TypeError$1('year is required');
+	      } else if (fields.era === undefined || fields.eraYear === undefined) {
+	        throw new TypeError$1('year (or era and eraYear) are required');
+	      }
+	    }
+	    if ((type === 'date' || type === 'month-day') && fields.day === undefined) {
+	      throw new TypeError$1('day is required');
+	    }
+	    if (type === 'month-day' && fields.month !== undefined && fields.year === undefined) {
+	      if (!CalendarSupportsEra(this.helper.id)) {
+	        throw new TypeError$1('when month is present, year is required');
+	      } else if (fields.era === undefined || fields.eraYear === undefined) {
+	        throw new TypeError$1('when month is present, year (or era and eraYear) are required');
+	      }
+	    }
 	    if (this.helper.calendarType !== 'lunisolar') {
 	      resolveNonLunisolarMonth(fields, this.helper.id);
 	    }
+	    // Note: Lunisolar calendars go on to resolve month/monthCode in their
+	    // adjustCalendarDate implementations
 	  },
 	  dateToISO(fields, overflow) {
 	    const cache = new OneObjectCache(this.id);
@@ -15089,6 +15289,20 @@
 	  dateUntil(one, two, largestUnit) {
 	    const cacheOne = OneObjectCache.getCacheForObject(this.id, one);
 	    const cacheTwo = OneObjectCache.getCacheForObject(this.id, two);
+	    if (largestUnit === 'week' || largestUnit === 'day') {
+	      let weeks = 0;
+	      let days = ISODateToEpochDays(two.year, two.month - 1, two.day) - ISODateToEpochDays(one.year, one.month - 1, one.day);
+	      if (largestUnit === 'week') {
+	        weeks = MathTrunc(days / 7);
+	        days %= 7;
+	      }
+	      return {
+	        years: 0,
+	        months: 0,
+	        weeks,
+	        days
+	      };
+	    }
 	    const calendarOne = this.helper.isoToCalendarDate(one, cacheOne);
 	    const calendarTwo = this.helper.isoToCalendarDate(two, cacheTwo);
 	    const result = this.helper.untilCalendar(calendarOne, calendarTwo, largestUnit, cacheOne);
@@ -15127,24 +15341,31 @@
 	});
 	Call$1(ArrayPrototypeForEach, [{
 	  id: 'islamic-umalqura',
-	  firstDay: 20
+	  firstDay: 20,
+	  tabular: false
 	}, {
 	  id: 'islamic-tbla',
-	  firstDay: 19
+	  firstDay: 19,
+	  tabular: true
 	}, {
 	  id: 'islamic-civil',
-	  firstDay: 20
+	  firstDay: 20,
+	  tabular: true
 	}, {
 	  id: 'islamicc',
-	  firstDay: 20
+	  firstDay: 20,
+	  tabular: true
 	}], [_ref9 => {
 	  let {
 	    id,
-	    firstDay
+	    firstDay,
+	    tabular
 	  } = _ref9;
-	  const helper = _objectSpread2(_objectSpread2({}, helperIslamic), {}, {
-	    id
-	  });
+	  const helper = {
+	    ...helperIslamic,
+	    id,
+	    tabular
+	  };
 	  helper.eras[0].isoEpoch.day = firstDay;
 	  impl[id] = ObjectAssign({}, nonIsoGeneralImpl, {
 	    helper
@@ -15213,7 +15434,50 @@
 	  }
 	  return val;
 	}
-	function createDateTimeFormat(dtf, locale, options) {
+
+	// Return the value of the corresponding part from formatToParts() output
+	function findPart(parts, expectedType) {
+	  for (let ix = 0; ix < parts.length; ix++) {
+	    if (parts[ix].type === expectedType) return parts[ix].value;
+	  }
+	  /* c8 ignore next */
+	  assertNotReached('findPart() should only be used when the part is expected');
+	}
+	function adjustRenderedDay(polyfilledFormatter, realFormatter, originalEpochMs, renderedValue, dayAdjust) {
+	  if (dayAdjust === 0) return renderedValue;
+	  let day = +renderedValue;
+	  if (!NumberIsNaN(day)) return String$1(day - dayAdjust);
+
+	  // If the day isn't given in Arabic numerals, re-do the format in a
+	  // way that's parseable by StringToNumber
+	  const options = Call$1(IntlDateTimeFormatPrototypeResolvedOptions, realFormatter, []);
+	  const originalNumberingSystem = options.numberingSystem;
+	  options.numberingSystem = 'latn';
+	  const parseableFormatter = new IntlDateTimeFormat('en', options);
+	  const parseableParts = Call$1(IntlDateTimeFormatPrototypeFormatToParts, parseableFormatter, [originalEpochMs]);
+	  const parseableDay = findPart(parseableParts, 'day');
+	  day = +parseableDay;
+
+	  // Reformat the day in the target format's numeral system
+	  const numberFormatter = new IntlNumberFormat(GetSlot(polyfilledFormatter, LOCALE), {
+	    numberingSystem: originalNumberingSystem
+	  });
+	  const boundFormat = Call$1(IntlNumberFormatPrototypeGetFormat, numberFormatter, []);
+	  return Call$1(boundFormat, numberFormatter, [day - dayAdjust]);
+	}
+	function adjustRenderedWeekday(polyfilledFormatter, realFormatter, originalEpochMs, renderedValue, dayAdjust) {
+	  if (dayAdjust === 0) return renderedValue;
+	  // The weekday, if present, needs to be adjusted as well. Use ZonedDateTime as
+	  // a convenient way to get the ordinal weekday.
+	  const options = Call$1(IntlDateTimeFormatPrototypeResolvedOptions, realFormatter, []);
+	  const zdt = CreateTemporalZonedDateTime(bigInt(originalEpochMs).multiply(1e6), options.timeZone);
+	  options.timeZone = 'UTC';
+	  const weekdayFormatter = new IntlDateTimeFormat(GetSlot(polyfilledFormatter, LOCALE), options);
+	  // Weekday of 1970-01-01 is 4 (Thursday)
+	  const weekdayParts = Call$1(IntlDateTimeFormatPrototypeFormatToParts, weekdayFormatter, [(zdt.dayOfWeek - dayAdjust - 4) * DAY_MS]);
+	  return findPart(weekdayParts, 'weekday');
+	}
+	function internalCreateDateTimeFormat(dtf, locale, options, required) {
 	  const hasOptions = typeof options !== 'undefined';
 	  if (hasOptions) {
 	    // Read all the options in the expected order and copy them to a
@@ -15244,7 +15508,7 @@
 	    const substitute = fallbacks[ix][1];
 	    if (ro.calendar === id) {
 	      options.calendar = substitute;
-	      warn("\"".concat(id, "\" calendar ID does not specify the calendar algorithm. \"").concat(substitute, "\" was used. ") + 'Please specify one of "islamic-umalqura", "islamic-tbla", or "islamic-civil" explicitly.');
+	      warn(`"${id}" calendar ID does not specify the calendar algorithm. "${substitute}" was used. ` + 'Please specify one of "islamic-umalqura", "islamic-tbla", or "islamic-civil" explicitly.');
 	      original = new IntlDateTimeFormat(locale, options);
 	      ro = Call$1(IntlDateTimeFormatPrototypeResolvedOptions, original, []);
 	    }
@@ -15281,10 +15545,33 @@
 	  SetSlot(dtf, ORIGINAL, original);
 	  SetSlot(dtf, TZ_CANONICAL, ro.timeZone);
 	  SetSlot(dtf, CAL_ID, ro.calendar);
-	  SetSlot(dtf, DATE, dateAmend);
-	  SetSlot(dtf, YM, yearMonthAmend);
-	  SetSlot(dtf, MD, monthDayAmend);
-	  SetSlot(dtf, TIME_FMT, timeAmend);
+	  if (options.dateStyle !== undefined || options.timeStyle !== undefined) {
+	    if (options.dateStyle !== undefined) {
+	      if (required === 'time') {
+	        throw new TypeError$1('toLocaleString of Temporal.PlainTime does not support dateStyle option');
+	      }
+	      SetSlot(dtf, DATE, dateAmend);
+	      SetSlot(dtf, YM, yearMonthAmend);
+	      SetSlot(dtf, MD, monthDayAmend);
+	    } else {
+	      SetSlot(dtf, DATE, null);
+	      SetSlot(dtf, YM, null);
+	      SetSlot(dtf, MD, null);
+	    }
+	    if (options.timeStyle !== undefined) {
+	      if (required === 'date') {
+	        throw new TypeError$1('toLocaleString of a Temporal date type does not support timeStyle option');
+	      }
+	      SetSlot(dtf, TIME_FMT, timeAmend);
+	    } else {
+	      SetSlot(dtf, TIME_FMT, null);
+	    }
+	  } else {
+	    SetSlot(dtf, DATE, dateAmend);
+	    SetSlot(dtf, YM, yearMonthAmend);
+	    SetSlot(dtf, MD, monthDayAmend);
+	    SetSlot(dtf, TIME_FMT, timeAmend);
+	  }
 	  SetSlot(dtf, DATETIME, datetimeAmend);
 	  SetSlot(dtf, INST, instantAmend);
 
@@ -15311,7 +15598,7 @@
 	  constructor() {
 	    let locales = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : undefined;
 	    let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
-	    createDateTimeFormat(this, locales, options);
+	    internalCreateDateTimeFormat(this, locales, options, 'any');
 	  }
 	  get format() {
 	    var _this = this;
@@ -15384,6 +15671,17 @@
 	});
 	DateTimeFormat.supportedLocalesOf = IntlDateTimeFormat.supportedLocalesOf;
 	MakeIntrinsicClass(DateTimeFormat, 'Intl.DateTimeFormat');
+
+	// This corresponds to the spec operation CreateDateTimeFormat in that it
+	// creates a new instance and does all the required initialization on it.
+	// However, most of the spec operation is in internalCreateDateTimeFormat() so
+	// that we can call it in the DateTimeFormat constructor, where we already have
+	// the uninitialized instance.
+	function CreateDateTimeFormat(locales, options, required) {
+	  const instance = Object.create(DateTimeFormat.prototype);
+	  internalCreateDateTimeFormat(instance, locales, options, required);
+	  return instance;
+	}
 	function resolvedOptions() {
 	  const resolved = Call$1(IntlDateTimeFormatPrototypeResolvedOptions, GetSlot(this, ORIGINAL), []);
 	  resolved.timeZone = GetSlot(this, TZ_ORIGINAL);
@@ -15397,7 +15695,8 @@
 	  }
 	  let {
 	    epochNs,
-	    formatter
+	    formatter,
+	    dayAdjust = 0
 	  } = extractOverrides(datetime, this);
 	  let formatArgs;
 	  if (formatter) {
@@ -15406,8 +15705,29 @@
 	    formatter = GetSlot(this, ORIGINAL);
 	    formatArgs = Call$1(ArrayPrototypeSlice, arguments, []);
 	  }
-	  const boundFormat = Call$1(IntlDateTimeFormatPrototypeGetFormat, formatter, []);
-	  return Call$1(boundFormat, formatter, formatArgs);
+	  if (dayAdjust === 0) {
+	    // Happy path
+	    const boundFormat = Call$1(IntlDateTimeFormatPrototypeGetFormat, formatter, []);
+	    return Call$1(boundFormat, formatter, formatArgs);
+	  }
+
+	  // Special case for extreme dates, to avoid TimeClip restriction
+	  const parts = Call$1(IntlDateTimeFormatPrototypeFormatToParts, formatter, formatArgs);
+	  let result = '';
+	  for (let ix = 0; ix < parts.length; ix++) {
+	    const {
+	      type,
+	      value
+	    } = parts[ix];
+	    if (type === 'day') {
+	      result += adjustRenderedDay(this, formatter, formatArgs[0], value, dayAdjust);
+	    } else if (type === 'weekday') {
+	      result += adjustRenderedWeekday(this, formatter, formatArgs[0], value, dayAdjust);
+	    } else {
+	      result += value;
+	    }
+	  }
+	  return result;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -15417,7 +15737,8 @@
 	  }
 	  let {
 	    epochNs,
-	    formatter
+	    formatter,
+	    dayAdjust = 0
 	  } = extractOverrides(datetime, this);
 	  let formatArgs;
 	  if (formatter) {
@@ -15426,7 +15747,22 @@
 	    formatter = GetSlot(this, ORIGINAL);
 	    formatArgs = Call$1(ArrayPrototypeSlice, arguments, []);
 	  }
-	  return Call$1(IntlDateTimeFormatPrototypeFormatToParts, formatter, formatArgs);
+	  const parts = Call$1(IntlDateTimeFormatPrototypeFormatToParts, formatter, formatArgs);
+	  if (dayAdjust !== 0) {
+	    // Special case for extreme dates, to avoid TimeClip restriction
+	    for (let ix = 0; ix < parts.length; ix++) {
+	      const {
+	        type,
+	        value
+	      } = parts[ix];
+	      if (type === 'day') {
+	        parts[ix].value = adjustRenderedDay(this, formatter, formatArgs[0], value, dayAdjust);
+	      } else if (type === 'weekday') {
+	        parts[ix].value = adjustRenderedWeekday(this, formatter, formatArgs[0], value, dayAdjust);
+	      }
+	    }
+	  }
+	  return parts;
 	}
 	function formatRange(a, b) {
 	  if (a === undefined || b === undefined) {
@@ -15436,28 +15772,44 @@
 	  b = toDateTimeFormattable(b);
 	  let formatArgs = [a, b];
 	  let formatter;
-	  if (isTemporalObject(a) !== isTemporalObject(b)) {
-	    throw new TypeError$1('Intl.DateTimeFormat.formatRange accepts two values of the same type');
-	  }
-	  if (isTemporalObject(a)) {
+	  let aDayAdjust = 0;
+	  let bDayAdjust = 0;
+	  if (isTemporalObject(a) || isTemporalObject(b)) {
 	    if (!sameTemporalType(a, b)) {
 	      throw new TypeError$1('Intl.DateTimeFormat.formatRange accepts two values of the same type');
 	    }
-	    const {
-	      epochNs: aa,
-	      formatter: aformatter
-	    } = extractOverrides(a, this);
-	    const {
-	      epochNs: bb,
-	      formatter: bformatter
-	    } = extractOverrides(b, this);
-	    if (aformatter) {
-	      assert(bformatter == aformatter, 'formatters for same Temporal type should be identical');
-	      formatter = aformatter;
-	      formatArgs = [epochNsToMs(aa, 'floor'), epochNsToMs(bb, 'floor')];
+	    const aRecord = extractOverrides(a, this);
+	    const bRecord = extractOverrides(b, this);
+	    if (aRecord.formatter) {
+	      assert(bRecord.formatter == aRecord.formatter, 'formatters for same Temporal type should be identical');
+	      formatter = aRecord.formatter;
+	      formatArgs = [epochNsToMs(aRecord.epochNs, 'floor'), epochNsToMs(bRecord.epochNs, 'floor')];
 	    }
+	    aDayAdjust = aRecord.dayAdjust ?? 0;
+	    bDayAdjust = bRecord.dayAdjust ?? 0;
 	  } else {
 	    formatter = GetSlot(this, ORIGINAL);
+	  }
+	  if (aDayAdjust !== 0 || bDayAdjust !== 0) {
+	    // Special case for extreme dates, to avoid TimeClip restriction
+	    const parts = Call$1(IntlDateTimeFormatPrototypeFormatRangeToParts, formatter, formatArgs);
+	    let result = '';
+	    for (let ix = 0; ix < parts.length; ix++) {
+	      const {
+	        type,
+	        value,
+	        source
+	      } = parts[ix];
+	      const isStart = source === 'startRange';
+	      if (type === 'day') {
+	        result += adjustRenderedDay(this, formatter, formatArgs[isStart ? 0 : 1], value, isStart ? aDayAdjust : bDayAdjust);
+	      } else if (type === 'weekday') {
+	        result += adjustRenderedWeekday(this, formatter, formatArgs[isStart ? 0 : 1], value, isStart ? aDayAdjust : bDayAdjust);
+	      } else {
+	        result += value;
+	      }
+	    }
+	    return result;
 	  }
 	  return Call$1(IntlDateTimeFormatPrototypeFormatRange, formatter, formatArgs);
 	}
@@ -15469,36 +15821,48 @@
 	  b = toDateTimeFormattable(b);
 	  let formatArgs = [a, b];
 	  let formatter;
-	  if (isTemporalObject(a) !== isTemporalObject(b)) {
-	    throw new TypeError$1('Intl.DateTimeFormat.formatRangeToParts accepts two values of the same type');
-	  }
-	  if (isTemporalObject(a)) {
+	  let aDayAdjust = 0;
+	  let bDayAdjust = 0;
+	  if (isTemporalObject(a) || isTemporalObject(b)) {
 	    if (!sameTemporalType(a, b)) {
 	      throw new TypeError$1('Intl.DateTimeFormat.formatRangeToParts accepts two values of the same type');
 	    }
-	    const {
-	      epochNs: aa,
-	      formatter: aformatter
-	    } = extractOverrides(a, this);
-	    const {
-	      epochNs: bb,
-	      formatter: bformatter
-	    } = extractOverrides(b, this);
-	    if (aformatter) {
-	      assert(bformatter == aformatter, 'formatters for same Temporal type should be identical');
-	      formatter = aformatter;
-	      formatArgs = [epochNsToMs(aa, 'floor'), epochNsToMs(bb, 'floor')];
+	    const aRecord = extractOverrides(a, this);
+	    const bRecord = extractOverrides(b, this);
+	    if (aRecord.formatter) {
+	      assert(bRecord.formatter == aRecord.formatter, 'formatters for same Temporal type should be identical');
+	      formatter = aRecord.formatter;
+	      formatArgs = [epochNsToMs(aRecord.epochNs, 'floor'), epochNsToMs(bRecord.epochNs, 'floor')];
 	    }
+	    aDayAdjust = aRecord.dayAdjust ?? 0;
+	    bDayAdjust = bRecord.dayAdjust ?? 0;
 	  } else {
 	    formatter = GetSlot(this, ORIGINAL);
 	  }
-	  return Call$1(IntlDateTimeFormatPrototypeFormatRangeToParts, formatter, formatArgs);
+	  const parts = Call$1(IntlDateTimeFormatPrototypeFormatRangeToParts, formatter, formatArgs);
+	  if (aDayAdjust !== 0 || bDayAdjust !== 0) {
+	    // Special case for extreme dates, to avoid TimeClip restriction
+	    for (let ix = 0; ix < parts.length; ix++) {
+	      const {
+	        type,
+	        value,
+	        source
+	      } = parts[ix];
+	      const isStart = source === 'startRange';
+	      if (type === 'day') {
+	        parts[ix].value = adjustRenderedDay(this, formatter, formatArgs[isStart ? 0 : 1], value, isStart ? aDayAdjust : bDayAdjust);
+	      } else if (type === 'weekday') {
+	        parts[ix].value = adjustRenderedWeekday(this, formatter, formatArgs[isStart ? 0 : 1], value, isStart ? aDayAdjust : bDayAdjust);
+	      }
+	    }
+	  }
+	  return parts;
 	}
 	function amend() {
 	  let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 	  let amended = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 	  options = ObjectAssign({}, options);
-	  const props = ['year', 'month', 'day', 'hour', 'minute', 'second', 'weekday', 'dayPeriod', 'timeZoneName', 'dateStyle', 'timeStyle'];
+	  const props = ['era', 'year', 'month', 'day', 'hour', 'minute', 'second', 'weekday', 'dayPeriod', 'timeZoneName', 'dateStyle', 'timeStyle'];
 	  for (let i = 0; i < props.length; i++) {
 	    const opt = props[i];
 	    options[opt] = opt in amended ? amended[opt] : options[opt];
@@ -15508,6 +15872,7 @@
 	}
 	function timeAmend(originalOptions) {
 	  const options = amend(originalOptions, {
+	    era: false,
 	    year: false,
 	    month: false,
 	    day: false,
@@ -15526,7 +15891,7 @@
 	  }
 	  if (!hasTimeOptions(options)) {
 	    if (hasAnyDateTimeOptions(originalOptions)) {
-	      throw new TypeError("cannot format Temporal.PlainTime with options [".concat(ObjectKeys(originalOptions), "]"));
+	      throw new TypeError$1(`cannot format Temporal.PlainTime with options [${ObjectKeys(originalOptions)}]`);
 	    }
 	    ObjectAssign(options, {
 	      hour: 'numeric',
@@ -15534,6 +15899,7 @@
 	      second: 'numeric'
 	    });
 	  }
+	  options.timeZone = 'UTC';
 	  return options;
 	}
 	function yearMonthAmend(originalOptions) {
@@ -15572,15 +15938,16 @@
 	    delete options.dateStyle;
 	    ObjectAssign(options, dateStyleHacks[style]);
 	  }
-	  if (!('year' in options || 'month' in options || 'era' in options)) {
+	  if (!('year' in options || 'month' in options)) {
 	    if (hasAnyDateTimeOptions(originalOptions)) {
-	      throw new TypeError("cannot format PlainYearMonth with options [".concat(ObjectKeys(originalOptions), "]"));
+	      throw new TypeError$1(`cannot format PlainYearMonth with options [${ObjectKeys(originalOptions)}]`);
 	    }
 	    ObjectAssign(options, {
 	      year: 'numeric',
 	      month: 'numeric'
 	    });
 	  }
+	  options.timeZone = 'UTC';
 	  return options;
 	}
 	function monthDayAmend(originalOptions) {
@@ -15604,6 +15971,7 @@
 	    }
 	  };
 	  const options = amend(originalOptions, {
+	    era: false,
 	    year: false,
 	    hour: false,
 	    minute: false,
@@ -15620,13 +15988,14 @@
 	  }
 	  if (!('month' in options || 'day' in options)) {
 	    if (hasAnyDateTimeOptions(originalOptions)) {
-	      throw new TypeError("cannot format PlainMonthDay with options [".concat(ObjectKeys(originalOptions), "]"));
+	      throw new TypeError$1(`cannot format PlainMonthDay with options [${ObjectKeys(originalOptions)}]`);
 	    }
 	    ObjectAssign(options, {
 	      month: 'numeric',
 	      day: 'numeric'
 	    });
 	  }
+	  options.timeZone = 'UTC';
 	  return options;
 	}
 	function dateAmend(originalOptions) {
@@ -15640,7 +16009,7 @@
 	  });
 	  if (!hasDateOptions(options)) {
 	    if (hasAnyDateTimeOptions(originalOptions)) {
-	      throw new TypeError("cannot format PlainDate with options [".concat(ObjectKeys(originalOptions), "]"));
+	      throw new TypeError$1(`cannot format PlainDate with options [${ObjectKeys(originalOptions)}]`);
 	    }
 	    ObjectAssign(options, {
 	      year: 'numeric',
@@ -15648,6 +16017,7 @@
 	      day: 'numeric'
 	    });
 	  }
+	  options.timeZone = 'UTC';
 	  return options;
 	}
 	function datetimeAmend(originalOptions) {
@@ -15695,7 +16065,7 @@
 	  }
 	  if (!hasTimeOptions(options) && !hasDateOptions(options)) {
 	    if (hasAnyDateTimeOptions(originalOptions)) {
-	      throw new TypeError("cannot format PlainDateTime with options [".concat(ObjectKeys(originalOptions), "]"));
+	      throw new TypeError$1(`cannot format PlainDateTime with options [${ObjectKeys(originalOptions)}]`);
 	    }
 	    ObjectAssign(options, {
 	      year: 'numeric',
@@ -15706,6 +16076,7 @@
 	      second: 'numeric'
 	    });
 	  }
+	  options.timeZone = 'UTC';
 	  return options;
 	}
 	function instantAmend(options) {
@@ -15722,13 +16093,13 @@
 	  return options;
 	}
 	function hasDateOptions(options) {
-	  return 'year' in options || 'month' in options || 'day' in options || 'weekday' in options || 'dateStyle' in options || 'era' in options;
+	  return 'year' in options || 'month' in options || 'day' in options || 'weekday' in options || 'dateStyle' in options;
 	}
 	function hasTimeOptions(options) {
 	  return 'hour' in options || 'minute' in options || 'second' in options || 'timeStyle' in options || 'dayPeriod' in options || 'fractionalSecondDigits' in options;
 	}
 	function hasAnyDateTimeOptions(originalOptions) {
-	  return hasDateOptions(originalOptions) || hasTimeOptions(originalOptions) || 'dateStyle' in originalOptions || 'timeStyle' in originalOptions || 'timeZoneName' in originalOptions;
+	  return hasDateOptions(originalOptions) || hasTimeOptions(originalOptions);
 	}
 	function isTemporalObject(obj) {
 	  return IsTemporalDate(obj) || IsTemporalTime(obj) || IsTemporalDateTime(obj) || IsTemporalZonedDateTime(obj) || IsTemporalYearMonth(obj) || IsTemporalMonthDay(obj) || IsTemporalInstant(obj);
@@ -15748,6 +16119,27 @@
 	  if (IsTemporalInstant(x) && !IsTemporalInstant(y)) return false;
 	  return true;
 	}
+
+	// Allows formatting an epochMs value that will pass TimeClip in the original
+	// DateTimeFormat code, and then adjusting it afterwards
+	function getAdjustedEpochNanoseconds(isoDateTime) {
+	  const epochNs = GetUTCEpochNanoseconds(isoDateTime);
+	  try {
+	    ValidateEpochNanoseconds(epochNs);
+	  } catch (e) {
+	    if (!(e instanceof RangeError$1)) throw e;
+	    const minAdjust = MathCeil(epochNs.abs().subtract(NS_MAX).toJSNumber() / DAY_NANOS);
+	    const dayAdjust = minAdjust * (epochNs.geq(0) ? -1 : 1);
+	    return {
+	      dayAdjust,
+	      epochNs: epochNs.add(dayAdjust * DAY_NANOS)
+	    };
+	  }
+	  return {
+	    dayAdjust: 0,
+	    epochNs
+	  };
+	}
 	function extractOverrides(temporalObj, main) {
 	  if (IsTemporalTime(temporalObj)) {
 	    const isoDateTime = {
@@ -15758,57 +16150,80 @@
 	      },
 	      time: GetSlot(temporalObj, TIME)
 	    };
+	    const formatter = getSlotLazy(main, TIME_FMT);
+	    if (!formatter) throw new TypeError$1('cannot format PlainTime with only date options');
 	    return {
-	      epochNs: GetEpochNanosecondsFor(GetSlot(main, TZ_CANONICAL), isoDateTime, 'compatible'),
-	      formatter: getSlotLazy(main, TIME_FMT)
+	      epochNs: GetUTCEpochNanoseconds(isoDateTime),
+	      formatter
 	    };
 	  }
 	  if (IsTemporalYearMonth(temporalObj)) {
 	    const calendar = GetSlot(temporalObj, CALENDAR);
 	    const mainCalendar = GetSlot(main, CAL_ID);
 	    if (calendar !== mainCalendar) {
-	      throw new RangeError$1("cannot format PlainYearMonth with calendar ".concat(calendar, " in locale with calendar ").concat(mainCalendar));
+	      throw new RangeError$1(`cannot format PlainYearMonth with calendar ${calendar} in locale with calendar ${mainCalendar}`);
 	    }
 	    const isoDateTime = CombineISODateAndTimeRecord(GetSlot(temporalObj, ISO_DATE), NoonTimeRecord());
+	    const formatter = getSlotLazy(main, YM);
+	    if (!formatter) throw new TypeError$1('cannot format PlainYearMonth with only time options');
+	    const {
+	      epochNs,
+	      dayAdjust
+	    } = getAdjustedEpochNanoseconds(isoDateTime);
 	    return {
-	      epochNs: GetEpochNanosecondsFor(GetSlot(main, TZ_CANONICAL), isoDateTime, 'compatible'),
-	      formatter: getSlotLazy(main, YM)
+	      epochNs,
+	      formatter,
+	      dayAdjust
 	    };
 	  }
 	  if (IsTemporalMonthDay(temporalObj)) {
 	    const calendar = GetSlot(temporalObj, CALENDAR);
 	    const mainCalendar = GetSlot(main, CAL_ID);
 	    if (calendar !== mainCalendar) {
-	      throw new RangeError$1("cannot format PlainMonthDay with calendar ".concat(calendar, " in locale with calendar ").concat(mainCalendar));
+	      throw new RangeError$1(`cannot format PlainMonthDay with calendar ${calendar} in locale with calendar ${mainCalendar}`);
 	    }
 	    const isoDateTime = CombineISODateAndTimeRecord(GetSlot(temporalObj, ISO_DATE), NoonTimeRecord());
+	    const formatter = getSlotLazy(main, MD);
+	    if (!formatter) throw new TypeError$1('cannot format PlainMonthDay with only time options');
 	    return {
-	      epochNs: GetEpochNanosecondsFor(GetSlot(main, TZ_CANONICAL), isoDateTime, 'compatible'),
-	      formatter: getSlotLazy(main, MD)
+	      epochNs: GetUTCEpochNanoseconds(isoDateTime),
+	      formatter
 	    };
 	  }
 	  if (IsTemporalDate(temporalObj)) {
 	    const calendar = GetSlot(temporalObj, CALENDAR);
 	    const mainCalendar = GetSlot(main, CAL_ID);
 	    if (calendar !== 'iso8601' && calendar !== mainCalendar) {
-	      throw new RangeError$1("cannot format PlainDate with calendar ".concat(calendar, " in locale with calendar ").concat(mainCalendar));
+	      throw new RangeError$1(`cannot format PlainDate with calendar ${calendar} in locale with calendar ${mainCalendar}`);
 	    }
 	    const isoDateTime = CombineISODateAndTimeRecord(GetSlot(temporalObj, ISO_DATE), NoonTimeRecord());
+	    const formatter = getSlotLazy(main, DATE);
+	    if (!formatter) throw new TypeError$1('cannot format PlainDate with only time options');
+	    const {
+	      epochNs,
+	      dayAdjust
+	    } = getAdjustedEpochNanoseconds(isoDateTime);
 	    return {
-	      epochNs: GetEpochNanosecondsFor(GetSlot(main, TZ_CANONICAL), isoDateTime, 'compatible'),
-	      formatter: getSlotLazy(main, DATE)
+	      epochNs,
+	      formatter,
+	      dayAdjust
 	    };
 	  }
 	  if (IsTemporalDateTime(temporalObj)) {
 	    const calendar = GetSlot(temporalObj, CALENDAR);
 	    const mainCalendar = GetSlot(main, CAL_ID);
 	    if (calendar !== 'iso8601' && calendar !== mainCalendar) {
-	      throw new RangeError$1("cannot format PlainDateTime with calendar ".concat(calendar, " in locale with calendar ").concat(mainCalendar));
+	      throw new RangeError$1(`cannot format PlainDateTime with calendar ${calendar} in locale with calendar ${mainCalendar}`);
 	    }
 	    const isoDateTime = GetSlot(temporalObj, ISO_DATE_TIME);
+	    const {
+	      epochNs,
+	      dayAdjust
+	    } = getAdjustedEpochNanoseconds(isoDateTime);
 	    return {
-	      epochNs: GetEpochNanosecondsFor(GetSlot(main, TZ_CANONICAL), isoDateTime, 'compatible'),
-	      formatter: getSlotLazy(main, DATETIME)
+	      epochNs,
+	      formatter: getSlotLazy(main, DATETIME),
+	      dayAdjust
 	    };
 	  }
 	  if (IsTemporalZonedDateTime(temporalObj)) {
@@ -15854,6 +16269,7 @@
 
 	var Intl = /*#__PURE__*/Object.freeze({
 		__proto__: null,
+		CreateDateTimeFormat: CreateDateTimeFormat,
 		DateTimeFormat: DateTimeFormat,
 		ModifiedIntlDurationFormatPrototypeFormat: ModifiedIntlDurationFormatPrototypeFormat
 	});
@@ -15875,7 +16291,7 @@
 	      const iso = GetISOPartsFromEpoch(ns);
 	      const repr = ISODateTimeToString(iso, 'iso8601', 'auto', 'never') + 'Z';
 	      ObjectDefineProperty(this, '_repr_', {
-	        value: "".concat(this[SymbolToStringTag], " <").concat(repr, ">"),
+	        value: `${this[SymbolToStringTag]} <${repr}>`,
 	        writable: false,
 	        enumerable: false,
 	        configurable: false
@@ -16204,7 +16620,7 @@
 	    let locales = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : undefined;
 	    let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
 	    if (!IsTemporalDate(this)) throw new TypeError$1('invalid receiver');
-	    return new DateTimeFormat(locales, options).format(this);
+	    return CreateDateTimeFormat(locales, options, 'date').format(this);
 	  }
 	  valueOf() {
 	    ValueOfThrows('PlainDate');
@@ -16279,13 +16695,13 @@
 	    const year = ToIntegerWithTruncation(isoYear);
 	    const month = ToIntegerWithTruncation(isoMonth);
 	    const day = ToIntegerWithTruncation(isoDay);
-	    hour = hour === undefined ? 0 : ToIntegerWithTruncation(hour);
-	    minute = minute === undefined ? 0 : ToIntegerWithTruncation(minute);
-	    second = second === undefined ? 0 : ToIntegerWithTruncation(second);
-	    millisecond = millisecond === undefined ? 0 : ToIntegerWithTruncation(millisecond);
-	    microsecond = microsecond === undefined ? 0 : ToIntegerWithTruncation(microsecond);
-	    nanosecond = nanosecond === undefined ? 0 : ToIntegerWithTruncation(nanosecond);
-	    calendar = calendar === undefined ? 'iso8601' : RequireString(calendar);
+	    hour = ToIntegerWithTruncation(hour);
+	    minute = ToIntegerWithTruncation(minute);
+	    second = ToIntegerWithTruncation(second);
+	    millisecond = ToIntegerWithTruncation(millisecond);
+	    microsecond = ToIntegerWithTruncation(microsecond);
+	    nanosecond = ToIntegerWithTruncation(nanosecond);
+	    calendar = RequireString(calendar);
 	    calendar = CanonicalizeCalendar(calendar);
 	    RejectDateTime(year, month, day, hour, minute, second, millisecond, microsecond, nanosecond);
 	    CreateTemporalDateTimeSlots(this, {
@@ -16447,7 +16863,10 @@
 	    const calendar = GetSlot(this, CALENDAR);
 	    let fields = ISODateToFields(calendar, GetSlot(this, ISO_DATE_TIME).isoDate);
 	    const isoDateTime = GetSlot(this, ISO_DATE_TIME);
-	    fields = _objectSpread2(_objectSpread2({}, fields), isoDateTime.time);
+	    fields = {
+	      ...fields,
+	      ...isoDateTime.time
+	    };
 	    const partialDateTime = PrepareCalendarFields(calendar, temporalDateTimeLike, ['year', 'month', 'monthCode', 'day'], ['hour', 'minute', 'second', 'millisecond', 'microsecond', 'nanosecond'], 'partial');
 	    fields = CalendarMergeFields(calendar, fields, partialDateTime);
 	    const overflow = GetTemporalOverflowOption(GetOptionsObject(options));
@@ -16614,16 +17033,16 @@
 	    let milliseconds = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : 0;
 	    let microseconds = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : 0;
 	    let nanoseconds = arguments.length > 9 && arguments[9] !== undefined ? arguments[9] : 0;
-	    years = years === undefined ? 0 : ToIntegerIfIntegral(years);
-	    months = months === undefined ? 0 : ToIntegerIfIntegral(months);
-	    weeks = weeks === undefined ? 0 : ToIntegerIfIntegral(weeks);
-	    days = days === undefined ? 0 : ToIntegerIfIntegral(days);
-	    hours = hours === undefined ? 0 : ToIntegerIfIntegral(hours);
-	    minutes = minutes === undefined ? 0 : ToIntegerIfIntegral(minutes);
-	    seconds = seconds === undefined ? 0 : ToIntegerIfIntegral(seconds);
-	    milliseconds = milliseconds === undefined ? 0 : ToIntegerIfIntegral(milliseconds);
-	    microseconds = microseconds === undefined ? 0 : ToIntegerIfIntegral(microseconds);
-	    nanoseconds = nanoseconds === undefined ? 0 : ToIntegerIfIntegral(nanoseconds);
+	    years = ToIntegerIfIntegral(years);
+	    months = ToIntegerIfIntegral(months);
+	    weeks = ToIntegerIfIntegral(weeks);
+	    days = ToIntegerIfIntegral(days);
+	    hours = ToIntegerIfIntegral(hours);
+	    minutes = ToIntegerIfIntegral(minutes);
+	    seconds = ToIntegerIfIntegral(seconds);
+	    milliseconds = ToIntegerIfIntegral(milliseconds);
+	    microseconds = ToIntegerIfIntegral(microseconds);
+	    nanoseconds = ToIntegerIfIntegral(nanoseconds);
 	    RejectDuration(years, months, weeks, days, hours, minutes, seconds, milliseconds, microseconds, nanoseconds);
 	    CreateSlots(this);
 	    SetSlot(this, YEARS, years);
@@ -16638,7 +17057,7 @@
 	    SetSlot(this, NANOSECONDS, nanoseconds);
 	    {
 	      ObjectDefineProperty(this, '_repr_', {
-	        value: "Temporal.Duration <".concat(TemporalDurationToString(this, 'auto'), ">"),
+	        value: `Temporal.Duration <${TemporalDurationToString(this, 'auto')}>`,
 	        writable: false,
 	        enumerable: false,
 	        configurable: false
@@ -16762,7 +17181,7 @@
 	      throw new RangeError$1('at least one of smallestUnit or largestUnit is required');
 	    }
 	    if (LargerOfTwoTemporalUnits(largestUnit, smallestUnit) !== largestUnit) {
-	      throw new RangeError$1("largestUnit ".concat(largestUnit, " cannot be smaller than smallestUnit ").concat(smallestUnit));
+	      throw new RangeError$1(`largestUnit ${largestUnit} cannot be smaller than smallestUnit ${smallestUnit}`);
 	    }
 	    const maximumIncrements = {
 	      hour: 24,
@@ -16804,22 +17223,22 @@
 
 	    // No reference date to calculate difference relative to
 	    if (IsCalendarUnit(existingLargestUnit)) {
-	      throw new RangeError$1("a starting point is required for ".concat(existingLargestUnit, "s balancing"));
+	      throw new RangeError$1(`a starting point is required for ${existingLargestUnit}s balancing`);
 	    }
 	    if (IsCalendarUnit(largestUnit)) {
-	      throw new RangeError$1("a starting point is required for ".concat(largestUnit, "s balancing"));
+	      throw new RangeError$1(`a starting point is required for ${largestUnit}s balancing`);
 	    }
 	    assert(!IsCalendarUnit(smallestUnit), 'smallestUnit was larger than largestUnit');
 	    let internalDuration = ToInternalDurationRecordWith24HourDays(this);
 	    if (smallestUnit === 'day') {
-	      // First convert time units up to days
+	      // Round in nanosecond (bigInt) space to avoid floating-point
+	      // precision loss when the sub-day remainder is tiny relative to
+	      // the number of days.
 	      const DAY_NANOS = 86400 * 1e9;
+	      const rounded = RoundTimeDuration(internalDuration.time, roundingIncrement, 'day', roundingMode);
 	      const {
-	        quotient,
-	        remainder
-	      } = internalDuration.time.divmod(DAY_NANOS);
-	      let days = internalDuration.date.days + quotient + TotalTimeDuration(remainder, 'day');
-	      days = RoundNumberToIncrement(days, roundingIncrement, roundingMode);
+	        quotient: days
+	      } = rounded.divmod(DAY_NANOS);
 	      const dateDuration = {
 	        years: 0,
 	        months: 0,
@@ -16874,10 +17293,10 @@
 	    // No reference date to calculate difference relative to
 	    const largestUnit = DefaultTemporalLargestUnit(this);
 	    if (IsCalendarUnit(largestUnit)) {
-	      throw new RangeError$1("a starting point is required for ".concat(largestUnit, "s total"));
+	      throw new RangeError$1(`a starting point is required for ${largestUnit}s total`);
 	    }
 	    if (IsCalendarUnit(unit)) {
-	      throw new RangeError$1("a starting point is required for ".concat(unit, "s total"));
+	      throw new RangeError$1(`a starting point is required for ${unit}s total`);
 	    }
 	    const duration = ToInternalDurationRecordWith24HourDays(this);
 	    return TotalTimeDuration(duration.time, unit);
@@ -16973,7 +17392,7 @@
 	    let referenceISOYear = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 1972;
 	    const month = ToIntegerWithTruncation(isoMonth);
 	    const day = ToIntegerWithTruncation(isoDay);
-	    calendar = calendar === undefined ? 'iso8601' : RequireString(calendar);
+	    calendar = RequireString(calendar);
 	    calendar = CanonicalizeCalendar(calendar);
 	    const year = ToIntegerWithTruncation(referenceISOYear);
 	    RejectISODate(year, month, day);
@@ -17037,7 +17456,7 @@
 	    let locales = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : undefined;
 	    let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
 	    if (!IsTemporalMonthDay(this)) throw new TypeError$1('invalid receiver');
-	    return new DateTimeFormat(locales, options).format(this);
+	    return CreateDateTimeFormat(locales, options, 'date').format(this);
 	  }
 	  valueOf() {
 	    ValueOfThrows('PlainMonthDay');
@@ -17115,12 +17534,12 @@
 	    let isoMillisecond = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
 	    let isoMicrosecond = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 0;
 	    let isoNanosecond = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 0;
-	    const hour = isoHour === undefined ? 0 : ToIntegerWithTruncation(isoHour);
-	    const minute = isoMinute === undefined ? 0 : ToIntegerWithTruncation(isoMinute);
-	    const second = isoSecond === undefined ? 0 : ToIntegerWithTruncation(isoSecond);
-	    const millisecond = isoMillisecond === undefined ? 0 : ToIntegerWithTruncation(isoMillisecond);
-	    const microsecond = isoMicrosecond === undefined ? 0 : ToIntegerWithTruncation(isoMicrosecond);
-	    const nanosecond = isoNanosecond === undefined ? 0 : ToIntegerWithTruncation(isoNanosecond);
+	    const hour = ToIntegerWithTruncation(isoHour);
+	    const minute = ToIntegerWithTruncation(isoMinute);
+	    const second = ToIntegerWithTruncation(isoSecond);
+	    const millisecond = ToIntegerWithTruncation(isoMillisecond);
+	    const microsecond = ToIntegerWithTruncation(isoMicrosecond);
+	    const nanosecond = ToIntegerWithTruncation(isoNanosecond);
 	    RejectTime(hour, minute, second, millisecond, microsecond, nanosecond);
 	    const time = {
 	      hour,
@@ -17258,7 +17677,7 @@
 	    let locales = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : undefined;
 	    let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
 	    if (!IsTemporalTime(this)) throw new TypeError$1('invalid receiver');
-	    return new DateTimeFormat(locales, options).format(this);
+	    return CreateDateTimeFormat(locales, options, 'time').format(this);
 	  }
 	  valueOf() {
 	    ValueOfThrows('PlainTime');
@@ -17281,7 +17700,7 @@
 	    let referenceISODay = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 1;
 	    const year = ToIntegerWithTruncation(isoYear);
 	    const month = ToIntegerWithTruncation(isoMonth);
-	    calendar = calendar === undefined ? 'iso8601' : RequireString(calendar);
+	    calendar = RequireString(calendar);
 	    calendar = CanonicalizeCalendar(calendar);
 	    const day = ToIntegerWithTruncation(referenceISODay);
 	    RejectISODate(year, month, day);
@@ -17414,7 +17833,7 @@
 	    let locales = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : undefined;
 	    let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
 	    if (!IsTemporalYearMonth(this)) throw new TypeError$1('invalid receiver');
-	    return new DateTimeFormat(locales, options).format(this);
+	    return CreateDateTimeFormat(locales, options, 'date').format(this);
 	  }
 	  valueOf() {
 	    ValueOfThrows('PlainYearMonth');
@@ -17459,12 +17878,12 @@
 	    if (offsetMinutes === undefined) {
 	      // if offsetMinutes is undefined, then tzName must be present
 	      const record = GetAvailableNamedTimeZoneIdentifier(tzName);
-	      if (!record) throw new RangeError$1("unknown time zone ".concat(tzName));
+	      if (!record) throw new RangeError$1(`unknown time zone ${tzName}`);
 	      timeZone = record.identifier;
 	    } else {
 	      timeZone = FormatOffsetTimeZoneIdentifier(offsetMinutes);
 	    }
-	    calendar = calendar === undefined ? 'iso8601' : RequireString(calendar);
+	    calendar = RequireString(calendar);
 	    calendar = CanonicalizeCalendar(calendar);
 	    CreateTemporalZonedDateTimeSlots(this, epochNanoseconds, timeZone, calendar);
 	  }
@@ -17573,7 +17992,7 @@
 	    if (!IsTemporalZonedDateTime(this)) throw new TypeError$1('invalid receiver');
 	    const timeZone = GetSlot(this, TIME_ZONE);
 	    const today = dateTime(this).isoDate;
-	    const tomorrow = BalanceISODate(today.year, today.month, today.day + 1);
+	    const tomorrow = AddDaysToISODate(today, 1);
 	    const todayNs = GetStartOfDay(timeZone, today);
 	    const tomorrowNs = GetStartOfDay(timeZone, tomorrow);
 	    const diff = TimeDuration.fromEpochNsDiff(tomorrowNs, todayNs);
@@ -17631,9 +18050,11 @@
 	    const offsetNs = GetOffsetNanosecondsFor(timeZone, epochNs);
 	    const isoDateTime = dateTime(this);
 	    let fields = ISODateToFields(calendar, isoDateTime.isoDate);
-	    fields = _objectSpread2(_objectSpread2(_objectSpread2({}, fields), isoDateTime.time), {}, {
+	    fields = {
+	      ...fields,
+	      ...isoDateTime.time,
 	      offset: FormatUTCOffsetNanoseconds(offsetNs)
-	    });
+	    };
 	    const partialZonedDateTime = PrepareCalendarFields(calendar, temporalZonedDateTimeLike, ['year', 'month', 'monthCode', 'day'], ['hour', 'minute', 'second', 'millisecond', 'microsecond', 'nanosecond', 'offset'], 'partial');
 	    fields = CalendarMergeFields(calendar, fields, partialZonedDateTime);
 	    const resolvedOptions = GetOptionsObject(options);
@@ -17730,7 +18151,7 @@
 	      // Compute Instants for start-of-day and end-of-day
 	      // Determine how far the current instant has progressed through this span.
 	      const dateStart = iso.isoDate;
-	      const dateEnd = BalanceISODate(dateStart.year, dateStart.month, dateStart.day + 1);
+	      const dateEnd = AddDaysToISODate(dateStart, 1);
 	      const startNs = GetStartOfDay(timeZone, dateStart);
 	      assert(thisNs.geq(startNs), 'cannot produce an instant during a day that occurs before start-of-day instant');
 	      const endNs = GetStartOfDay(timeZone, dateEnd);
@@ -17806,15 +18227,11 @@
 	      // The rest of the defaults will be filled in by formatting the Instant
 	    }
 	    optionsCopy.timeZone = GetSlot(this, TIME_ZONE);
-	    if (IsOffsetTimeZoneIdentifier(optionsCopy.timeZone)) {
-	      // Note: https://github.com/tc39/ecma402/issues/683 will remove this
-	      throw new RangeError$1('toLocaleString does not currently support offset time zones');
-	    }
 	    const formatter = new DateTimeFormat(locales, optionsCopy);
 	    const localeCalendarIdentifier = Call$1(customResolvedOptions, formatter, []).calendar;
 	    const calendarIdentifier = GetSlot(this, CALENDAR);
 	    if (calendarIdentifier !== 'iso8601' && localeCalendarIdentifier !== 'iso8601' && !CalendarEquals(localeCalendarIdentifier, calendarIdentifier)) {
-	      throw new RangeError$1("cannot format ZonedDateTime with calendar ".concat(calendarIdentifier) + " in locale with calendar ".concat(localeCalendarIdentifier));
+	      throw new RangeError$1(`cannot format ZonedDateTime with calendar ${calendarIdentifier}` + ` in locale with calendar ${localeCalendarIdentifier}`);
 	    }
 	    const Instant = GetIntrinsic('%Temporal.Instant%');
 	    return formatter.format(new Instant(GetSlot(this, EPOCHNANOSECONDS)));
@@ -17845,7 +18262,7 @@
 	      directionParam = GetOptionsObject(directionParam);
 	    }
 	    const direction = GetDirectionOption(directionParam);
-	    if (direction === undefined) throw new TypeError$1('direction option is required');
+	    assert(direction !== undefined);
 
 	    // Offset time zones or UTC have no transitions
 	    if (IsOffsetTimeZoneIdentifier(timeZone) || timeZone === 'UTC') {
